@@ -2,22 +2,37 @@
 name = "lipford-nautobot-metrics"
 version = "0.1.0a0"
 description = "Custom Nautobot app for ROI, activity, and platform metrics."
-authors = ["Lipford <info@example.com>"]
+authors = ["Lipford Dutch"]
 license = "Apache-2.0"
 readme = "README.md"
-homepage = "https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics"
-repository = "https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics"
-documentation = "https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/"
-keywords = ["nautobot", "nautobot-app", "nautobot-plugin"]
+homepage = "https://github.com/Lipford-Dutch/nautobot-app-custom-metrics"
+repository = "https://github.com/Lipford-Dutch/nautobot-app-custom-metrics"
+documentation = "https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/tree/main/docs"
+keywords = [
+    "nautobot",
+    "nautobot-app",
+    "nautobot-plugin",
+    "metrics",
+    "automation",
+    "roi",
+    "telemetry",
+]
 classifiers = [
+    "Framework :: Django",
     "Intended Audience :: Developers",
-    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Information Technology",
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3.14",
+    "Topic :: System :: Networking",
+    "Topic :: System :: Systems Administration",
 ]
 packages = [
     { include = "lipford_nautobot_metrics" },
@@ -100,7 +115,7 @@ notes = """,
 
 [tool.ruff]
 line-length = 120
-target-version = "py38"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = [
@@ -167,7 +182,7 @@ directory = "changes"
 filename = "docs/admin/release_notes/version_X.Y.md"
 template = "development/towncrier_template.j2"
 start_string = "<!-- towncrier release notes start -->"
-issue_format = "[#{issue}](https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/issues/{issue})"
+issue_format = "[#{issue}](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/issues/{issue})"
 
 [[tool.towncrier.type]]
 directory = "breaking"
