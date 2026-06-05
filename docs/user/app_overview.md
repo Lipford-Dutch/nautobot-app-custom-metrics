@@ -1,32 +1,31 @@
 # App Overview
 
-This document provides an overview of the App including critical information and important considerations when applying it to your Nautobot environment.
+Lipford Nautobot Metrics adds custom metric tracking to Nautobot. It stores metric definitions and timestamped metric values, exposes them through the Nautobot UI and REST API, and provides a simple dashboard for reviewing current values.
 
-!!! note
-    Throughout this documentation, the terms "app" and "plugin" will be used interchangeably.
+The first implemented metrics are ROI-focused:
 
-## Description
+- Time Saved per Automated Task
+- Automation Adoption Rate
 
-![Main Page](../media/ss_main_page_light.png#only-light)
-![Main Page](../media/ss_main_page_dark.png#only-dark)
+These are intentionally small starting points so the app can be verified end to end before expanding into additional metric categories.
 
-## Audience (User Personas) - Who should use this App?
+## Audience
 
-!!! warning "Developer Note - Remove Me!"
-    Who is this meant for/ who is the common user of this app?
-
-## Authors and Maintainers
-
-!!! warning "Developer Note - Remove Me!"
-    Add the team and/or the main individuals maintaining this project. Include historical maintainers as well.
+This app is intended for Nautobot administrators, automation engineers, and operations leaders who need to quantify the business and operational impact of Nautobot-driven automation.
 
 ## Nautobot Features Used
 
-!!! warning "Developer Note - Remove Me!"
-    What is shown today in the Installed Apps page in Nautobot. What parts of Nautobot does it interact with, what does it add etc. ?
+The app uses standard Nautobot app patterns:
 
-### Extras
+- Primary models for `MetricDefinition` and `MetricValue`
+- Nautobot UI viewsets, tables, forms, filters, and navigation
+- REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`
+- A summary API endpoint for dashboard consumers
+- A Nautobot Job for sample metric data population
+- Permissions, tags, custom fields, webhooks, custom links, export templates, and GraphQL support
 
-!!! warning "Developer Note - Remove Me!"
-    Custom Fields - things like which CFs are created by this app?
-    Jobs - are jobs, if so, which ones, installed by this app?
+## Current Views
+
+- Dashboard: `/plugins/lipford-nautobot-metrics/`
+- Metric Definitions: `/plugins/lipford-nautobot-metrics/metric-definitions/`
+- Metric Values: `/plugins/lipford-nautobot-metrics/metric-values/`

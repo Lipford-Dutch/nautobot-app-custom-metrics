@@ -14,6 +14,15 @@ menu_items = (
                 weight=100,
                 items=(
                     NavMenuItem(
+                        link="plugins:lipford_nautobot_metrics:dashboard",
+                        name="Dashboard",
+                        weight=50,
+                        permissions=[
+                            "lipford_nautobot_metrics.view_metricdefinition",
+                            "lipford_nautobot_metrics.view_metricvalue",
+                        ],
+                    ),
+                    NavMenuItem(
                         link="plugins:lipford_nautobot_metrics:metricdefinition_list",
                         name="Metric Definitions",
                         weight=100,

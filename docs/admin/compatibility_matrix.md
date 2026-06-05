@@ -1,8 +1,7 @@
 # Compatibility Matrix
 
-!!! warning "Developer Note - Remove Me!"
-    Explain how the release models of the app and of Nautobot work together, how releases are supported, how features and older releases are deprecated etc.
+| Lipford Nautobot Metrics Version | Nautobot First Support Version | Nautobot Last Support Version | Python Support |
+| --- | --- | --- | --- |
+| `0.1.x` | `3.1.0` | `<4.0.0` | `>=3.10,<3.15` |
 
-| Lipford Nautobot Metrics Version | Nautobot First Support Version | Nautobot Last Support Version |
-| ------------- | -------------------- | ------------- |
-| 1.0.X         | 3.0.0                | 2.99.99        |
+Compatibility follows the supported Nautobot version range declared in `pyproject.toml`. Future releases should update this table whenever Nautobot or Python support changes.

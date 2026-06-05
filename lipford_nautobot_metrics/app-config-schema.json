@@ -1,1 +1,21 @@
-true
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Lipford Nautobot Metrics App Configuration",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "sample_metric_days": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 30,
+      "default": 3,
+      "description": "Default number of daily sample observations created per metric by the sample data job."
+    },
+    "sample_metric_source": {
+      "type": "string",
+      "minLength": 1,
+      "default": "lipford_nautobot_metrics.phase2_sample_job",
+      "description": "Source label written to sample MetricValue records."
+    }
+  }
+}

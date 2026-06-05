@@ -1,11 +1,39 @@
 """UI views for Lipford Nautobot Metrics."""
 
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
+from django.views.generic import TemplateView
 from nautobot.apps.views import NautobotUIViewSet
 from nautobot.core.ui import object_detail
 from nautobot.core.ui.choices import SectionChoices
 
 from lipford_nautobot_metrics import filters, forms, models, tables
 from lipford_nautobot_metrics.api import serializers
+from lipford_nautobot_metrics.services import get_metric_summaries
+
+
+class MetricsDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
+    """Dashboard view for custom metric summaries."""
+
+    template_name = "lipford_nautobot_metrics/dashboard.html"
+    permission_required = (
+        "lipford_nautobot_metrics.view_metricdefinition",
+        "lipford_nautobot_metrics.view_metricvalue",
+    )
+    raise_exception = True
+
+    def get_context_data(self, **kwargs):
+        """Build dashboard context."""
+        context = super().get_context_data(**kwargs)
+        summaries = get_metric_summaries()
+        context.update(
+            {
+                "title": "Metrics Dashboard",
+                "metric_summaries": summaries,
+                "definition_count": len(summaries),
+                "value_count": sum(summary["value_count"] for summary in summaries),
+            }
+        )
+        return context
 
 
 class MetricDefinitionUIViewSet(NautobotUIViewSet):

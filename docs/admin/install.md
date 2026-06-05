@@ -1,67 +1,47 @@
 # Installing the App in Nautobot
 
-Here you will find detailed instructions on how to **install** and **configure** the App within your Nautobot environment.
-
-!!! warning "Developer Note - Remove Me!"
-    Detailed instructions on installing the App. You will need to update this section based on any additional dependencies or prerequisites.
-
 ## Prerequisites
 
-- The app is compatible with Nautobot 3.0.0 and higher.
-- Databases supported: PostgreSQL, MySQL
+- Nautobot `>=3.1.0,<4.0.0`
+- Python `>=3.10,<3.15`
+- PostgreSQL or MySQL, following Nautobot support
 
-!!! note
-    Please check the [dedicated page](compatibility_matrix.md) for a full compatibility matrix and the deprecation policy.
-
-### Access Requirements
-
-!!! warning "Developer Note - Remove Me!"
-    What external systems (if any) it needs access to in order to work.
+The app does not require access to external systems for its current sample-data workflow.
 
 ## Install Guide
 
-!!! note
-    Apps can be installed from the [Python Package Index](https://pypi.org/) or locally. See the [Nautobot documentation](https://docs.nautobot.com/projects/core/en/stable/user-guide/administration/installation/app-install/) for more details. The pip package name for this app is [`lipford-nautobot-metrics`](https://pypi.org/project/lipford-nautobot-metrics/).
-
-The app is available as a Python package via PyPI and can be installed with `pip`:
+Install the package in the Nautobot environment:
 
 ```shell
 pip install lipford-nautobot-metrics
 ```
 
-To ensure Lipford Nautobot Metrics is automatically re-installed during future upgrades, create a file named `local_requirements.txt` (if not already existing) in the Nautobot root directory (alongside `requirements.txt`) and list the `lipford-nautobot-metrics` package:
+To reinstall the app during future Nautobot upgrades, add it to `local_requirements.txt`:
 
 ```shell
 echo lipford-nautobot-metrics >> local_requirements.txt
 ```
 
-Once installed, the app needs to be enabled in your Nautobot configuration. The following block of code below shows the additional configuration required to be added to your `nautobot_config.py` file:
-
-- Append `"lipford_nautobot_metrics"` to the `PLUGINS` list.
-- Append the `"lipford_nautobot_metrics"` dictionary to the `PLUGINS_CONFIG` dictionary and override any defaults.
+Enable the app in `nautobot_config.py`:
 
 ```python
-# In your nautobot_config.py
 PLUGINS = ["lipford_nautobot_metrics"]
 
-# PLUGINS_CONFIG = {
-#   "lipford_nautobot_metrics": {
-#     ADD YOUR SETTINGS HERE
-#   }
-# }
+PLUGINS_CONFIG = {
+    "lipford_nautobot_metrics": {
+        "sample_metric_days": 3,
+        "sample_metric_source": "lipford_nautobot_metrics.phase2_sample_job",
+    }
+}
 ```
 
-Once the Nautobot configuration is updated, run the Post Upgrade command (`nautobot-server post_upgrade`) to run migrations and clear any cache:
+Run Nautobot post-upgrade tasks:
 
 ```shell
 nautobot-server post_upgrade
 ```
 
-Then restart (if necessary) the Nautobot services which may include:
-
-- Nautobot
-- Nautobot Workers
-- Nautobot Scheduler
+Restart Nautobot services:
 
 ```shell
 sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
@@ -69,13 +49,17 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 
 ## App Configuration
 
-!!! warning "Developer Note - Remove Me!"
-    Any configuration required to get the App set up. Edit the table below as per the examples provided.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
+| `sample_metric_source` | string | `lipford_nautobot_metrics.phase2_sample_job` | Source label written to sample `MetricValue` records. |
 
-The app behavior can be controlled with the following list of settings:
+## Verification
 
-| Key     | Example | Default | Description                          |
-| ------- | ------ | -------- | ------------------------------------- |
-| `enable_backup` | `True` | `True` | A boolean to represent whether or not to run backup configurations within the app. |
-| `platform_slug_map` | `{"cisco_wlc": "cisco_aireos"}` | `None` | A dictionary in which the key is the platform slug and the value is what netutils uses in any "network_os" parameter. |
-| `per_feature_bar_width` | `0.15` | `0.15` | The width of the table bar within the overview report |
+After installation:
+
+1. Run `nautobot-server check`.
+2. Confirm `nautobot-server migrate --check` reports no pending migrations.
+3. Confirm the app appears in Nautobot under Installed Apps.
+4. Confirm Metrics > Custom Metrics > Dashboard loads.
+5. Run the sample data job and confirm metric definitions and values are created.

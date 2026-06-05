@@ -18,7 +18,10 @@ class LipfordNautobotMetricsConfig(NautobotAppConfig):
     description = "Custom Nautobot app for ROI, activity, and platform metrics."
     base_url = "lipford-nautobot-metrics"
     required_settings = []
-    default_settings = {}
+    default_settings = {
+        "sample_metric_days": 3,
+        "sample_metric_source": "lipford_nautobot_metrics.phase2_sample_job",
+    }
     docs_view_name = "plugins:lipford_nautobot_metrics:docs"
     searchable_models = [
         "MetricDefinition",

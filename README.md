@@ -1,66 +1,99 @@
 # Lipford Nautobot Metrics
 
-<!--
-Developer Note - Remove Me!
+Lipford Nautobot Metrics is a custom Nautobot App for tracking business and operational metrics inside Nautobot. The current implementation focuses on two initial ROI metrics: Time Saved per Automated Task and Automation Adoption Rate.
 
-The README will have certain links/images broken until the PR is merged into `develop`. Update the GitHub links with whichever branch you're using (main etc.) if different.
+The app provides:
 
-The logo of the project is a placeholder (docs/images/icon-lipford-nautobot-metrics.png) - please replace it with your app icon, making sure it's at least 200x200px and has a transparent background!
+- Metric definition and metric value models with Nautobot UI, filtering, permissions, REST API, custom fields, tags, webhooks, and GraphQL support.
+- A sample data Nautobot Job for creating deterministic metric observations.
+- A dashboard page at `/plugins/lipford-nautobot-metrics/`.
+- A summary API endpoint at `/api/plugins/lipford-nautobot-metrics/summary/`.
 
-To avoid extra work and temporary links, make sure that publishing docs (or merging a PR) is done at the same time as setting up the docs site on RTD, then test everything.
--->
+## Compatibility
 
-<p align="center">
-  <img src="https://raw.githubusercontent.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/develop/docs/images/icon-lipford-nautobot-metrics.png" class="logo" height="200px">
-  <br>
-  <a href="https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/actions"><img src="https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/actions/workflows/ci.yml/badge.svg?branch=main"></a>
-  <a href="https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/"><img src="https://readthedocs.org/projects/nautobot-app-lipford-nautobot-metrics/badge/"></a>
-  <a href="https://pypi.org/project/lipford-nautobot-metrics/"><img src="https://img.shields.io/pypi/v/lipford-nautobot-metrics"></a>
-  <a href="https://pypi.org/project/lipford-nautobot-metrics/"><img src="https://img.shields.io/pypi/dm/lipford-nautobot-metrics"></a>
-  <br>
-  An <a href="https://networktocode.com/nautobot-apps/">App</a> for <a href="https://nautobot.com/">Nautobot</a>.
-</p>
+- Nautobot: `>=3.1.0,<4.0.0`
+- Python: `>=3.10,<3.15`
+- Databases: PostgreSQL and MySQL, following Nautobot support.
 
-## Overview
+## Installation
 
-> Developer Note: Add a long (2-3 paragraphs) description of what the App does, what problems it solves, what functionality it adds to Nautobot, what external systems it works with etc.
+Install the package in the Nautobot environment:
 
-### Screenshots
+```shell
+pip install lipford-nautobot-metrics
+```
 
-> Developer Note: Add any representative screenshots of the App in action. These images should also be added to the `docs/user/app_use_cases.md` section.
+Enable the app in `nautobot_config.py`:
 
-> Developer Note: Place the files in the `docs/images/` folder and link them using only full URLs from GitHub, for example: `![Overview](https://raw.githubusercontent.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/develop/docs/images/app-overview.png)`. This absolute static linking is required to ensure the README renders properly in GitHub, the docs site, and any other external sites like PyPI.
+```python
+PLUGINS = ["lipford_nautobot_metrics"]
 
-More screenshots can be found in the [Using the App](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/user/app_use_cases/) page in the documentation. Here's a quick overview of some of the app's added functionality:
+PLUGINS_CONFIG = {
+    "lipford_nautobot_metrics": {
+        "sample_metric_days": 3,
+        "sample_metric_source": "lipford_nautobot_metrics.phase2_sample_job",
+    }
+}
+```
 
-![](https://raw.githubusercontent.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/develop/docs/images/placeholder.png)
+Run post-upgrade tasks and restart Nautobot services:
 
-## Try it out!
+```shell
+nautobot-server post_upgrade
+sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
+```
 
-> Developer Note: Only keep this section if appropriate. Update link to correct sandbox.
+## Local Development
 
-This App is installed in the Nautobot Community Sandbox found over at [demo.nautobot.com](https://demo.nautobot.com/)!
+This project was generated from the official Nautobot App cookiecutter and supports Poetry, Invoke, and Docker development.
 
-> For a full list of all the available always-on sandbox environments, head over to the main page on [networktocode.com](https://www.networktocode.com/nautobot/sandbox-environments/).
+Useful commands:
 
-## Documentation
+```powershell
+.\.venv\Scripts\poetry.exe run ruff check lipford_nautobot_metrics
+.\.venv\Scripts\poetry.exe run ruff format --check lipford_nautobot_metrics
+```
 
-Full documentation for this App can be found over on the [Nautobot Docs](https://docs.nautobot.com) website:
+Docker verification:
 
-- [User Guide](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/user/app_overview/) - Overview, Using the App, Getting Started.
-- [Administrator Guide](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/admin/install/) - How to Install, Configure, Upgrade, or Uninstall the App.
-- [Developer Guide](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/dev/contributing/) - Extending the App, Code Reference, Contribution Guide.
-- [Release Notes / Changelog](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/admin/release_notes/).
-- [Frequently Asked Questions](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/user/faq/).
+```powershell
+$env:PATH = 'C:\Program Files\Docker\Docker\resources\bin;' + $env:PATH
+$env:NAUTOBOT_VER='3.1.3'
+$env:PYTHON_VER='3.12'
+.\.venv\Scripts\poetry.exe run invoke start
+```
 
-### Contributing to the Documentation
+Inside the running Nautobot container:
 
-You can find all the Markdown source for the App documentation under the [`docs`](https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics/tree/develop/docs) folder in this repository. For simple edits, a Markdown capable editor is sufficient: clone the repository and edit away.
+```shell
+nautobot-server check
+nautobot-server migrate --check
+nautobot-server test lipford_nautobot_metrics.tests --verbosity 2
+```
 
-If you need to view the fully-generated documentation site, you can build it with [MkDocs](https://www.mkdocs.org/). A container hosting the documentation can be started using the `invoke` commands (details in the [Development Environment Guide](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/dev/dev_environment/#docker-development-environment)) on [http://localhost:8001](http://localhost:8001). Using this container, as your changes to the documentation are saved, they will be automatically rebuilt and any pages currently being viewed will be reloaded in your browser.
+## First Workflow
 
-Any PRs with fixes or improvements are very welcome!
+1. Open Nautobot and confirm the app appears under Installed Apps.
+2. Navigate to Metrics > Custom Metrics > Dashboard.
+3. Enable the "Seed sample metric data" job from Jobs if needed.
+4. Run the job with `sample_days=3`.
+5. Review metric definitions, metric values, the dashboard, and the summary API.
 
-## Questions
+## Configuration
 
-For any questions or comments, please check the [FAQ](https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/user/faq/) first. Feel free to also swing by the [Network to Code Slack](https://networktocode.slack.com/) (channel `#nautobot`), sign up [here](http://slack.networktocode.com/) if you don't have an account.
+| Key | Type | Default | Description |
+| --- | --- | --- | --- |
+| `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
+| `sample_metric_source` | string | `lipford_nautobot_metrics.phase2_sample_job` | Source label written to sample `MetricValue` records. |
+
+## Verification Status
+
+Current local verification includes:
+
+- Ruff lint and format checks.
+- Nautobot system checks.
+- Migration checks.
+- Docker-backed Nautobot app tests.
+- Live API and dashboard smoke checks.
+
+The implemented test suite currently covers model validation, uniqueness constraints, job dry-run/idempotency, dashboard permissions, API permissions, token authentication, and invalid API payload handling.

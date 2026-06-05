@@ -3,6 +3,7 @@
 from decimal import Decimal
 
 from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from django.test import TestCase
 from django.utils import timezone
 
@@ -50,6 +51,17 @@ class MetricValueTestCase(TestCase):
         with self.assertRaises(ValidationError):
             metric_value.full_clean()
 
+    def test_percent_value_must_not_be_negative(self):
+        """Negative percent metric values are range validated."""
+        metric_value = MetricValue(
+            metric_definition=self.percent_definition,
+            value=Decimal("-1.0"),
+            recorded_at=timezone.now(),
+        )
+
+        with self.assertRaises(ValidationError):
+            metric_value.full_clean()
+
     def test_valid_percent_value_cleans(self):
         """A valid percent observation passes validation."""
         metric_value = MetricValue(
@@ -59,3 +71,21 @@ class MetricValueTestCase(TestCase):
         )
 
         metric_value.full_clean()
+
+    def test_duplicate_definition_recorded_source_is_rejected(self):
+        """Duplicate values for the same metric, timestamp, and source are rejected."""
+        recorded_at = timezone.now()
+        MetricValue.objects.create(
+            metric_definition=self.percent_definition,
+            value=Decimal("75.0"),
+            recorded_at=recorded_at,
+            source="unit-test",
+        )
+
+        with self.assertRaises(IntegrityError):
+            MetricValue.objects.create(
+                metric_definition=self.percent_definition,
+                value=Decimal("80.0"),
+                recorded_at=recorded_at,
+                source="unit-test",
+            )

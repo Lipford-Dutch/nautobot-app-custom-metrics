@@ -1,19 +1,19 @@
 # Getting Started with the App
 
-This document provides a step-by-step tutorial on how to get the App going and how to use it.
-
 ## Install the App
 
-To install the App, please follow the instructions detailed in the [Installation Guide](../admin/install.md).
+Follow the [Installation Guide](../admin/install.md) to install and enable the app.
 
-## First steps with the App
+## First Workflow
 
-!!! warning "Developer Note - Remove Me!"
-    What (with screenshots preferably) does it look like to perform the simplest workflow within the App once installed?
+1. Confirm the app appears on Nautobot's Installed Apps page.
+2. Open Metrics > Custom Metrics > Dashboard.
+3. Open Jobs and enable `Seed sample metric data` if it has not been enabled yet.
+4. Run the job with the default `sample_days` value.
+5. Open Metric Definitions and confirm the two ROI metrics exist.
+6. Open Metric Values and confirm daily sample observations exist.
+7. Open `/api/plugins/lipford-nautobot-metrics/summary/` with an authenticated API token to verify the summary endpoint.
 
-## What are the next steps?
+## Next Steps
 
-!!! warning "Developer Note - Remove Me!"
-    After taking the first steps, what else could the users look at doing.
-
-You can check out the [Use Cases](app_use_cases.md) section for more examples.
+After the first workflow is verified, replace or extend the sample job with a real collector that writes production metric values from Nautobot job results, external automation platforms, change systems, or team-provided baseline data.

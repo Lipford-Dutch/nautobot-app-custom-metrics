@@ -15,6 +15,7 @@ router.register("metric-values", views.MetricValueUIViewSet)
 
 
 urlpatterns = [
+    path("", views.MetricsDashboardView.as_view(), name="dashboard"),
     path("docs/", RedirectView.as_view(url=static("lipford_nautobot_metrics/docs/index.html")), name="docs"),
 ]
 

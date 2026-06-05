@@ -2,7 +2,7 @@
 
 from nautobot.apps.jobs import DryRunVar, IntegerVar, Job, register_jobs
 
-from lipford_nautobot_metrics.services import MAX_SAMPLE_DAYS, seed_sample_metrics
+from lipford_nautobot_metrics.services import DEFAULT_SAMPLE_DAYS, MAX_SAMPLE_DAYS, seed_sample_metrics
 
 name = "Lipford Nautobot Metrics"
 
@@ -12,7 +12,7 @@ class SeedSampleMetricData(Job):
 
     dryrun = DryRunVar(description="Validate the seed operation without committing database changes.")
     sample_days = IntegerVar(
-        default=3,
+        default=DEFAULT_SAMPLE_DAYS,
         min_value=1,
         max_value=MAX_SAMPLE_DAYS,
         description="Number of daily sample observations to create or update per metric.",
@@ -26,7 +26,7 @@ class SeedSampleMetricData(Job):
         field_order = ["sample_days", "dryrun"]
         has_sensitive_variables = False
 
-    def run(self, dryrun=False, sample_days=3):
+    def run(self, dryrun=False, sample_days=DEFAULT_SAMPLE_DAYS):
         """Run the sample metric seed operation."""
         try:
             result = seed_sample_metrics(sample_days=sample_days, dryrun=dryrun)
