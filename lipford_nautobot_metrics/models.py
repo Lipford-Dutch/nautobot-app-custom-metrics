@@ -100,5 +100,12 @@ class MetricValue(PrimaryModel):
         """Validate metric observations before saving."""
         super().clean()
         if self.metric_definition_id and self.metric_definition.unit == MetricUnitChoices.PERCENT:
-            if self.value < 0 or self.value > 100:
-                raise ValidationError({"value": "Percent metric values must be between 0 and 100."})
+            if self.value < 0:
+                raise ValidationError({"value": "Percent metric values must not be negative."})
+
+            bounded_percent_kinds = {
+                MetricKindChoices.AUTOMATION_ADOPTION_RATE,
+                MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
+            }
+            if self.metric_definition.kind in bounded_percent_kinds and self.value > 100:
+                raise ValidationError({"value": "Bounded percent metric values must be between 0 and 100."})

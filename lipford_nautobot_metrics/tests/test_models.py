@@ -41,7 +41,7 @@ class MetricValueTestCase(TestCase):
         )
 
     def test_percent_value_must_be_between_zero_and_one_hundred(self):
-        """Percent metric values are range validated."""
+        """Bounded percent metric values are range validated."""
         metric_value = MetricValue(
             metric_definition=self.percent_definition,
             value=Decimal("125.0"),
@@ -67,6 +67,23 @@ class MetricValueTestCase(TestCase):
         metric_value = MetricValue(
             metric_definition=self.percent_definition,
             value=Decimal("75.0"),
+            recorded_at=timezone.now(),
+        )
+
+        metric_value.full_clean()
+
+    def test_percent_change_metric_can_exceed_one_hundred(self):
+        """Throughput improvement percentages can exceed one hundred."""
+        throughput_definition = MetricDefinition.objects.create(
+            name="Increased Task Throughput",
+            key="increased_task_throughput",
+            category=MetricCategoryChoices.ROI,
+            kind=MetricKindChoices.INCREASED_TASK_THROUGHPUT,
+            unit=MetricUnitChoices.PERCENT,
+        )
+        metric_value = MetricValue(
+            metric_definition=throughput_definition,
+            value=Decimal("400.0"),
             recorded_at=timezone.now(),
         )
 

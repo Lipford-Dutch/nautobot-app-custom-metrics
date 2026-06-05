@@ -4,7 +4,7 @@ edit_uri: "edit/main/docs"
 site_dir: "lipford_nautobot_metrics/static/lipford_nautobot_metrics/docs"
 site_name: "Lipford Nautobot Metrics Documentation"
 site_url: "https://docs.nautobot.com/projects/lipford-nautobot-metrics/en/latest/"
-repo_url: "https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics"
+repo_url: "https://github.com/Lipford-Dutch/nautobot-app-custom-metrics"
 copyright: "Copyright &copy; The Authors"
 theme:
   name: "material"
@@ -28,15 +28,12 @@ theme:
   favicon: "assets/favicon.ico"
   logo: "assets/nautobot_logo.svg"
   palette:
-    # Palette toggle for light mode
     - media: "(prefers-color-scheme: light)"
       scheme: "default"
       primary: "black"
       toggle:
         icon: "material/weather-sunny"
         name: "Switch to dark mode"
-
-    # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: "slate"
       primary: "black"
@@ -109,6 +106,7 @@ nav:
   - User Guide:
       - App Overview: "user/app_overview.md"
       - Getting Started: "user/app_getting_started.md"
+      - V1 First-Batch Metrics: "user/v1_first_batch_metrics.md"
       - Using the App: "user/app_use_cases.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"
@@ -130,4 +128,4 @@ nav:
           - "dev/code_reference/index.md"
           - Package: "dev/code_reference/package.md"
           - API: "dev/code_reference/api.md"
-  - Nautobot Docs Home ↗︎: "https://docs.nautobot.com"
+  - Nautobot Docs Home: "https://docs.nautobot.com"

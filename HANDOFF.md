@@ -3,14 +3,15 @@
 ## Repository
 
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
-- Current branch: `codex/start-nautobot-app-phase-5`
+- Current branch: `main-development-metrics-stage`
 - Intended GitHub organization: `Lipford-Dutch`
 - GitHub repository: `nautobot-app-custom-metrics`
 - Remote URL: `https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git`
 
 ## Current State
 
-The app has been implemented through Phases 0-5:
+The base app has been implemented through Phases 0-5, and this branch extends
+the metrics catalog through Phase 4 for the v1 first batch:
 
 1. Bootstrap and local Docker environment
 2. Core models
@@ -18,12 +19,25 @@ The app has been implemented through Phases 0-5:
 4. Dashboard, UI, and API
 5. Test expansion, configuration, packaging, and documentation polish
 
+Current branch pause point:
+
+1. Phase 0: reviewed `C:\Users\spamw\Downloads\custom_metrics_def.md` and selected the Section 2.1 ROI efficiency metrics as the first batch.
+2. Phase 1: expanded supported metric kinds for the full first batch.
+3. Phase 2: updated deterministic sample population for all first-batch metrics.
+4. Phase 3: verified existing dashboard and API paths expose the expanded batch.
+5. Phase 4: updated tests and validation. Stop here until further notice.
+
 The repository currently contains a custom Nautobot App named `lipford_nautobot_metrics`.
 
 ## Implemented Functionality
 
 - `MetricDefinition` model for metric catalog entries
 - `MetricValue` model for timestamped observations
+- V1 first-batch ROI metrics:
+  - Time Saved per Automated Task
+  - Reduction in Manual Error Rates
+  - Increased Task Throughput
+  - Automation Adoption Rate
 - Nautobot UI viewsets for definitions and values
 - Dashboard page at `/plugins/lipford-nautobot-metrics/`
 - REST model APIs:
@@ -64,6 +78,7 @@ The repository currently contains a custom Nautobot App named `lipford_nautobot_
 - `docs/admin/compatibility_matrix.md`
 - `docs/user/app_overview.md`
 - `docs/user/app_getting_started.md`
+- `docs/user/v1_first_batch_metrics.md`
 - `docs/user/app_use_cases.md`
 
 ## Local Development Notes
@@ -125,7 +140,21 @@ docker compose --project-name lipford-nautobot-metrics --project-directory "C:\U
 - `mkdocs build --strict`: passed
 - `nautobot-server check`: no issues
 - `nautobot-server migrate --check`: no pending migrations
-- Full Docker app tests: `22 passed`
+- Full Docker app tests: `23 passed`
+
+## Current Branch Verification Results
+
+- Branch: `main-development-metrics-stage`
+- Ruff check: passed
+- Ruff format check: passed after formatting changed files
+- JSON schema parse: passed
+- `poetry check`: valid with Poetry 2 deprecation warnings for cookiecutter metadata format
+- `poetry build`: passed
+- `mkdocs build --strict`: passed
+- `nautobot-server check`: no issues
+- `nautobot-server migrate --check`: no pending migrations
+- Docker-backed Nautobot app tests: `23 passed`
+- Note: the first Docker test attempt timed out while creating `test_nautobot`; the stale test database was dropped from the Docker Postgres container and the suite then passed.
 
 ## Repository Metadata Added
 
@@ -159,7 +188,7 @@ Local `origin` is configured as:
 https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git
 ```
 
-The release branch to publish is:
+The original release branch is:
 
 ```text
 codex/start-nautobot-app-phase-5
@@ -185,7 +214,15 @@ The release branch was merged with origin/main using --allow-unrelated-histories
 so GitHub can create a pull request from the branch into main.
 ```
 
-The branch should now be pushed again and a draft PR opened against `main`.
+Draft PR for the original release branch:
+
+```text
+https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/1
+```
+
+The current branch, `main-development-metrics-stage`, has not been pushed in
+this session. Push it only after the user resumes from the requested Phase 4
+pause.
 
 ## Residual Notes
 

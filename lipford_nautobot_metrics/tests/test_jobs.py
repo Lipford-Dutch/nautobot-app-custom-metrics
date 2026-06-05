@@ -16,16 +16,25 @@ from lipford_nautobot_metrics.services import (
 
 
 class SeedSampleMetricsTestCase(TestCase):
-    """Tests for Phase 2 sample metric population."""
+    """Tests for v1 first-batch sample metric population."""
 
     def test_seed_creates_definitions_and_values(self):
-        """The seed service creates two definitions and daily values for each metric."""
+        """The seed service creates first-batch definitions and daily values for each metric."""
         result = seed_sample_metrics(sample_days=DEFAULT_SAMPLE_DAYS)
 
-        self.assertEqual(result["definitions_created"], 2)
-        self.assertEqual(result["values_created"], 6)
-        self.assertEqual(MetricDefinition.objects.count(), 2)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 6)
+        self.assertEqual(result["definitions_created"], 4)
+        self.assertEqual(result["values_created"], 12)
+        self.assertEqual(MetricDefinition.objects.count(), 4)
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 12)
+        self.assertEqual(
+            set(MetricDefinition.objects.values_list("key", flat=True)),
+            {
+                MetricKindChoices.AUTOMATION_ADOPTION_RATE,
+                MetricKindChoices.INCREASED_TASK_THROUGHPUT,
+                MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
+                MetricKindChoices.TIME_SAVED_PER_AUTOMATED_TASK,
+            },
+        )
 
     def test_app_settings_use_defaults_and_overrides(self):
         """App settings expose defensive defaults and Nautobot config overrides."""
@@ -41,8 +50,8 @@ class SeedSampleMetricsTestCase(TestCase):
         ):
             result = seed_sample_metrics()
 
-        self.assertEqual(result["values_created"], 4)
-        self.assertEqual(MetricValue.objects.filter(source="unit-test-source").count(), 4)
+        self.assertEqual(result["values_created"], 8)
+        self.assertEqual(MetricValue.objects.filter(source="unit-test-source").count(), 8)
 
     def test_seed_is_idempotent(self):
         """Running the seed service twice updates existing records instead of duplicating them."""
@@ -51,15 +60,15 @@ class SeedSampleMetricsTestCase(TestCase):
 
         self.assertEqual(result["definitions_created"], 0)
         self.assertEqual(result["values_created"], 0)
-        self.assertEqual(MetricDefinition.objects.count(), 2)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 4)
+        self.assertEqual(MetricDefinition.objects.count(), 4)
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 8)
 
     def test_dryrun_rolls_back_writes(self):
         """Dry-run validates the seed path without committing database records."""
         result = seed_sample_metrics(sample_days=2, dryrun=True)
 
-        self.assertEqual(result["definitions_created"], 2)
-        self.assertEqual(result["values_created"], 4)
+        self.assertEqual(result["definitions_created"], 4)
+        self.assertEqual(result["values_created"], 8)
         self.assertEqual(MetricDefinition.objects.count(), 0)
         self.assertEqual(MetricValue.objects.count(), 0)
 
@@ -76,7 +85,7 @@ class SeedSampleMetricsTestCase(TestCase):
         summary = SeedSampleMetricData().run(dryrun=False, sample_days=1)
 
         self.assertIn("Seeded sample metric data", summary)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 2)
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 4)
 
     def test_job_run_dryrun_returns_summary_without_writes(self):
         """The Nautobot Job dry-run path validates without committing writes."""
@@ -106,5 +115,8 @@ class SeedSampleMetricsTestCase(TestCase):
 
         summaries = get_metric_summaries()
 
-        self.assertEqual(len(summaries), 1)
-        self.assertEqual(summaries[0]["key"], MetricKindChoices.TIME_SAVED_PER_AUTOMATED_TASK)
+        self.assertEqual(len(summaries), 3)
+        self.assertNotIn(
+            MetricKindChoices.AUTOMATION_ADOPTION_RATE,
+            {summary["key"] for summary in summaries},
+        )

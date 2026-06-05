@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
-Lipford Nautobot Metrics is a custom Nautobot App for tracking automation ROI and platform adoption metrics inside Nautobot. It starts with two production-ready metric types, exposed through Nautobot models, UI views, REST API endpoints, and a sample-data Nautobot Job.
+Lipford Nautobot Metrics is a custom Nautobot App for tracking automation ROI and platform adoption metrics inside Nautobot. It starts with the v1 first batch of four production-ready ROI metrics, exposed through Nautobot models, UI views, REST API endpoints, and a sample-data Nautobot Job.
 
 ## Repository Metadata
 
@@ -25,8 +25,10 @@ Recommended GitHub repository metadata:
 ## Features
 
 - Metric definition and metric value models using Nautobot model patterns.
-- Two initial metrics:
+- V1 first-batch ROI metrics:
   - `time_saved_per_automated_task`
+  - `manual_error_rate_reduction`
+  - `increased_task_throughput`
   - `automation_adoption_rate`
 - Nautobot UI list, detail, filter, dashboard, and navigation integration.
 - REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`.
@@ -61,7 +63,7 @@ PLUGINS = ["lipford_nautobot_metrics"]
 PLUGINS_CONFIG = {
     "lipford_nautobot_metrics": {
         "sample_metric_days": 3,
-        "sample_metric_source": "lipford_nautobot_metrics.phase2_sample_job",
+        "sample_metric_source": "lipford_nautobot_metrics.v1_first_batch_sample_job",
     }
 }
 ```
@@ -80,7 +82,7 @@ For Docker-based deployments, rebuild or restart the Nautobot containers after i
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
 | `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
-| `sample_metric_source` | string | `lipford_nautobot_metrics.phase2_sample_job` | Source label written to sample `MetricValue` records. |
+| `sample_metric_source` | string | `lipford_nautobot_metrics.v1_first_batch_sample_job` | Source label written to sample `MetricValue` records. |
 
 ## First Workflow
 
