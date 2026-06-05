@@ -165,30 +165,27 @@ The release branch to publish is:
 codex/start-nautobot-app-phase-5
 ```
 
-Latest repository metadata commit before this handoff update:
+Latest repository metadata commit before the publish/handoff updates:
 
 ```text
 88c6629 docs(repo): enrich project metadata
 ```
 
-If the branch is not already present on GitHub, push it with:
-
-```powershell
-git push -u origin codex/start-nautobot-app-phase-5
-```
-
-Current blocker: local HTTPS git authentication is not available in this Codex
-session. A noninteractive push fails with:
+Publishing status:
 
 ```text
-fatal: Cannot prompt because user interactivity has been disabled.
-fatal: could not read Username for 'https://github.com': terminal prompts disabled
+The release branch was pushed to GitHub after the user completed browser auth.
 ```
 
-A normal `git push` also timed out while waiting on Git Credential Manager.
-After GitHub authentication is available locally, rerun the push command above.
-Then open a draft PR against the repository default branch, or merge/publish
-according to release policy.
+Important history note:
+
+```text
+GitHub initialized main independently from this local cookiecutter history.
+The release branch was merged with origin/main using --allow-unrelated-histories
+so GitHub can create a pull request from the branch into main.
+```
+
+The branch should now be pushed again and a draft PR opened against `main`.
 
 ## Residual Notes
 
