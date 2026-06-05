@@ -56,6 +56,10 @@ The repository currently contains a custom Nautobot App named `lipford_nautobot_
 - `lipford_nautobot_metrics/tests/test_jobs.py`
 - `lipford_nautobot_metrics/tests/test_views.py`
 - `README.md`
+- `SECURITY.md`
+- `.github/dependabot.yml`
+- `.github/ISSUE_TEMPLATE/bug_report.md`
+- `.github/ISSUE_TEMPLATE/feature_request.md`
 - `docs/admin/install.md`
 - `docs/admin/compatibility_matrix.md`
 - `docs/user/app_overview.md`
@@ -123,6 +127,24 @@ docker compose --project-name lipford-nautobot-metrics --project-directory "C:\U
 - `nautobot-server migrate --check`: no pending migrations
 - Full Docker app tests: `22 passed`
 
+## Repository Metadata Added
+
+- README now includes badges, repository metadata, recommended GitHub
+  description/topics, compatibility, install/configuration, API, local
+  development, verification, project structure, release notes, and contribution
+  guidance.
+- `pyproject.toml` now points at
+  `Lipford-Dutch/nautobot-app-custom-metrics`, has richer package classifiers
+  and keywords, and uses a Python 3.10 Ruff target.
+- Issue templates now use ASCII-safe names and capture Nautobot version,
+  deployment type, impact, metric semantics, and UI/API expectations.
+- Added `SECURITY.md`.
+- Added `.github/dependabot.yml` for Python and GitHub Actions dependency
+  monitoring.
+- The GitHub connector does not currently expose a repository metadata update
+  tool. Manually set the remote repository description, website, and topics in
+  GitHub after the branch is pushed.
+
 ## GitHub Publishing Status
 
 The repository exists and is visible through the GitHub connector:
@@ -143,10 +165,10 @@ The release branch to publish is:
 codex/start-nautobot-app-phase-5
 ```
 
-Latest local release commit:
+Latest repository metadata commit before this handoff update:
 
 ```text
-cfe4626 docs(handoff): update GitHub repository status
+88c6629 docs(repo): enrich project metadata
 ```
 
 If the branch is not already present on GitHub, push it with:
