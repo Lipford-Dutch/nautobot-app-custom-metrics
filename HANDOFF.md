@@ -5,8 +5,8 @@
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
 - Current branch: `codex/start-nautobot-app-phase-5`
 - Intended GitHub organization: `Lipford-Dutch`
-- Intended repository: `nautobot-app-lipford-nautobot-metrics`
-- Intended remote URL: `https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics.git`
+- GitHub repository: `nautobot-app-custom-metrics`
+- Remote URL: `https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git`
 
 ## Current State
 
@@ -125,32 +125,31 @@ docker compose --project-name lipford-nautobot-metrics --project-directory "C:\U
 
 ## GitHub Publishing Status
 
-The GitHub connector is installed for the `Lipford-Dutch` organization, but the currently exposed connector tools do not include repository creation.
-
-The target repository was checked and did not exist:
+The repository exists and is visible through the GitHub connector:
 
 ```text
-Lipford-Dutch/nautobot-app-lipford-nautobot-metrics
+Lipford-Dutch/nautobot-app-custom-metrics
 ```
 
-The local shell does not have `gh` installed and does not expose a `GITHUB_TOKEN` or `GH_TOKEN`, so creating the repository from the shell is currently blocked.
+Local `origin` is configured as:
 
-Remaining publishing steps:
-
-1. Create the repository `Lipford-Dutch/nautobot-app-lipford-nautobot-metrics` on GitHub.
-2. Add remote:
-
-```powershell
-git remote add origin https://github.com/Lipford-Dutch/nautobot-app-lipford-nautobot-metrics.git
+```text
+https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git
 ```
 
-3. Push branch:
+The release branch to publish is:
+
+```text
+codex/start-nautobot-app-phase-5
+```
+
+If the branch is not already present on GitHub, push it with:
 
 ```powershell
 git push -u origin codex/start-nautobot-app-phase-5
 ```
 
-4. Open a draft PR or merge/publish according to release policy.
+Then open a draft PR against the repository default branch, or merge/publish according to release policy.
 
 ## Residual Notes
 
