@@ -1,0 +1,68 @@
+schema_version: 1
+campaign:
+  vulnerability_report_id: TNSCM-VR-2026-06-02
+  report_path: reports/security/VULNERABILITY-REPORT-2026-06-02.md
+  audited_at: 2026-06-02
+  audit_owner: codex
+  scope:
+    - poetry.lock
+    - docs/requirements.txt
+
+tickets:
+  - primary_key: TNSCM-SEC-2026-001
+    title: Refresh vulnerable runtime dependencies
+    assignee: codex
+    priority: P0
+    status: ready_for_implementation
+    root_cause: stale_runtime_dependency_resolution
+    planned_branch: security/TNSCM-SEC-2026-001-runtime-dependency-refresh
+    documentation:
+      - reports/security/README.md#tnscm-sec-2026-001-refresh-vulnerable-runtime-dependencies
+      - reports/security/VULNERABILITY-REPORT-2026-06-02.md#tnscm-sec-2026-001-runtime-dependency-resolution
+    fix:
+      commit: pending
+      pull_request: pending
+      release_note: changes/TNSCM-SEC-2026-001.security.md
+    vulnerabilities:
+      - { package: cryptography, locked_version: 43.0.3, severity: HIGH, advisory: GHSA-r6ph-v2qm-q3c2, cve: CVE-2026-26007, minimum_fixed_version: 46.0.5 }
+      - { package: django, locked_version: 4.2.17, severity: CRITICAL, advisory: GHSA-frmv-pr5f-9mcr, cve: CVE-2025-64459, minimum_fixed_version: 4.2.26 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-6w2r-r2m5-xq5w, cve: CVE-2025-57833, minimum_fixed_version: 4.2.24 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-8p8v-wh79-9r56, cve: CVE-2026-25673, minimum_fixed_version: 4.2.29 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-933h-hp56-hf7m, cve: CVE-2026-33034, minimum_fixed_version: 4.2.30 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-gvg8-93h5-g6qq, cve: CVE-2026-1287, minimum_fixed_version: 4.2.28 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-hpr9-3m2g-3j9p, cve: CVE-2025-59681, minimum_fixed_version: 4.2.25 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-mvfq-ggxm-9mc5, cve: CVE-2026-3902, minimum_fixed_version: 4.2.30 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-mwm9-4648-f68q, cve: CVE-2026-1207, minimum_fixed_version: 4.2.28 }
+      - { package: django, locked_version: 4.2.17, severity: HIGH, advisory: GHSA-qw25-v68c-qjf3, cve: CVE-2025-64458, minimum_fixed_version: 4.2.26 }
+      - { package: gitpython, locked_version: 3.1.44, severity: HIGH, advisory: GHSA-mv93-w799-cj2w, cve: null, minimum_fixed_version: 3.1.50 }
+      - { package: gitpython, locked_version: 3.1.44, severity: HIGH, advisory: GHSA-rpm5-65cw-6hj4, cve: CVE-2026-42215, minimum_fixed_version: 3.1.47 }
+      - { package: gitpython, locked_version: 3.1.44, severity: HIGH, advisory: GHSA-v87r-6q3f-2j67, cve: CVE-2026-44244, minimum_fixed_version: 3.1.49 }
+      - { package: gitpython, locked_version: 3.1.44, severity: HIGH, advisory: GHSA-x2qx-6953-8485, cve: CVE-2026-42284, minimum_fixed_version: 3.1.47 }
+      - { package: nautobot, locked_version: 2.3.16, severity: HIGH, advisory: GHSA-c35q-vxrp-ph26, cve: CVE-2026-44797, minimum_fixed_version: 2.4.33 }
+      - { package: nautobot, locked_version: 2.3.16, severity: HIGH, advisory: GHSA-p3hx-pwf3-j8wr, cve: CVE-2026-44798, minimum_fixed_version: 2.4.33 }
+      - { package: pillow, locked_version: 10.3.0, severity: HIGH, advisory: GHSA-cfh3-3jmp-rvhc, cve: CVE-2026-25990, minimum_fixed_version: 12.1.1 }
+      - { package: pillow, locked_version: 10.3.0, severity: HIGH, advisory: GHSA-pwv6-vv43-88gr, cve: CVE-2026-42311, minimum_fixed_version: 12.2.0 }
+      - { package: pillow, locked_version: 10.3.0, severity: HIGH, advisory: GHSA-whj4-6x5x-4v2j, cve: CVE-2026-40192, minimum_fixed_version: 12.2.0 }
+      - { package: pyjwt, locked_version: 2.9.0, severity: HIGH, advisory: GHSA-752w-5fwx-jx9f, cve: CVE-2026-32597, minimum_fixed_version: 2.12.0 }
+      - { package: urllib3, locked_version: 2.2.3, severity: HIGH, advisory: GHSA-2xpw-w6gg-jr37, cve: CVE-2025-66471, minimum_fixed_version: 2.6.0 }
+      - { package: urllib3, locked_version: 2.2.3, severity: HIGH, advisory: GHSA-38jv-5279-wg99, cve: CVE-2026-21441, minimum_fixed_version: 2.6.3 }
+      - { package: urllib3, locked_version: 2.2.3, severity: HIGH, advisory: GHSA-gm62-xv2j-4w53, cve: CVE-2025-66418, minimum_fixed_version: 2.6.0 }
+      - { package: urllib3, locked_version: 2.2.3, severity: HIGH, advisory: GHSA-qccp-gfcp-xxvc, cve: CVE-2026-44431, minimum_fixed_version: 2.7.0 }
+
+  - primary_key: TNSCM-SEC-2026-002
+    title: Refresh vulnerable build tools
+    assignee: codex
+    priority: P1
+    status: ready_for_implementation
+    root_cause: stale_build_tool_dependency_resolution
+    planned_branch: security/TNSCM-SEC-2026-002-build-tool-refresh
+    documentation:
+      - reports/security/README.md#tnscm-sec-2026-002-refresh-vulnerable-build-tools
+      - reports/security/VULNERABILITY-REPORT-2026-06-02.md#tnscm-sec-2026-002-build-tool-dependency-resolution
+    fix:
+      commit: pending
+      pull_request: pending
+      release_note: changes/TNSCM-SEC-2026-002.security.md
+    vulnerabilities:
+      - { package: setuptools, locked_version: 75.3.0, severity: HIGH, advisory: GHSA-5rjg-fvgr-3xxf, cve: CVE-2025-47273, minimum_fixed_version: 78.1.1 }
+      - { package: wheel, locked_version: 0.45.1, severity: HIGH, advisory: GHSA-8rrh-rw8j-w5fx, cve: CVE-2026-24049, minimum_fixed_version: 0.46.2 }

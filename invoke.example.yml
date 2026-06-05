@@ -1,0 +1,15 @@
+---
+lipford_nautobot_metrics:
+  nautobot_ver: "3.0.0"
+  python_ver: "3.12"
+  # local: false
+  # compose_dir: "/full/path/to/nautobot-app-lipford-nautobot-metrics/development"
+
+# The following is an example of using MySQL as the database backend
+# ---
+# lipford_nautobot_metrics:
+#   compose_files:
+#     - "docker-compose.base.yml"
+#     - "docker-compose.redis.yml"
+#     - "docker-compose.mysql.yml"
+#     - "docker-compose.dev.yml"
