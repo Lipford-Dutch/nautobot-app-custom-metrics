@@ -143,13 +143,30 @@ The release branch to publish is:
 codex/start-nautobot-app-phase-5
 ```
 
+Latest local release commit:
+
+```text
+cfe4626 docs(handoff): update GitHub repository status
+```
+
 If the branch is not already present on GitHub, push it with:
 
 ```powershell
 git push -u origin codex/start-nautobot-app-phase-5
 ```
 
-Then open a draft PR against the repository default branch, or merge/publish according to release policy.
+Current blocker: local HTTPS git authentication is not available in this Codex
+session. A noninteractive push fails with:
+
+```text
+fatal: Cannot prompt because user interactivity has been disabled.
+fatal: could not read Username for 'https://github.com': terminal prompts disabled
+```
+
+A normal `git push` also timed out while waiting on Git Credential Manager.
+After GitHub authentication is available locally, rerun the push command above.
+Then open a draft PR against the repository default branch, or merge/publish
+according to release policy.
 
 ## Residual Notes
 
