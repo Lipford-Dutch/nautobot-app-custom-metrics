@@ -5,14 +5,36 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "America/New_York"
     open-pull-requests-limit: 5
+    groups:
+      python-runtime:
+        patterns:
+          - "*"
     labels:
       - "type: dependencies"
+      - "security"
+    commit-message:
+      prefix: "deps"
+      include: "scope"
 
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
       interval: "weekly"
+      day: "monday"
+      time: "06:30"
+      timezone: "America/New_York"
     open-pull-requests-limit: 5
+    groups:
+      github-actions:
+        patterns:
+          - "*"
     labels:
       - "type: dependencies"
+      - "security"
+    commit-message:
+      prefix: "deps"
+      include: "scope"

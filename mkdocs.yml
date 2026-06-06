@@ -112,6 +112,7 @@ nav:
       - External Interactions: "user/external_interactions.md"
   - Administrator Guide:
       - Install and Configure: "admin/install.md"
+      - GitHub Environments: "admin/github_environments.md"
       - Upgrade: "admin/upgrade.md"
       - Uninstall: "admin/uninstall.md"
       - Compatibility Matrix: "admin/compatibility_matrix.md"
