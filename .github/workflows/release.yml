@@ -94,7 +94,7 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           RELEASE_TAG: "${{ needs.build.outputs.release_tag }}"
-        run: "gh release upload ${RELEASE_TAG} dist/*.{tar.gz,whl} --clobber"
+        run: "gh release upload ${RELEASE_TAG} dist/*.{tar.gz,whl} --clobber --repo ${{ github.repository }}"
 
   publish-pypi:
     name: "Publish PyPI package"
