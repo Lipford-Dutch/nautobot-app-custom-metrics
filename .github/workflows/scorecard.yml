@@ -10,7 +10,10 @@ on:  # yamllint disable-line rule:truthy
       - "main"
 
 permissions:
+  actions: "read"
   contents: "read"
+  issues: "read"
+  pull-requests: "read"
   security-events: "write"
   id-token: "write"
 
