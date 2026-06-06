@@ -21,7 +21,7 @@ jobs:
     if: "startsWith(github.event.release.tag_name || inputs.tag || github.ref_name, 'v')"
     steps:
       - name: "Check out repository code"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v6"
         with:
           ref: "${{ github.event.release.tag_name || inputs.tag || github.ref_name }}"
 
@@ -48,7 +48,7 @@ jobs:
           fi
 
       - name: "Upload package artifacts"
-        uses: "actions/upload-artifact@v4"
+        uses: "actions/upload-artifact@v7"
         with:
           name: "distfiles"
           path: "dist/"
@@ -62,7 +62,7 @@ jobs:
     needs: "build"
     steps:
       - name: "Retrieve built package artifacts"
-        uses: "actions/download-artifact@v4"
+        uses: "actions/download-artifact@v8"
         with:
           name: "distfiles"
           path: "dist/"
@@ -84,13 +84,13 @@ jobs:
       id-token: "write"
     steps:
       - name: "Retrieve built package artifacts"
-        uses: "actions/download-artifact@v4"
+        uses: "actions/download-artifact@v8"
         with:
           name: "distfiles"
           path: "dist/"
 
       - name: "Publish package distributions to PyPI"
-        uses: "pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e"  # v1.13.0
+        uses: "pypa/gh-action-pypi-publish@cef221092ed1bacb1cc03d23a2d87d1d172e277b"  # v1.14.0
 
   slack-notify:
     name: "Notify release publication"
@@ -110,7 +110,7 @@ jobs:
     steps:
       - name: "Send Slack notification"
         if: "${{ env.SLACK_WEBHOOK_URL != '' }}"
-        uses: "slackapi/slack-github-action@fcfb566f8b0aab22203f066d80ca1d7e4b5d05b3"  # v1.27.1
+        uses: "slackapi/slack-github-action@45a88b9581bfab2566dc881e2cd66d334e621e2c"  # v3.0.3
         with:
           payload: |
             {
@@ -138,7 +138,7 @@ jobs:
       pull-requests: "write"
     steps:
       - name: "Check out main"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v6"
         with:
           ref: "main"
           fetch-depth: 0
