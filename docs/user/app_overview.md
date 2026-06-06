@@ -2,9 +2,11 @@
 
 Lipford Nautobot Metrics adds custom metric tracking to Nautobot. It stores metric definitions and timestamped metric values, exposes them through the Nautobot UI and REST API, and provides a simple dashboard for reviewing current values.
 
-The first implemented metrics are ROI-focused:
+The v1 first-batch metrics are ROI-focused:
 
 - Time Saved per Automated Task
+- Reduction in Manual Error Rates
+- Increased Task Throughput
 - Automation Adoption Rate
 
 These are intentionally small starting points so the app can be verified end to end before expanding into additional metric categories.

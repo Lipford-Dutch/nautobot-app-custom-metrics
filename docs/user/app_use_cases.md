@@ -11,6 +11,8 @@ Use the dashboard to review current ROI metrics:
 - Latest timestamp
 - Source label
 
+The v1 first batch covers Time Saved per Automated Task, Reduction in Manual Error Rates, Increased Task Throughput, and Automation Adoption Rate.
+
 ## Sample Data Population
 
 Run the `Seed sample metric data` Nautobot Job to create deterministic sample values for local validation or demonstrations. The job is idempotent, so repeated runs update existing observations for the same metric, timestamp, and source instead of creating duplicates.

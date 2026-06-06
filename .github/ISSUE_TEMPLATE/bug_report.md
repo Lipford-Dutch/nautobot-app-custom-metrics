@@ -9,7 +9,7 @@ labels:
 
 - Python version: <!-- Example: 3.12.4 -->
 - Nautobot version: <!-- Example: 3.1.3 -->
-- lipford-nautobot-metrics version: <!-- Example: 0.1.0a0 -->
+- lipford-nautobot-metrics version: <!-- Example: 0.1.0 -->
 - Deployment type: <!-- Docker, Kubernetes, systemd, other -->
 - Database: <!-- PostgreSQL, MySQL -->
 

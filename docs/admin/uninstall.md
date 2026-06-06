@@ -1,6 +1,6 @@
 # Uninstall the App from Nautobot
 
-Here you will find any steps necessary to cleanly remove the App from your Nautobot environment.
+Use this guide to remove Lipford Nautobot Metrics from a Nautobot environment.
 
 ## Database Cleanup
 
@@ -10,15 +10,14 @@ Prior to removing the app from the `nautobot_config.py`, run the following comma
 nautobot-server migrate lipford_nautobot_metrics zero
 ```
 
-!!! warning "Developer Note - Remove Me!"
-    Any other cleanup operations to ensure the database is clean after the app is removed. Is there anything else that needs cleaning up, such as CFs, relationships, etc. if they're no longer desired?
+This removes the app-owned database tables, including metric definitions and values. Export any data that must be retained before running the migration rollback.
 
 ## Remove App configuration
 
-Remove the configuration you added in `nautobot_config.py` from `PLUGINS` & `PLUGINS_CONFIG`.
+Remove the configuration you added in `nautobot_config.py` from `PLUGINS` and `PLUGINS_CONFIG`.
 
 ## Uninstall the package
 
-```bash
-$ pip3 uninstall lipford-nautobot-metrics
+```shell
+pip uninstall lipford-nautobot-metrics
 ```

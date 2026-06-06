@@ -31,6 +31,8 @@ class MetricsDashboardViewTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Metrics Dashboard")
         self.assertContains(response, "Time Saved per Automated Task")
+        self.assertContains(response, "Reduction in Manual Error Rates")
+        self.assertContains(response, "Increased Task Throughput")
         self.assertContains(response, "Automation Adoption Rate")
 
     def test_dashboard_blocks_user_without_metric_permissions(self):
@@ -73,10 +75,15 @@ class MetricSummaryAPITestCase(TestCase):
         response = self.client.get(reverse("plugins-api:lipford_nautobot_metrics-api:metric-summary"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["count"], 2)
+        self.assertEqual(response.json()["count"], 4)
         self.assertEqual(
             {item["key"] for item in response.json()["results"]},
-            {"automation_adoption_rate", "time_saved_per_automated_task"},
+            {
+                "automation_adoption_rate",
+                "increased_task_throughput",
+                "manual_error_rate_reduction",
+                "time_saved_per_automated_task",
+            },
         )
 
     def test_metric_value_api_rejects_invalid_percent_value(self):
@@ -106,7 +113,7 @@ class MetricSummaryAPITestCase(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["count"], 2)
+        self.assertEqual(response.json()["count"], 4)
 
 
 def response_definition_id(key):

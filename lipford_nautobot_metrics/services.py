@@ -12,7 +12,7 @@ from django.utils import timezone
 from lipford_nautobot_metrics.choices import MetricCategoryChoices, MetricKindChoices, MetricUnitChoices
 from lipford_nautobot_metrics.models import MetricDefinition, MetricValue
 
-SAMPLE_SOURCE = "lipford_nautobot_metrics.phase2_sample_job"
+SAMPLE_SOURCE = "lipford_nautobot_metrics.v1_first_batch_sample_job"
 DEFAULT_SAMPLE_DAYS = 3
 MAX_SAMPLE_DAYS = 30
 
@@ -27,6 +27,30 @@ DEFAULT_METRIC_DEFINITIONS: tuple[dict[str, Any], ...] = (
         "formula": "Time_Manual - Time_Automated",
         "baseline_value": Decimal("0.0000"),
         "target_value": Decimal("1.7500"),
+        "enabled": True,
+    },
+    {
+        "name": "Reduction in Manual Error Rates",
+        "key": MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
+        "category": MetricCategoryChoices.ROI,
+        "kind": MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
+        "unit": MetricUnitChoices.PERCENT,
+        "description": "Decrease in errors for tasks that were previously manual and are now automated.",
+        "formula": "(Error_Rate_Manual - Error_Rate_Automated) / Error_Rate_Manual * 100",
+        "baseline_value": Decimal("0.0000"),
+        "target_value": Decimal("90.0000"),
+        "enabled": True,
+    },
+    {
+        "name": "Increased Task Throughput",
+        "key": MetricKindChoices.INCREASED_TASK_THROUGHPUT,
+        "category": MetricCategoryChoices.ROI,
+        "kind": MetricKindChoices.INCREASED_TASK_THROUGHPUT,
+        "unit": MetricUnitChoices.PERCENT,
+        "description": "Increase in completed task volume for a period after introducing Nautobot automation.",
+        "formula": "(Tasks_Completed_Automated - Tasks_Completed_Manual) / Tasks_Completed_Manual * 100",
+        "baseline_value": Decimal("0.0000"),
+        "target_value": Decimal("400.0000"),
         "enabled": True,
     },
     {
@@ -125,7 +149,7 @@ def get_metric_summaries() -> list[dict[str, Any]]:
 
 
 def _upsert_metric_definitions(result: dict[str, int]) -> dict[str, MetricDefinition]:
-    """Create or update the Phase 2 metric definitions."""
+    """Create or update the v1 first-batch metric definitions."""
     definitions = {}
 
     for definition_data in DEFAULT_METRIC_DEFINITIONS:
@@ -153,7 +177,7 @@ def _upsert_sample_values(
     sample_days: int,
     result: dict[str, int],
 ) -> None:
-    """Create or update sample observations for the Phase 2 metrics."""
+    """Create or update sample observations for the v1 first-batch metrics."""
     base_recorded_at = timezone.localtime(timezone.now()).replace(hour=12, minute=0, second=0, microsecond=0)
     start_recorded_at = base_recorded_at - timedelta(days=sample_days - 1)
     source = get_app_settings()["sample_metric_source"]
@@ -170,7 +194,38 @@ def _upsert_sample_values(
                 "manual_hours": "2.0000",
                 "automated_hours": str(Decimal("0.7500") - Decimal("0.2500") * min(day_index, 2)),
             },
-            notes="Sample ROI observation generated for Phase 2 validation.",
+            notes="Sample ROI observation generated for v1 first-batch validation.",
+            source=source,
+            result=result,
+        )
+
+        _upsert_metric_value(
+            metric_definition=definitions[MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION],
+            recorded_at=recorded_at,
+            value=min(Decimal("75.0000") + Decimal("5.0000") * day_index, Decimal("95.0000")),
+            context={
+                "task_name": "device configuration changes",
+                "manual_error_rate_percent": "10.0000",
+                "automated_error_rate_percent": str(
+                    max(Decimal("2.5000") - Decimal("0.5000") * day_index, Decimal("0.5000"))
+                ),
+            },
+            notes="Sample quality observation generated for v1 first-batch validation.",
+            source=source,
+            result=result,
+        )
+
+        _upsert_metric_value(
+            metric_definition=definitions[MetricKindChoices.INCREASED_TASK_THROUGHPUT],
+            recorded_at=recorded_at,
+            value=min(Decimal("250.0000") + Decimal("50.0000") * day_index, Decimal("500.0000")),
+            context={
+                "task_name": "firewall policy updates",
+                "manual_tasks_completed": 20,
+                "automated_tasks_completed": 70 + day_index * 10,
+                "period": "weekly",
+            },
+            notes="Sample throughput observation generated for v1 first-batch validation.",
             source=source,
             result=result,
         )
@@ -184,7 +239,7 @@ def _upsert_sample_values(
                 "total_target_tasks": 50,
                 "team": "network automation",
             },
-            notes="Sample adoption observation generated for Phase 2 validation.",
+            notes="Sample adoption observation generated for v1 first-batch validation.",
             source=source,
             result=result,
         )

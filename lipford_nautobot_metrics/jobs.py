@@ -22,7 +22,7 @@ class SeedSampleMetricData(Job):
         """Job metadata."""
 
         name = "Seed sample metric data"
-        description = "Create or update sample ROI metrics for Time Saved and Automation Adoption Rate."
+        description = "Create or update sample ROI metrics for the v1 first batch."
         field_order = ["sample_days", "dryrun"]
         has_sensitive_variables = False
 

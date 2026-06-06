@@ -20,7 +20,7 @@ class LipfordNautobotMetricsConfig(NautobotAppConfig):
     required_settings = []
     default_settings = {
         "sample_metric_days": 3,
-        "sample_metric_source": "lipford_nautobot_metrics.phase2_sample_job",
+        "sample_metric_source": "lipford_nautobot_metrics.v1_first_batch_sample_job",
     }
     docs_view_name = "plugins:lipford_nautobot_metrics:docs"
     searchable_models = [

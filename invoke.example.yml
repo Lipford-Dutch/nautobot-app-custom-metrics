@@ -3,7 +3,7 @@ lipford_nautobot_metrics:
   nautobot_ver: "3.0.0"
   python_ver: "3.12"
   # local: false
-  # compose_dir: "/full/path/to/nautobot-app-lipford-nautobot-metrics/development"
+  # compose_dir: "/full/path/to/nautobot-app-custom-metrics/development"
 
 # The following is an example of using MySQL as the database backend
 # ---

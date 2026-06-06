@@ -3,14 +3,16 @@
 ## Repository
 
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
-- Current branch: `codex/start-nautobot-app-phase-5`
+- Current branch: `main-development-metrics-stage`
 - Intended GitHub organization: `Lipford-Dutch`
 - GitHub repository: `nautobot-app-custom-metrics`
 - Remote URL: `https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git`
 
 ## Current State
 
-The app has been implemented through Phases 0-5:
+The base app has been implemented through Phases 0-5, and this branch extends
+the metrics catalog through the v1 first batch. Release polish for package
+version `0.1.0` has been completed locally:
 
 1. Bootstrap and local Docker environment
 2. Core models
@@ -18,28 +20,43 @@ The app has been implemented through Phases 0-5:
 4. Dashboard, UI, and API
 5. Test expansion, configuration, packaging, and documentation polish
 
+Current branch release point:
+
+1. Phase 0: reviewed `C:\Users\spamw\Downloads\custom_metrics_def.md` and selected the Section 2.1 ROI efficiency metrics as the first batch.
+2. Phase 1: expanded supported metric kinds for the full first batch.
+3. Phase 2: updated deterministic sample population for all first-batch metrics.
+4. Phase 3: verified existing dashboard and API paths expose the expanded batch.
+5. Phase 4: updated model, job, API, dashboard, and permission tests.
+6. Phase 5: refreshed release docs, security audit notes, repository metadata,
+   and package version for `0.1.0`.
+
 The repository currently contains a custom Nautobot App named `lipford_nautobot_metrics`.
 
 ## Implemented Functionality
 
 - `MetricDefinition` model for metric catalog entries
 - `MetricValue` model for timestamped observations
+- V1 first-batch ROI metrics:
+    - Time Saved per Automated Task
+    - Reduction in Manual Error Rates
+    - Increased Task Throughput
+    - Automation Adoption Rate
 - Nautobot UI viewsets for definitions and values
 - Dashboard page at `/plugins/lipford-nautobot-metrics/`
 - REST model APIs:
-  - `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
-  - `/api/plugins/lipford-nautobot-metrics/metric-values/`
+    - `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
+    - `/api/plugins/lipford-nautobot-metrics/metric-values/`
 - Summary API:
-  - `/api/plugins/lipford-nautobot-metrics/summary/`
+    - `/api/plugins/lipford-nautobot-metrics/summary/`
 - Navigation under Metrics > Custom Metrics
 - Nautobot Job:
-  - `Seed sample metric data`
-  - Supports dry-run
-  - Supports configurable sample window
-  - Idempotent by metric, timestamp, and source
+    - `Seed sample metric data`
+    - Supports dry-run
+    - Supports configurable sample window
+    - Idempotent by metric, timestamp, and source
 - App configuration schema:
-  - `sample_metric_days`
-  - `sample_metric_source`
+    - `sample_metric_days`
+    - `sample_metric_source`
 
 ## Key Files
 
@@ -64,6 +81,7 @@ The repository currently contains a custom Nautobot App named `lipford_nautobot_
 - `docs/admin/compatibility_matrix.md`
 - `docs/user/app_overview.md`
 - `docs/user/app_getting_started.md`
+- `docs/user/v1_first_batch_metrics.md`
 - `docs/user/app_use_cases.md`
 
 ## Local Development Notes
@@ -121,11 +139,37 @@ docker compose --project-name lipford-nautobot-metrics --project-directory "C:\U
 - JSON schema parse: passed
 - `poetry check`: valid with Poetry 2 deprecation warnings for cookiecutter metadata format
 - `poetry build`: passed
+- Built artifacts:
+    - `dist/lipford_nautobot_metrics-0.1.0.tar.gz`
+    - `dist/lipford_nautobot_metrics-0.1.0-py3-none-any.whl`
 - Wheel includes dashboard template and app config schema
 - `mkdocs build --strict`: passed
+- `yamllint . --format standard`: passed
+- `pymarkdown scan --recurse docs *.md`: passed
+- `pip-audit --local`: reviewed; blocked only by upstream-constrained PyJWT
+  advisories through Nautobot/social-auth dependencies
 - `nautobot-server check`: no issues
 - `nautobot-server migrate --check`: no pending migrations
-- Full Docker app tests: `22 passed`
+- Full Docker app tests: `23 passed`
+
+## Current Branch Verification Results
+
+- Branch: `main-development-metrics-stage`
+- Ruff check: passed
+- Ruff format check: passed after formatting changed files
+- JSON schema parse: passed
+- `poetry check`: valid with Poetry 2 deprecation warnings for cookiecutter metadata format
+- `poetry build`: passed
+- `mkdocs build --strict`: passed
+- `yamllint . --format standard`: passed
+- `pymarkdown scan --recurse docs *.md`: passed
+- `nautobot-server check`: no issues
+- `nautobot-server migrate --check`: no pending migrations
+- Docker-backed Nautobot app tests: `23 passed`
+- Known security-audit note: `pip-audit --local` reports PyJWT advisories
+  fixed in `2.13.0`; Nautobot's current auth dependency chain resolves
+  `PyJWT==2.12.1`. Tracked as upstream-constrained in
+  `reports/security/RELEASE-AUDIT-2026-06-05.md`.
 
 ## Repository Metadata Added
 
@@ -159,7 +203,7 @@ Local `origin` is configured as:
 https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git
 ```
 
-The release branch to publish is:
+The original release branch is:
 
 ```text
 codex/start-nautobot-app-phase-5
@@ -185,13 +229,36 @@ The release branch was merged with origin/main using --allow-unrelated-histories
 so GitHub can create a pull request from the branch into main.
 ```
 
-The branch should now be pushed again and a draft PR opened against `main`.
+Draft PR for the original release branch:
+
+```text
+https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/1
+```
+
+The current branch, `main-development-metrics-stage`, is the release candidate
+branch for `0.1.0`. Push and merge this branch after committing the release
+polish:
+
+```powershell
+git push -u origin main-development-metrics-stage
+```
+
+After merge, create the release tag:
+
+```powershell
+git tag -a v0.1.0 -m "v0.1.0"
+git push origin v0.1.0
+```
+
+If GitHub Release tooling or `gh` is available, publish release `v0.1.0` and
+attach the two files under `dist/`. PyPI publication requires valid PyPI
+credentials or configured GitHub Trusted Publishing.
 
 ## Residual Notes
 
 - `poetry check` emits deprecation warnings because the generated cookiecutter uses `[tool.poetry]` metadata. It builds successfully. A later maintenance task can migrate metadata into PEP 621 `[project]` format.
 - Generated/ignored artifacts from verification may exist locally:
-  - `.ruff_cache/`
-  - `dist/`
-  - `lipford_nautobot_metrics/static/lipford_nautobot_metrics/docs/`
+    - `.ruff_cache/`
+    - `dist/`
+    - `lipford_nautobot_metrics/static/lipford_nautobot_metrics/docs/`
 - These are ignored by `.gitignore`.

@@ -1,6 +1,13 @@
 # Extending the App
 
-!!! warning "Developer Note - Remove Me!"
-    Information on how to extend the App functionality.
+Extending the application is welcome. Open an issue first for larger changes so the metric model, data-source assumptions, and dashboard impact can be reviewed before implementation.
 
-Extending the application is welcome, however it is best to open an issue first, to ensure that a PR would be accepted and makes sense in terms of features and design.
+## Adding a Metric
+
+1. Add a stable key to `MetricKindChoices`.
+2. Add a default entry in `DEFAULT_METRIC_DEFINITIONS`.
+3. Add collection or sample data logic in `services.py` or a dedicated collector.
+4. Add model, job, dashboard, and API tests.
+5. Update user documentation and release notes.
+
+Prefer additive changes. Do not modify Nautobot core models.
