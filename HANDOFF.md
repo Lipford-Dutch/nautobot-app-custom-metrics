@@ -203,22 +203,29 @@ Local `origin` is configured as:
 https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git
 ```
 
-The original release branch is:
+Original release branch:
 
 ```text
 codex/start-nautobot-app-phase-5
 ```
 
-Latest repository metadata commit before the publish/handoff updates:
+V1 first-batch release branch:
 
 ```text
-88c6629 docs(repo): enrich project metadata
+main-development-metrics-stage
 ```
 
 Publishing status:
 
 ```text
-The release branch was pushed to GitHub after the user completed browser auth.
+PR #12 was opened and merged into main:
+https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/12
+
+Merge commit:
+7bbdb69aab8437d3b4faaac02d9b51de0fd09a61
+
+Annotated release tag pushed:
+v0.1.0
 ```
 
 Important history note:
@@ -235,24 +242,17 @@ Draft PR for the original release branch:
 https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/1
 ```
 
-The current branch, `main-development-metrics-stage`, is the release candidate
-branch for `0.1.0`. Push and merge this branch after committing the release
-polish:
+Package publication status:
 
-```powershell
-git push -u origin main-development-metrics-stage
-```
-
-After merge, create the release tag:
-
-```powershell
-git tag -a v0.1.0 -m "v0.1.0"
-git push origin v0.1.0
-```
-
-If GitHub Release tooling or `gh` is available, publish release `v0.1.0` and
-attach the two files under `dist/`. PyPI publication requires valid PyPI
-credentials or configured GitHub Trusted Publishing.
+- Local package artifacts were built successfully under `dist/`.
+- GitHub Release publication is not complete from this workstation because the
+  GitHub CLI is not installed and the available GitHub connector does not expose
+  a release-creation endpoint.
+- PyPI publication requires either valid local PyPI credentials or a published
+  GitHub Release with the repository's Trusted Publishing environment
+  configured.
+- The release workflow is configured to build, upload release assets, and publish
+  to PyPI only for a `release.published` event on a `v*` tag.
 
 ## Residual Notes
 
