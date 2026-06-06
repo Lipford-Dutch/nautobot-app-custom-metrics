@@ -1,0 +1,16 @@
+github_owner    = "Lipford-Dutch"
+repository_name = "nautobot-app-custom-metrics"
+
+# Replace these with numeric GitHub team IDs from the organization.
+team_qa_leads_id      = 1000001
+team_sre_approvers_id = 1000002
+team_cab_id           = 1000003
+
+# Use unique, environment-scoped cloud identities. Do not reuse values.
+development_aws_role_arn = "arn:aws:iam::111111111111:role/github-actions-nautobot-metrics-development"
+staging_aws_role_arn     = "arn:aws:iam::222222222222:role/github-actions-nautobot-metrics-staging"
+production_aws_role_arn  = "arn:aws:iam::333333333333:role/github-actions-nautobot-metrics-production"
+
+# Placeholder values only. Supply real values via a secure tfvars file or CI secret store.
+staging_external_service_token    = "REPLACE_WITH_STAGING_ONLY_SECRET"
+production_external_service_token = "REPLACE_WITH_PRODUCTION_ONLY_SECRET"

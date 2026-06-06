@@ -1,2 +1,8 @@
-# Default owner(s) of all files in this repository
-* 
+# Default owner of all files in this repository.
+* @willyd61
+
+# Security-sensitive automation and release controls require explicit owner review.
+/.github/ @willyd61
+/infrastructure/ @willyd61
+/pyproject.toml @willyd61
+/poetry.lock @willyd61
