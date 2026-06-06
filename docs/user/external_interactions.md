@@ -1,17 +1,26 @@
 # External Interactions
 
-This document describes external dependencies and prerequisites for this App to operate, including system requirements, API endpoints, interconnection or integrations to other applications or services, and similar topics.
-
-!!! warning "Developer Note - Remove Me!"
-    Optional page, remove if not applicable.
+Lipford Nautobot Metrics stores metric definitions and values inside Nautobot. The app does not require an external metrics database for the `v0.1.0` release.
 
 ## External System Integrations
 
 ### From the App to Other Systems
 
+The app does not initiate outbound calls to external systems in `v0.1.0`. Sample data is generated locally by the `Seed sample metric data` Nautobot Job.
+
 ### From Other Systems to the App
+
+External systems can write metric definitions and values through Nautobot's REST API when authenticated and authorized.
 
 ## Nautobot REST API endpoints
 
-!!! warning "Developer Note - Remove Me!"
-    API documentation in this doc - including python request examples, curl examples, postman collections referred etc.
+- `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
+- `/api/plugins/lipford-nautobot-metrics/metric-values/`
+- `/api/plugins/lipford-nautobot-metrics/summary/`
+
+Example:
+
+```shell
+curl -H "Authorization: Token ${NAUTOBOT_TOKEN}" \
+  https://nautobot.example.com/api/plugins/lipford-nautobot-metrics/summary/
+```

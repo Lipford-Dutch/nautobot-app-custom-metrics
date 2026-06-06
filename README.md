@@ -26,10 +26,10 @@ Recommended GitHub repository metadata:
 
 - Metric definition and metric value models using Nautobot model patterns.
 - V1 first-batch ROI metrics:
-  - `time_saved_per_automated_task`
-  - `manual_error_rate_reduction`
-  - `increased_task_throughput`
-  - `automation_adoption_rate`
+    - `time_saved_per_automated_task`
+    - `manual_error_rate_reduction`
+    - `increased_task_throughput`
+    - `automation_adoption_rate`
 - Nautobot UI list, detail, filter, dashboard, and navigation integration.
 - REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`.
 - Summary endpoint for aggregate metric snapshots.

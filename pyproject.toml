@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lipford-nautobot-metrics"
-version = "0.1.0a0"
+version = "0.1.0"
 description = "Custom Nautobot app for ROI, activity, and platform metrics."
 authors = ["Lipford Dutch"]
 license = "Apache-2.0"
