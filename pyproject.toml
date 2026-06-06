@@ -56,13 +56,13 @@ ipython = "*"
 pylint = "*"
 pylint-django = ">=2.5.4"
 pylint-nautobot = ">=0.3.1"
-ruff = "0.5.5"
+ruff = "0.15.16"
 yamllint = "*"
 toml = "*"
 # Python implementation of markdownlint
 pymarkdownlnt = "~0.9.30"
 Markdown = "*"
-towncrier = ">=23.6.0,<=24.8.0"
+towncrier = ">=23.6.0,<=25.8.0"
 to-json-schema = "*"
 jsonschema = "*"
 djlint = ">=1.36.4,<2.0.0"
@@ -73,14 +73,14 @@ tomli = { version = "*", markers = "python_version < '3.11'" }  # tomli is inclu
 # Render custom markdown for version added/changed/remove notes
 markdown-version-annotations = "1.0.1"
 # Rendering docs to HTML
-mkdocs = "1.6.0"
+mkdocs = "1.6.1"
 # Material for MkDocs theme
-mkdocs-material = "9.5.32"
+mkdocs-material = "9.7.6"
 # Automatic documentation from sources, for MkDocs
-mkdocstrings = "0.25.2"
-mkdocstrings-python = "1.10.8"
-mkdocs-autorefs = "1.2.0"
-griffe = "1.1.1"
+mkdocstrings = "0.27.0"
+mkdocstrings-python = "1.13.0"
+mkdocs-autorefs = "1.4.4"
+griffe = "2.0.2"
 # Image lightboxing in mkdocs
 mkdocs-glightbox = "~0.5.2"
 
