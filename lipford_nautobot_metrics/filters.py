@@ -19,7 +19,7 @@ class MetricDefinitionFilterSet(NautobotFilterSet):
         """FilterSet options."""
 
         model = models.MetricDefinition
-        fields = ["id", "name", "key", "category", "kind", "unit", "enabled"]
+        fields = "__all__"
 
 
 class MetricValueFilterSet(NautobotFilterSet):
@@ -42,4 +42,4 @@ class MetricValueFilterSet(NautobotFilterSet):
         """FilterSet options."""
 
         model = models.MetricValue
-        fields = ["id", "metric_definition", "value", "recorded_at", "source"]
+        fields = "__all__"
