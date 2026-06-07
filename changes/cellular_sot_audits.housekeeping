@@ -1,0 +1,1 @@
+Added design-patterns and testing audits for the extracted `nautobot_cellular_sot` app under `audits/` (`cellular-sot-design-patterns-audit.md`, `cellular-sot-testing-audit.md`), produced against the recovered PR #30 source snapshot.
