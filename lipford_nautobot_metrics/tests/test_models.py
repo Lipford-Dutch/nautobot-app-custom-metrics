@@ -89,6 +89,24 @@ class MetricValueTestCase(TestCase):
 
         metric_value.full_clean()
 
+    def test_bounded_rate_must_not_exceed_one_hundred(self):
+        """Bounded rate metric values are range validated."""
+        rate_definition = MetricDefinition.objects.create(
+            name="Job Execution Success Rate",
+            key="job_execution_status_rate",
+            category=MetricCategoryChoices.JOB_EXECUTION,
+            kind="job_execution_status_rate",
+            unit=MetricUnitChoices.RATE,
+        )
+        metric_value = MetricValue(
+            metric_definition=rate_definition,
+            value=Decimal("101.0"),
+            recorded_at=timezone.now(),
+        )
+
+        with self.assertRaises(ValidationError):
+            metric_value.full_clean()
+
     def test_duplicate_definition_recorded_source_is_rejected(self):
         """Duplicate values for the same metric, timestamp, and source are rejected."""
         recorded_at = timezone.now()

@@ -30,7 +30,7 @@ PLUGINS = ["lipford_nautobot_metrics"]
 PLUGINS_CONFIG = {
     "lipford_nautobot_metrics": {
         "sample_metric_days": 3,
-        "sample_metric_source": "lipford_nautobot_metrics.v1_first_batch_sample_job",
+        "sample_metric_source": "lipford_nautobot_metrics.full_catalog_sample_job",
     }
 }
 ```
@@ -52,7 +52,7 @@ sudo systemctl restart nautobot nautobot-worker nautobot-scheduler
 | Key | Type | Default | Description |
 | --- | --- | --- | --- |
 | `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
-| `sample_metric_source` | string | `lipford_nautobot_metrics.v1_first_batch_sample_job` | Source label written to sample `MetricValue` records. |
+| `sample_metric_source` | string | `lipford_nautobot_metrics.full_catalog_sample_job` | Source label written to sample `MetricValue` records. |
 
 ## Verification
 
