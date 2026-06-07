@@ -32,3 +32,4 @@
 - [ ] Unit, Integration Tests
 - [ ] Documentation Updates (when adding/changing features)
 - [ ] Outline Remaining Work, Constraints from Design
+- [ ] Cellular SoT ownership boundaries documented when touching router, SIM, carrier, collector, or telemetry behavior

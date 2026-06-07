@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block breadcrumbs %}
+    <li class="breadcrumb-item active" aria-current="page">Cellular SoT Dashboard</li>
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <div class="row">
+        {% for label, value in dashboard_stats %}
+            <div class="col-md-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><strong>{{ label }}</strong></div>
+                    <div class="panel-body"><span class="h2">{{ value }}</span></div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Desired and Observed Cellular State</strong></div>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr><th>Device</th><th>Provisioning</th><th>SIMs</th><th>Registration</th><th>Observed</th><th>Assignment</th></tr>
+                </thead>
+                <tbody>
+                    {% for router in routers %}
+                        <tr>
+                            <td><a href="{% url 'plugins:nautobot_cellular_sot:cellularrouter' pk=router.id %}">{{ router.device }}</a></td>
+                            <td>{{ router.provisioning_state }}</td>
+                            <td>{{ router.sim_count }}</td>
+                            <td>{{ router.registration_state }}</td>
+                            <td>{{ router.observed_at|default:"-" }}</td>
+                            <td>{% if router.assignment_conflict %}<span class="label label-danger">Conflict</span>{% else %}<span class="label label-success">Aligned</span>{% endif %}</td>
+                        </tr>
+                    {% empty %}
+                        <tr><td colspan="6">No cellular routers are configured.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content %}

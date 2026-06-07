@@ -1,0 +1,1 @@
+Added the initial Cellular SoT app package with models, dashboard, API endpoints, GraphQL types, Device detail integration, SSoT scaffolding, tests, documentation, and a standalone marketing page.

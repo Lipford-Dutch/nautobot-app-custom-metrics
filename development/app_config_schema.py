@@ -28,11 +28,12 @@ def _main():
     pyproject = toml.loads(Path("pyproject.toml").read_text())
     url = urlparse(pyproject["tool"]["poetry"]["repository"])
     _, owner, repository = url.path.split("/")
-    package_name = pyproject["tool"]["poetry"]["packages"][0]["include"]
-    app_config = settings.PLUGINS_CONFIG[package_name]  # type: ignore
-    schema_path = Path(package_name) / "app-config-schema.json"
+    package_names = [package["include"] for package in pyproject["tool"]["poetry"]["packages"]]
     command = getenv("APP_CONFIG_SCHEMA_COMMAND", "")
     if command == "generate":
+        package_name = package_names[0]
+        app_config = settings.PLUGINS_CONFIG[package_name]  # type: ignore
+        schema_path = Path(package_name) / "app-config-schema.json"
         schema = {
             "$schema": "https://json-schema.org/draft/2020-12/schema",
             "$id": f"https://raw.githubusercontent.com/{owner}/{repository}/develop/{package_name}/app-config-schema.json",
@@ -53,11 +54,16 @@ def _main():
             "- `NautobotAppConfig.required_settings`"
         )
     elif command == "validate":
-        schema = json.loads(schema_path.read_text())
-        jsonschema.validate(app_config, schema)
-        print(
-            f"\n==================\nValidated configuration using the schema:\n{schema_path}\nConfiguration is valid."
-        )
+        for package_name in package_names:
+            schema_path = Path(package_name) / "app-config-schema.json"
+            if not schema_path.exists():
+                continue
+            app_config = settings.PLUGINS_CONFIG[package_name]  # type: ignore
+            schema = json.loads(schema_path.read_text())
+            jsonschema.validate(app_config, schema)
+            print(
+                f"\n==================\nValidated configuration using the schema:\n{schema_path}\nConfiguration is valid."
+            )
     else:
         raise RuntimeError(f"Unknown command: {command}")
 

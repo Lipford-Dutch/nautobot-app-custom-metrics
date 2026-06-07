@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nautobot Cellular SoT manages cellular routers, SIM cards, carriers, and normalized operational state.">
+  <title>Nautobot Cellular SoT | Control the Wireless Edge</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { tower: "#12f7ff", signal: "#7cff00", alert: "#ff3459", night: "#050812" },
+          fontFamily: { sans: ["Inter", "sans-serif"], display: ["Rajdhani", "Impact", "sans-serif"] }
+        }
+      }
+    };
+  </script>
+  <style>
+    body { background: #050812; }
+    .radar { background: radial-gradient(circle at center, rgba(18,247,255,.18), transparent 28%), repeating-radial-gradient(circle at center, rgba(124,255,0,.12) 0 1px, transparent 1px 72px); }
+    .mesh { background-image: linear-gradient(rgba(18,247,255,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(18,247,255,.08) 1px, transparent 1px); background-size: 48px 48px; }
+    .beam { animation: beam 5s linear infinite; transform-origin: bottom center; }
+    @keyframes beam { from { transform: rotate(-24deg); } 50% { transform: rotate(24deg); } to { transform: rotate(-24deg); } }
+    @media (prefers-reduced-motion: reduce) { .beam { animation: none; } }
+  </style>
+</head>
+<body class="text-white antialiased">
+  <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-night/85 backdrop-blur">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between px-5 py-4">
+      <a class="flex items-center gap-3 font-display text-2xl font-bold uppercase tracking-wide" href="#">
+        <span class="grid h-10 w-10 place-items-center rounded-full border border-tower bg-tower/10 text-tower"><i data-lucide="radio-tower" class="h-5 w-5"></i></span>
+        Cellular <span class="text-signal">SoT</span>
+      </a>
+      <div class="hidden gap-7 text-xs font-black uppercase tracking-[.18em] text-slate-400 md:flex">
+        <a class="hover:text-tower" href="#advantage">Advantage</a>
+        <a class="hover:text-tower" href="#control">Control Plane</a>
+        <a class="hover:text-tower" href="#deploy">Deploy</a>
+      </div>
+      <a class="rounded-full bg-signal px-5 py-2 text-xs font-black uppercase tracking-widest text-night" href="#deploy">Claim the edge</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="mesh relative isolate min-h-screen overflow-hidden pt-28">
+      <div class="radar absolute inset-0 -z-10 opacity-70"></div>
+      <div class="beam absolute left-1/2 top-40 -z-10 h-[42rem] w-16 -translate-x-1/2 bg-gradient-to-t from-tower/30 to-transparent blur-xl"></div>
+      <div class="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.1fr_.9fr]">
+        <div>
+          <p class="inline-flex items-center gap-2 rounded-full border border-tower/40 bg-tower/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-tower">
+            <span class="h-2 w-2 rounded-full bg-signal"></span> Nautobot owns desired state
+          </p>
+          <h1 class="mt-7 font-display text-6xl font-bold uppercase leading-[.85] tracking-tight sm:text-7xl lg:text-8xl">
+            Turn the wireless edge into a <span class="text-tower">controlled system</span>.
+          </h1>
+          <p class="mt-7 max-w-2xl text-lg font-semibold leading-8 text-slate-300">
+            `nautobot_cellular_sot` binds routers, modem interfaces, SIM cards, carrier profiles, and latest operational snapshots into one authoritative Nautobot control plane.
+          </p>
+          <div class="mt-9 flex flex-col gap-4 sm:flex-row">
+            <a href="#deploy" class="flex justify-center gap-3 bg-signal px-7 py-4 text-sm font-black uppercase tracking-[.16em] text-night transition hover:-translate-y-1">Deploy the control plane <i data-lucide="send" class="h-4 w-4"></i></a>
+            <a href="#control" class="flex justify-center gap-3 border border-tower bg-tower/10 px-7 py-4 text-sm font-black uppercase tracking-[.16em] text-tower transition hover:bg-tower hover:text-night">Inspect the model <i data-lucide="scan-search" class="h-4 w-4"></i></a>
+          </div>
+        </div>
+        <div class="rounded-3xl border border-white/10 bg-white/[.04] p-5 shadow-2xl shadow-tower/10">
+          <div class="rounded-2xl border border-tower/30 bg-night p-6">
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-black uppercase tracking-[.2em] text-slate-500">Wireless Infrastructure</span>
+              <span class="rounded-full bg-signal/10 px-3 py-1 text-xs font-black text-signal">AUTHORITATIVE</span>
+            </div>
+            <div class="mt-8 grid gap-4">
+              <div class="rounded-xl border border-white/10 bg-white/[.03] p-5"><p class="text-xs font-bold uppercase tracking-widest text-slate-500">CellularRouter</p><p class="mt-2 text-2xl font-black">Device + modem interface + IMEI</p></div>
+              <div class="rounded-xl border border-white/10 bg-white/[.03] p-5"><p class="text-xs font-bold uppercase tracking-widest text-slate-500">SIMCard</p><p class="mt-2 text-2xl font-black">ICCID + slot + lifecycle state</p></div>
+              <div class="rounded-xl border border-white/10 bg-white/[.03] p-5"><p class="text-xs font-bold uppercase tracking-widest text-slate-500">CarrierProfile</p><p class="mt-2 text-2xl font-black">Carrier + APN + roaming intent</p></div>
+              <div class="rounded-xl border border-alert/30 bg-alert/10 p-5"><p class="text-xs font-bold uppercase tracking-widest text-alert">Conflict Guard</p><p class="mt-2 text-2xl font-black">Observed ICCID must match desired assignment</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="advantage" class="border-y border-white/10 bg-slate-950 py-24">
+      <div class="mx-auto max-w-7xl px-5">
+        <p class="text-sm font-black uppercase tracking-[.28em] text-signal">Why it wins</p>
+        <h2 class="mt-4 max-w-4xl font-display text-5xl font-bold uppercase leading-none sm:text-7xl">No more SIM spreadsheets. No more mystery modems.</h2>
+        <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+          <article class="rounded-3xl border border-white/10 bg-white/[.035] p-6"><i data-lucide="link-2" class="h-8 w-8 text-tower"></i><h3 class="mt-8 font-display text-3xl font-bold uppercase">Device-native</h3><p class="mt-3 text-sm leading-6 text-slate-400">Cellular state extends Nautobot `Device`, `Interface`, and `InventoryItem` instead of inventing parallel inventory.</p></article>
+          <article class="rounded-3xl border border-white/10 bg-white/[.035] p-6"><i data-lucide="shield-alert" class="h-8 w-8 text-alert"></i><h3 class="mt-8 font-display text-3xl font-bold uppercase">Conflict-aware</h3><p class="mt-3 text-sm leading-6 text-slate-400">Observed SIMs disagreeing with desired assignments are surfaced as operator decisions, not silently accepted drift.</p></article>
+          <article class="rounded-3xl border border-white/10 bg-white/[.035] p-6"><i data-lucide="database" class="h-8 w-8 text-signal"></i><h3 class="mt-8 font-display text-3xl font-bold uppercase">Telemetry sane</h3><p class="mt-3 text-sm leading-6 text-slate-400">Nautobot keeps latest normalized state while Prometheus and Splunk handle high-frequency history and logs.</p></article>
+          <article class="rounded-3xl border border-white/10 bg-white/[.035] p-6"><i data-lucide="workflow" class="h-8 w-8 text-tower"></i><h3 class="mt-8 font-display text-3xl font-bold uppercase">DiffSync ready</h3><p class="mt-3 text-sm leading-6 text-slate-400">Vendor payloads are normalized through Pydantic before reconciliation ever touches the database.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="control" class="mesh py-24">
+      <div class="mx-auto grid max-w-7xl gap-8 px-5 lg:grid-cols-2">
+        <div class="rounded-3xl border border-white/10 bg-night p-6">
+          <div class="mb-5 flex gap-2"><span class="h-3 w-3 rounded-full bg-alert"></span><span class="h-3 w-3 rounded-full bg-yellow-400"></span><span class="h-3 w-3 rounded-full bg-signal"></span></div>
+          <pre class="overflow-x-auto text-sm leading-7 text-slate-300"><code>PLUGINS = [
+  "lipford_nautobot_metrics",
+  "nautobot_cellular_sot",
+]
+
+PLUGINS_CONFIG = {
+  "nautobot_cellular_sot": {
+    "operational_snapshot_ttl_seconds": 900,
+    "sync_batch_size": 500,
+    "prometheus_export_enabled": True,
+  }
+}</code></pre>
+        </div>
+        <div class="rounded-3xl border border-tower/30 bg-tower/10 p-8">
+          <p class="text-sm font-black uppercase tracking-[.28em] text-tower">Control plane checklist</p>
+          <h2 class="mt-4 font-display text-5xl font-bold uppercase">Every edge router gets a paper trail.</h2>
+          <ul class="mt-8 space-y-4 text-slate-300">
+            <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0 text-signal"></i> CRUD pages for routers, SIMs, and carrier profiles.</li>
+            <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0 text-signal"></i> Device detail panel shows cellular desired and observed state.</li>
+            <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0 text-signal"></i> Summary API and Prometheus text endpoint feed external systems.</li>
+            <li class="flex gap-3"><i data-lucide="check-circle-2" class="h-5 w-5 shrink-0 text-signal"></i> Dry-run reconciliation job protects production intent.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-signal py-20 text-night">
+      <div class="mx-auto grid max-w-7xl gap-10 px-5 text-center sm:grid-cols-4">
+        <div><p class="counter font-display text-7xl font-bold" data-target="4">0</p><p class="text-xs font-black uppercase tracking-widest">Core models</p></div>
+        <div><p class="counter font-display text-7xl font-bold" data-target="2">0</p><p class="text-xs font-black uppercase tracking-widest">Observability endpoints</p></div>
+        <div><p class="counter font-display text-7xl font-bold" data-target="1">0</p><p class="text-xs font-black uppercase tracking-widest">Desired-state authority</p></div>
+        <div><p class="font-display text-7xl font-bold">0</p><p class="text-xs font-black uppercase tracking-widest">Raw polling loops in Nautobot</p></div>
+      </div>
+    </section>
+
+    <section id="deploy" class="bg-night py-28">
+      <div class="mx-auto max-w-4xl px-5 text-center">
+        <p class="text-sm font-black uppercase tracking-[.28em] text-tower">Deploy the wireless edge SoT</p>
+        <h2 class="mt-5 font-display text-6xl font-bold uppercase leading-none sm:text-8xl">Make cellular inventory obey the same rules as the rest of the network.</h2>
+        <div class="mx-auto mt-10 flex max-w-3xl items-center gap-3 rounded-2xl border border-white/15 bg-slate-950 p-3 text-left">
+          <span class="pl-2 font-mono text-sm font-bold text-signal">$</span>
+          <code id="clone-command" class="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs text-slate-300 sm:text-sm">git clone https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git</code>
+          <button id="copy-button" class="rounded-xl bg-tower px-4 py-3 text-xs font-black uppercase tracking-wider text-night">Copy</button>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="border-t border-white/10 bg-night px-5 py-8 text-center text-xs font-bold uppercase tracking-[.18em] text-slate-600">Nautobot Cellular SoT · wireless edge control without spreadsheet drift</footer>
+  <script>
+    lucide.createIcons();
+    document.getElementById("copy-button").addEventListener("click", async function () {
+      await navigator.clipboard.writeText(document.getElementById("clone-command").textContent);
+      this.textContent = "Copied";
+      setTimeout(() => this.textContent = "Copy", 1600);
+    });
+    const observer = new IntersectionObserver(entries => entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.querySelectorAll(".counter").forEach(counter => {
+        const target = Number(counter.dataset.target); let current = 0;
+        const timer = setInterval(() => { current += 1; counter.textContent = Math.min(current, target); if (current >= target) clearInterval(timer); }, 120);
+      });
+      observer.unobserve(entry.target);
+    }), { threshold: .35 });
+    observer.observe(document.querySelector(".bg-signal"));
+  </script>
+</body>
+</html>

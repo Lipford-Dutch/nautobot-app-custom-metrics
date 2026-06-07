@@ -128,9 +128,14 @@ if not _TESTING:
 #
 
 # Enable installed Apps. Add the name of each App to the list.
-PLUGINS = ["lipford_nautobot_metrics"]
+PLUGINS = ["lipford_nautobot_metrics", "nautobot_cellular_sot"]
 
 # Apps configuration settings. Each key is the name of an installed App and its value is a dictionary of settings.
 PLUGINS_CONFIG = {
     "lipford_nautobot_metrics": {},
+    "nautobot_cellular_sot": {
+        "operational_snapshot_ttl_seconds": 900,
+        "sync_batch_size": 500,
+        "prometheus_export_enabled": True,
+    },
 }

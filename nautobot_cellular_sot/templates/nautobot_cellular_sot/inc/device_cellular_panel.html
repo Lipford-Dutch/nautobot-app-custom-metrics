@@ -1,0 +1,37 @@
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <strong>Cellular State</strong>
+  </div>
+  <table class="table table-hover panel-body attr-table">
+    <tr>
+      <td>IMEI</td>
+      <td>{{ cellular_router.imei }}</td>
+    </tr>
+    <tr>
+      <td>Modem Interface</td>
+      <td><a href="{{ cellular_router.modem_interface.get_absolute_url }}">{{ cellular_router.modem_interface }}</a></td>
+    </tr>
+    <tr>
+      <td>Provisioning State</td>
+      <td>{{ cellular_router.get_provisioning_state_display }}</td>
+    </tr>
+    <tr>
+      <td>Assigned SIMs</td>
+      <td>{{ cellular_router.sim_cards.count }}</td>
+    </tr>
+    <tr>
+      <td>Last Reconciled</td>
+      <td>{{ cellular_router.last_reconciled_at|placeholder }}</td>
+    </tr>
+    {% if cellular_router.operational_snapshot %}
+      <tr>
+        <td>Registration State</td>
+        <td>{{ cellular_router.operational_snapshot.get_registration_state_display }}</td>
+      </tr>
+      <tr>
+        <td>Observed At</td>
+        <td>{{ cellular_router.operational_snapshot.observed_at }}</td>
+      </tr>
+    {% endif %}
+  </table>
+</div>

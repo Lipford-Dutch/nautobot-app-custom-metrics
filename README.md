@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
-Lipford Nautobot Metrics is a custom Nautobot App for tracking automation ROI and platform adoption metrics inside Nautobot. It starts with the v1 first batch of four production-ready ROI metrics, exposed through Nautobot models, UI views, REST API endpoints, and a sample-data Nautobot Job.
+Lipford Nautobot Metrics is a custom Nautobot App suite for tracking automation ROI, platform adoption metrics, and cellular source-of-truth data inside Nautobot. It exposes metrics and cellular inventory through Nautobot models, UI views, REST API endpoints, GraphQL, and Jobs.
 
 ## Repository Metadata
 
@@ -36,6 +36,8 @@ Recommended GitHub repository metadata:
 - Idempotent sample-data Nautobot Job for local verification and demos.
 - App configuration schema for collection defaults.
 - Tests for models, jobs, views, permissions, API behavior, and invalid payloads.
+- Cellular SoT models for carrier profiles, cellular routers, SIM cards, and latest operational snapshots.
+- Wireless Infrastructure navigation, cellular dashboard, Device detail integration, summary API, and Prometheus-format export.
 
 ## Compatibility
 
@@ -58,12 +60,17 @@ pip install lipford-nautobot-metrics
 Enable the app in `nautobot_config.py`:
 
 ```python
-PLUGINS = ["lipford_nautobot_metrics"]
+PLUGINS = ["lipford_nautobot_metrics", "nautobot_cellular_sot"]
 
 PLUGINS_CONFIG = {
     "lipford_nautobot_metrics": {
         "sample_metric_days": 3,
         "sample_metric_source": "lipford_nautobot_metrics.full_catalog_sample_job",
+    },
+    "nautobot_cellular_sot": {
+        "operational_snapshot_ttl_seconds": 900,
+        "sync_batch_size": 500,
+        "prometheus_export_enabled": True,
     }
 }
 ```
@@ -83,6 +90,9 @@ For Docker-based deployments, rebuild or restart the Nautobot containers after i
 | --- | --- | --- | --- |
 | `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
 | `sample_metric_source` | string | `lipford_nautobot_metrics.full_catalog_sample_job` | Source label written to sample `MetricValue` records. |
+| `operational_snapshot_ttl_seconds` | integer | `900` | Maximum expected age for latest normalized cellular operational snapshots before they should be treated as stale. |
+| `sync_batch_size` | integer | `500` | Maximum number of cellular records processed per bounded synchronization batch. |
+| `prometheus_export_enabled` | boolean | `true` | Enable the bounded-cardinality Prometheus text export endpoint. |
 
 ## First Workflow
 
@@ -101,6 +111,8 @@ The app registers these REST API routes:
 | `/api/plugins/lipford-nautobot-metrics/metric-definitions/` | Metric definition CRUD |
 | `/api/plugins/lipford-nautobot-metrics/metric-values/` | Metric value CRUD |
 | `/api/plugins/lipford-nautobot-metrics/summary/` | Aggregate metric summary |
+| `/api/plugins/cellular-sot/summary/` | Aggregate cellular SoT summary |
+| `/api/plugins/cellular-sot/prometheus/` | Bounded-cardinality Prometheus text export |
 
 Example summary request:
 

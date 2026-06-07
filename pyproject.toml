@@ -36,6 +36,7 @@ classifiers = [
 ]
 packages = [
     { include = "lipford_nautobot_metrics" },
+    { include = "nautobot_cellular_sot" },
 ]
 include = [
     # Poetry by default will exclude files that are in .gitignore
@@ -47,6 +48,8 @@ include = [
 python = ">=3.10,<3.15"
 # Used for local development
 nautobot = ">=3.1.0,<4.0.0"
+pydantic = ">=2.7,<3.0"
+diffsync = ">=2.0,<3.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"
@@ -156,10 +159,22 @@ convention = "google"
 "lipford_nautobot_metrics/migrations/*" = [
     "D",
 ]
+"nautobot_cellular_sot/migrations/*" = [
+    "D",
+]
 "lipford_nautobot_metrics/tests/*" = [
     "D",
     "S"
 ]
+"nautobot_cellular_sot/tests/*" = [
+    "D",
+    "S"
+]
+"nautobot_cellular_sot/api/serializers.py" = ["D106"]
+"nautobot_cellular_sot/filters.py" = ["D106"]
+"nautobot_cellular_sot/forms.py" = ["D106"]
+"nautobot_cellular_sot/graphql/types.py" = ["D106"]
+"nautobot_cellular_sot/tables.py" = ["D106"]
 
 [tool.coverage.run]
 disable_warnings = ["already-imported"]
@@ -170,6 +185,7 @@ omit = [
 ]
 include = [
     "lipford_nautobot_metrics/*",
+    "nautobot_cellular_sot/*",
 ]
 
 [tool.pymarkdown]

@@ -18,6 +18,7 @@ This document describes all new features and changes in the `0.1` release series
 - Added the `Seed sample metric data` Nautobot Job for idempotent sample observations.
 - Added app configuration schema and defaults for sample metric data generation.
 - Added documentation, security policy, Dependabot configuration, issue templates, and release handoff notes.
+- Added the initial `nautobot_cellular_sot` app package with carrier profiles, cellular routers, SIM cards, latest-only operational snapshots, dashboard, REST API, GraphQL, Device detail panel, and SSoT adapter scaffolding.
 
 ### Changed
 

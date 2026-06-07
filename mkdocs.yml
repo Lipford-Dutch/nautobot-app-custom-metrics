@@ -108,6 +108,7 @@ nav:
       - Getting Started: "user/app_getting_started.md"
       - V1 First-Batch Metrics: "user/v1_first_batch_metrics.md"
       - Full Metric Catalog: "user/full_metric_catalog.md"
+      - Cellular SoT Overview: "user/cellular_sot_overview.md"
       - Using the App: "user/app_use_cases.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"
@@ -125,6 +126,7 @@ nav:
       - Contributing to the App: "dev/contributing.md"
       - Development Environment: "dev/dev_environment.md"
       - Full Metric Catalog Phase 0: "dev/full_metric_catalog_phase_0.md"
+      - Cellular SoT Architecture: "dev/cellular_sot_architecture.md"
       - Release Checklist: "dev/release_checklist.md"
       - Architecture Decision Records: "dev/arch_decision.md"
       - Code Reference:
