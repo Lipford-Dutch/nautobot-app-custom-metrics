@@ -1,0 +1,1 @@
+Repaired `main` CI after the full-metric-catalog merge (PR #27): restored the `local-nautobot-lab.md` mkdocs nav entry (strict-mode docs build) and silenced a `too-many-return-statements` pylint message on the readable per-unit `_sample_value` dispatch.
