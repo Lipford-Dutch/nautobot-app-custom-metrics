@@ -14,7 +14,7 @@
     "sample_metric_source": {
       "type": "string",
       "minLength": 1,
-      "default": "lipford_nautobot_metrics.v1_first_batch_sample_job",
+      "default": "lipford_nautobot_metrics.full_catalog_sample_job",
       "description": "Source label written to sample MetricValue records."
     }
   }

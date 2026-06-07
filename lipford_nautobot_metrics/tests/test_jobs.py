@@ -2,6 +2,7 @@
 
 from django.test import TestCase, override_settings
 
+from lipford_nautobot_metrics.catalog import METRIC_CATALOG
 from lipford_nautobot_metrics.choices import MetricKindChoices
 from lipford_nautobot_metrics.jobs import SeedSampleMetricData
 from lipford_nautobot_metrics.models import MetricDefinition, MetricValue
@@ -16,24 +17,20 @@ from lipford_nautobot_metrics.services import (
 
 
 class SeedSampleMetricsTestCase(TestCase):
-    """Tests for v1 first-batch sample metric population."""
+    """Tests for full-catalog sample metric population."""
 
     def test_seed_creates_definitions_and_values(self):
-        """The seed service creates first-batch definitions and daily values for each metric."""
+        """The seed service creates full-catalog definitions and daily values."""
         result = seed_sample_metrics(sample_days=DEFAULT_SAMPLE_DAYS)
+        catalog_size = len(METRIC_CATALOG)
 
-        self.assertEqual(result["definitions_created"], 4)
-        self.assertEqual(result["values_created"], 12)
-        self.assertEqual(MetricDefinition.objects.count(), 4)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 12)
+        self.assertEqual(result["definitions_created"], catalog_size)
+        self.assertEqual(result["values_created"], catalog_size * DEFAULT_SAMPLE_DAYS)
+        self.assertEqual(MetricDefinition.objects.count(), catalog_size)
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), catalog_size * DEFAULT_SAMPLE_DAYS)
         self.assertEqual(
             set(MetricDefinition.objects.values_list("key", flat=True)),
-            {
-                MetricKindChoices.AUTOMATION_ADOPTION_RATE,
-                MetricKindChoices.INCREASED_TASK_THROUGHPUT,
-                MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
-                MetricKindChoices.TIME_SAVED_PER_AUTOMATED_TASK,
-            },
+            {definition["key"] for definition in METRIC_CATALOG},
         )
 
     def test_app_settings_use_defaults_and_overrides(self):
@@ -50,8 +47,8 @@ class SeedSampleMetricsTestCase(TestCase):
         ):
             result = seed_sample_metrics()
 
-        self.assertEqual(result["values_created"], 8)
-        self.assertEqual(MetricValue.objects.filter(source="unit-test-source").count(), 8)
+        self.assertEqual(result["values_created"], len(METRIC_CATALOG) * 2)
+        self.assertEqual(MetricValue.objects.filter(source="unit-test-source").count(), len(METRIC_CATALOG) * 2)
 
     def test_seed_is_idempotent(self):
         """Running the seed service twice updates existing records instead of duplicating them."""
@@ -60,15 +57,15 @@ class SeedSampleMetricsTestCase(TestCase):
 
         self.assertEqual(result["definitions_created"], 0)
         self.assertEqual(result["values_created"], 0)
-        self.assertEqual(MetricDefinition.objects.count(), 4)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 8)
+        self.assertEqual(MetricDefinition.objects.count(), len(METRIC_CATALOG))
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), len(METRIC_CATALOG) * 2)
 
     def test_dryrun_rolls_back_writes(self):
         """Dry-run validates the seed path without committing database records."""
         result = seed_sample_metrics(sample_days=2, dryrun=True)
 
-        self.assertEqual(result["definitions_created"], 4)
-        self.assertEqual(result["values_created"], 8)
+        self.assertEqual(result["definitions_created"], len(METRIC_CATALOG))
+        self.assertEqual(result["values_created"], len(METRIC_CATALOG) * 2)
         self.assertEqual(MetricDefinition.objects.count(), 0)
         self.assertEqual(MetricValue.objects.count(), 0)
 
@@ -85,7 +82,7 @@ class SeedSampleMetricsTestCase(TestCase):
         summary = SeedSampleMetricData().run(dryrun=False, sample_days=1)
 
         self.assertIn("Seeded sample metric data", summary)
-        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), 4)
+        self.assertEqual(MetricValue.objects.filter(source=SAMPLE_SOURCE).count(), len(METRIC_CATALOG))
 
     def test_job_run_dryrun_returns_summary_without_writes(self):
         """The Nautobot Job dry-run path validates without committing writes."""
@@ -115,7 +112,7 @@ class SeedSampleMetricsTestCase(TestCase):
 
         summaries = get_metric_summaries()
 
-        self.assertEqual(len(summaries), 3)
+        self.assertEqual(len(summaries), len(METRIC_CATALOG) - 1)
         self.assertNotIn(
             MetricKindChoices.AUTOMATION_ADOPTION_RATE,
             {summary["key"] for summary in summaries},

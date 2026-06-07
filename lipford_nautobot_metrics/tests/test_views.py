@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 from nautobot.users.models import Token
 
+from lipford_nautobot_metrics.catalog import METRIC_CATALOG
 from lipford_nautobot_metrics.services import seed_sample_metrics
 
 
@@ -34,6 +35,10 @@ class MetricsDashboardViewTestCase(TestCase):
         self.assertContains(response, "Reduction in Manual Error Rates")
         self.assertContains(response, "Increased Task Throughput")
         self.assertContains(response, "Automation Adoption Rate")
+        self.assertContains(response, "Golden Config Overall Compliance Status")
+        self.assertContains(response, "SSoT Data Synchronization Job Frequency")
+        self.assertContains(response, "DLM Time to Provision New Device")
+        self.assertContains(response, "Job Results")
 
     def test_dashboard_blocks_user_without_metric_permissions(self):
         """Authenticated users without metric permissions cannot view the dashboard."""
@@ -75,15 +80,10 @@ class MetricSummaryAPITestCase(TestCase):
         response = self.client.get(reverse("plugins-api:lipford_nautobot_metrics-api:metric-summary"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["count"], 4)
+        self.assertEqual(response.json()["count"], len(METRIC_CATALOG))
         self.assertEqual(
             {item["key"] for item in response.json()["results"]},
-            {
-                "automation_adoption_rate",
-                "increased_task_throughput",
-                "manual_error_rate_reduction",
-                "time_saved_per_automated_task",
-            },
+            {definition["key"] for definition in METRIC_CATALOG},
         )
 
     def test_metric_value_api_rejects_invalid_percent_value(self):
@@ -113,7 +113,7 @@ class MetricSummaryAPITestCase(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json()["count"], 4)
+        self.assertEqual(response.json()["count"], len(METRIC_CATALOG))
 
 
 def response_definition_id(key):

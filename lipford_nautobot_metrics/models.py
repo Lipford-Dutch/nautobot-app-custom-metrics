@@ -6,6 +6,7 @@ from nautobot.core.constants import CHARFIELD_MAX_LENGTH
 from nautobot.core.models.generics import PrimaryModel
 from nautobot.extras.utils import extras_features
 
+from lipford_nautobot_metrics.catalog import BOUNDED_METRIC_KINDS
 from lipford_nautobot_metrics.choices import MetricCategoryChoices, MetricKindChoices, MetricUnitChoices
 
 
@@ -99,13 +100,12 @@ class MetricValue(PrimaryModel):
     def clean(self):
         """Validate metric observations before saving."""
         super().clean()
-        if self.metric_definition_id and self.metric_definition.unit == MetricUnitChoices.PERCENT:
+        if self.metric_definition_id and self.metric_definition.unit in {
+            MetricUnitChoices.PERCENT,
+            MetricUnitChoices.RATE,
+        }:
             if self.value < 0:
-                raise ValidationError({"value": "Percent metric values must not be negative."})
+                raise ValidationError({"value": "Percent and rate metric values must not be negative."})
 
-            bounded_percent_kinds = {
-                MetricKindChoices.AUTOMATION_ADOPTION_RATE,
-                MetricKindChoices.MANUAL_ERROR_RATE_REDUCTION,
-            }
-            if self.metric_definition.kind in bounded_percent_kinds and self.value > 100:
-                raise ValidationError({"value": "Bounded percent metric values must be between 0 and 100."})
+            if self.metric_definition.kind in BOUNDED_METRIC_KINDS and self.value > 100:
+                raise ValidationError({"value": "Bounded percent and rate metric values must be between 0 and 100."})
