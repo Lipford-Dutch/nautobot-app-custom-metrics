@@ -1,7 +1,7 @@
 ---
 lipford_nautobot_metrics:
   project_name: "lipford-nautobot-metrics"
-  nautobot_ver: "3.0.0"
+  nautobot_ver: "3.1.0"
   local: false
   python_ver: "3.12"
   compose_dir: "development"
