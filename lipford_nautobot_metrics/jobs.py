@@ -46,4 +46,6 @@ class SeedSampleMetricData(Job):
         return summary
 
 
-register_jobs(SeedSampleMetricData)
+jobs = [SeedSampleMetricData]
+
+register_jobs(*jobs)

@@ -1,7 +1,7 @@
 # Lipford Nautobot Metrics
 
 [![Nautobot](https://img.shields.io/badge/Nautobot-3.1%2B-blue)](https://www.networktocode.com/nautobot/)
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.14-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
 Lipford Nautobot Metrics is a custom Nautobot App for tracking automation ROI and platform adoption metrics inside Nautobot. It starts with the v1 first batch of four production-ready ROI metrics, exposed through Nautobot models, UI views, REST API endpoints, and a sample-data Nautobot Job.
@@ -42,10 +42,10 @@ Recommended GitHub repository metadata:
 | Component | Supported versions |
 | --- | --- |
 | Nautobot | `>=3.1.0,<4.0.0` |
-| Python | `>=3.10,<3.15` |
+| Python | `>=3.10,<3.15`; active validation target is `3.14` |
 | Database | PostgreSQL or MySQL, following Nautobot support |
 
-The local Docker verification target used Nautobot `3.1.3` and Python `3.12`.
+The local Docker verification target uses Nautobot `3.1.3` and Python `3.14`.
 
 ## Installation
 
@@ -118,7 +118,7 @@ Prepare the Docker environment on Windows PowerShell:
 ```powershell
 $env:PATH = 'C:\Program Files\Docker\Docker\resources\bin;' + $env:PATH
 $env:NAUTOBOT_VER='3.1.3'
-$env:PYTHON_VER='3.12'
+$env:PYTHON_VER='3.14'
 ```
 
 Start the development stack:

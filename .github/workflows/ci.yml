@@ -164,7 +164,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10"]
+        python-version: ["3.14"]
         nautobot-version: ["3.1.0"]
     env:
       INVOKE_LIPFORD_NAUTOBOT_METRICS_PYTHON_VER: "${{ matrix.python-version }}"
@@ -210,11 +210,11 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.10"]  # 3.13 stable is tested in unittest_report stage.
+        python-version: ["3.14"]
         db-backend: ["postgresql"]
         nautobot-version: ["stable"]
         include:
-          - python-version: "3.10"
+          - python-version: "3.14"
             db-backend: "postgresql"
             nautobot-version: "3.1.0"
           - python-version: "3.13"
@@ -264,7 +264,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.13"]
+        python-version: ["3.14"]
         db-backend: ["postgresql"]
         nautobot-version: ["stable"]
     runs-on: "ubuntu-latest"

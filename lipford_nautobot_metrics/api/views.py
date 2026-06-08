@@ -15,6 +15,7 @@ class MetricSummaryView(APIView):
     """Read-only API endpoint for dashboard metric summaries."""
 
     permission_classes = [IsAuthenticated]
+    serializer_class = serializers.MetricSummaryResponseSerializer
 
     def get(self, request):
         """Return current metric summary values."""
