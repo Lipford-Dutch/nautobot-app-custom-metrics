@@ -168,6 +168,7 @@ def _upsert_sample_values(
             )
 
 
+# pylint: disable-next=too-many-return-statements  # readable per-unit dispatch
 def _sample_value(unit: str, metric_index: int, day_index: int, bounded: bool) -> Decimal:
     """Return a deterministic, validation-safe sample value by unit."""
     seed = Decimal(metric_index + day_index + 1)
