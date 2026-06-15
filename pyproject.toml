@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lipford-nautobot-metrics"
-version = "0.1.0"
+version = "0.2.0a1"
 description = "Custom Nautobot app for ROI, activity, and platform metrics."
 authors = ["Lipford Dutch"]
 license = "Apache-2.0"
@@ -107,6 +107,8 @@ disable = """,
     too-many-ancestors,
     too-few-public-methods,
     too-many-arguments,
+    too-many-locals,
+    abstract-method,
     invalid-name,
     arguments-differ,
     import-outside-toplevel,

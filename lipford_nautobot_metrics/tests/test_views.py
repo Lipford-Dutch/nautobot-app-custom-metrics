@@ -6,6 +6,7 @@ from django.urls import reverse
 from nautobot.users.models import Token
 
 from lipford_nautobot_metrics.catalog import METRIC_CATALOG
+from lipford_nautobot_metrics.models import MetricValue
 from lipford_nautobot_metrics.services import seed_sample_metrics
 
 
@@ -114,6 +115,60 @@ class MetricSummaryAPITestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json()["count"], len(METRIC_CATALOG))
+
+    def test_bulk_ingest_is_atomic_and_idempotent(self):
+        """Bulk ingestion validates and updates a stable observation identity."""
+        self.client.force_login(self.user)
+        url = reverse("plugins-api:lipford_nautobot_metrics-api:metric-ingest")
+        payload = {
+            "values": [
+                {
+                    "metric_key": "automation_adoption_rate",
+                    "value": "75.0000",
+                    "recorded_at": "2026-06-15T12:00:00Z",
+                    "source": "integration-test",
+                }
+            ]
+        }
+
+        first = self.client.post(url, data=payload, content_type="application/json")
+        payload["values"][0]["value"] = "80.0000"
+        second = self.client.post(url, data=payload, content_type="application/json")
+
+        self.assertEqual(first.status_code, 200)
+        self.assertEqual(first.json(), {"created": 1, "updated": 0})
+        self.assertEqual(second.status_code, 200)
+        self.assertEqual(second.json(), {"created": 0, "updated": 1})
+
+    def test_bulk_ingest_rejects_unknown_key_without_writes(self):
+        """An invalid item rejects the entire ingestion batch."""
+        self.client.force_login(self.user)
+        response = self.client.post(
+            reverse("plugins-api:lipford_nautobot_metrics-api:metric-ingest"),
+            data={
+                "values": [
+                    {
+                        "metric_key": "automation_adoption_rate",
+                        "value": "75.0000",
+                        "recorded_at": "2026-06-15T12:00:00Z",
+                        "source": "integration-test",
+                    },
+                    {
+                        "metric_key": "not-a-metric",
+                        "value": "1.0000",
+                        "recorded_at": "2026-06-15T12:00:00Z",
+                        "source": "integration-test",
+                    },
+                ]
+            },
+            content_type="application/json",
+        )
+
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            MetricValue.objects.filter(source="integration-test").count(),
+            0,
+        )
 
 
 def response_definition_id(key):

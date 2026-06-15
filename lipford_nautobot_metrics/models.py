@@ -70,7 +70,6 @@ class MetricValue(PrimaryModel):
     recorded_at = models.DateTimeField(db_index=True)
     source = models.CharField(
         max_length=CHARFIELD_MAX_LENGTH,
-        blank=True,
         help_text="Collector, job, integration, or manual source that produced this observation.",
     )
     context = models.JSONField(
@@ -91,6 +90,10 @@ class MetricValue(PrimaryModel):
                 fields=("metric_definition", "recorded_at", "source"),
                 name="lipford_metrics_unique_definition_recorded_source",
             ),
+        )
+        indexes = (
+            models.Index(fields=("metric_definition", "recorded_at"), name="lip_metrics_def_time_idx"),
+            models.Index(fields=("source", "recorded_at"), name="lip_metrics_src_time_idx"),
         )
 
     def __str__(self):

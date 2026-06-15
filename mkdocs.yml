@@ -117,8 +117,11 @@ nav:
       - Upgrade: "admin/upgrade.md"
       - Uninstall: "admin/uninstall.md"
       - Compatibility Matrix: "admin/compatibility_matrix.md"
+      - Operations: "admin/operations.md"
+      - Known Limitations: "admin/known_limitations.md"
       - Release Notes:
           - "admin/release_notes/index.md"
+          - v0.2: "admin/release_notes/version_0.2.md"
           - v0.1: "admin/release_notes/version_0.1.md"
   - Developer Guide:
       - Extending the App: "dev/extending.md"

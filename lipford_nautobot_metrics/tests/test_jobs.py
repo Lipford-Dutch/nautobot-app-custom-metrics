@@ -1,17 +1,24 @@
 """Job tests for Lipford Nautobot Metrics."""
 
+from datetime import timedelta
+
 from django.test import TestCase, override_settings
+from django.utils import timezone
+from nautobot.extras.choices import JobResultStatusChoices, ObjectChangeActionChoices
+from nautobot.extras.factory import JobResultFactory, ObjectChangeFactory
 
 from lipford_nautobot_metrics.catalog import METRIC_CATALOG
 from lipford_nautobot_metrics.choices import MetricKindChoices
-from lipford_nautobot_metrics.jobs import SeedSampleMetricData
+from lipford_nautobot_metrics.jobs import CollectNautobotMetrics, PurgeMetricValues, SeedSampleMetricData
 from lipford_nautobot_metrics.models import MetricDefinition, MetricValue
 from lipford_nautobot_metrics.services import (
     DEFAULT_SAMPLE_DAYS,
     MAX_SAMPLE_DAYS,
     SAMPLE_SOURCE,
+    collect_nautobot_metrics,
     get_app_settings,
     get_metric_summaries,
+    purge_metric_values,
     seed_sample_metrics,
 )
 
@@ -92,18 +99,22 @@ class SeedSampleMetricsTestCase(TestCase):
         self.assertEqual(MetricDefinition.objects.count(), 0)
         self.assertEqual(MetricValue.objects.count(), 0)
 
-    def test_seed_repairs_changed_definition_metadata(self):
-        """Existing default metric definitions are repaired when their metadata drifts."""
+    def test_seed_repairs_catalog_metadata_but_preserves_operator_fields(self):
+        """Catalog sync repairs app metadata while preserving operator settings."""
         seed_sample_metrics(sample_days=1)
         definition = MetricDefinition.objects.get(key=MetricKindChoices.AUTOMATION_ADOPTION_RATE)
-        definition.target_value = None
+        definition.name = "Drifted name"
+        definition.target_value = 72
+        definition.enabled = False
         definition.save()
 
         result = seed_sample_metrics(sample_days=1)
 
         definition.refresh_from_db()
         self.assertEqual(result["definitions_updated"], 1)
-        self.assertEqual(str(definition.target_value), "60.0000")
+        self.assertEqual(definition.name, "Automation Adoption Rate")
+        self.assertEqual(str(definition.target_value), "72.0000")
+        self.assertFalse(definition.enabled)
 
     def test_metric_summaries_exclude_disabled_definitions(self):
         """Dashboard summaries only include enabled metric definitions."""
@@ -116,4 +127,80 @@ class SeedSampleMetricsTestCase(TestCase):
         self.assertNotIn(
             MetricKindChoices.AUTOMATION_ADOPTION_RATE,
             {summary["key"] for summary in summaries},
+        )
+
+    def test_metric_summaries_use_bounded_query_count(self):
+        """Summary generation does not execute a query per metric."""
+        seed_sample_metrics(sample_days=1)
+
+        with self.assertNumQueries(1):
+            summaries = get_metric_summaries()
+
+        self.assertEqual(len(summaries), len(METRIC_CATALOG))
+
+    def test_retention_dryrun_and_delete(self):
+        """Retention reports and then deletes observations older than the cutoff."""
+        seed_sample_metrics(sample_days=1)
+        MetricValue.objects.update(recorded_at=timezone.now() - timedelta(days=30))
+
+        dryrun = purge_metric_values(retention_days=7, dryrun=True)
+        deleted = purge_metric_values(retention_days=7)
+
+        self.assertEqual(dryrun["deleted"], len(METRIC_CATALOG))
+        self.assertEqual(deleted["deleted"], len(METRIC_CATALOG))
+        self.assertEqual(MetricValue.objects.count(), 0)
+
+    def test_retention_job_dryrun(self):
+        """The retention Job exposes a non-destructive validation path."""
+        seed_sample_metrics(sample_days=1)
+        MetricValue.objects.update(recorded_at=timezone.now() - timedelta(days=30))
+
+        summary = PurgeMetricValues().run(dryrun=True, retention_days=7)
+
+        self.assertIn("Would delete", summary)
+        self.assertEqual(MetricValue.objects.count(), len(METRIC_CATALOG))
+
+    def test_registered_jobs_include_production_operations(self):
+        """The app exposes collection and retention Jobs."""
+        self.assertTrue(CollectNautobotMetrics)
+        self.assertTrue(PurgeMetricValues)
+
+    def test_native_collectors_are_idempotent(self):
+        """Native collectors aggregate JobResult and ObjectChange data once per window."""
+        seed_sample_metrics(sample_days=1)
+        completed_at = timezone.now() - timedelta(minutes=5)
+        successful_job = JobResultFactory(status=JobResultStatusChoices.STATUS_SUCCESS)
+        failed_job = JobResultFactory(status=JobResultStatusChoices.STATUS_FAILURE)
+        successful_job.date_started = completed_at - timedelta(seconds=10)
+        successful_job.date_done = completed_at
+        successful_job.save()
+        failed_job.date_started = completed_at - timedelta(seconds=30)
+        failed_job.date_done = completed_at
+        failed_job.save()
+        ObjectChangeFactory(action=ObjectChangeActionChoices.ACTION_CREATE)
+        ObjectChangeFactory(action=ObjectChangeActionChoices.ACTION_UPDATE)
+
+        recorded_at = timezone.now().replace(second=0, microsecond=0)
+        first = collect_nautobot_metrics(lookback_minutes=60, recorded_at=recorded_at)
+        second = collect_nautobot_metrics(lookback_minutes=60, recorded_at=recorded_at)
+
+        self.assertEqual(first, {"created": 6, "updated": 0})
+        self.assertEqual(second, {"created": 0, "updated": 0})
+        self.assertEqual(
+            MetricValue.objects.get(
+                metric_definition__key="job_execution_status_rate",
+                recorded_at=recorded_at,
+            ).value,
+            50,
+        )
+
+    def test_native_collectors_dryrun(self):
+        """Native collection dry-run does not persist observations."""
+        seed_sample_metrics(sample_days=1)
+
+        result = collect_nautobot_metrics(lookback_minutes=60, dryrun=True)
+
+        self.assertEqual(result["created"], 6)
+        self.assertFalse(
+            MetricValue.objects.filter(source__contains="collector").exists(),
         )
