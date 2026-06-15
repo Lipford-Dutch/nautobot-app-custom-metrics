@@ -114,6 +114,8 @@ nav:
   - Administrator Guide:
       - Install and Configure: "admin/install.md"
       - GitHub Environments: "admin/github_environments.md"
+      - Production Readiness: "admin/production_readiness.md"
+      - Security Advisories: "admin/security_advisories.md"
       - Upgrade: "admin/upgrade.md"
       - Uninstall: "admin/uninstall.md"
       - Compatibility Matrix: "admin/compatibility_matrix.md"

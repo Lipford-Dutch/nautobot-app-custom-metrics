@@ -44,6 +44,14 @@ Follow the [installation instructions](../admin/install.md) to perform a new pro
 
 The goal of this step is to walk through the entire install process *as documented* to make sure nothing there needs to be changed or updated, to catch any errors or omissions in the documentation, and to ensure that it is current with each release.
 
+### Verify Production Readiness Evidence
+
+Before promoting a release beyond Alpha, complete the
+[production readiness checklist](../admin/production_readiness.md) and review
+the [security advisory disposition](../admin/security_advisories.md). Attach
+the upgrade, rollback, dependency-review, and staging smoke-test evidence to
+the release pull request.
+
 ---
 
 ## All Releases from `develop`
