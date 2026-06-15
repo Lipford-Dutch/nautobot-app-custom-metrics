@@ -220,6 +220,9 @@ jobs:
           - python-version: "3.13"
             db-backend: "mysql"
             nautobot-version: "stable"
+          - python-version: "3.14"
+            db-backend: "postgresql"
+            nautobot-version: "3.1.0"
     runs-on: "ubuntu-latest"
     env:
       INVOKE_LIPFORD_NAUTOBOT_METRICS_PYTHON_VER: "${{ matrix.python-version }}"
