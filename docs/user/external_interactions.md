@@ -10,12 +10,15 @@ The app does not initiate outbound calls to external systems in `v0.1.0`. Sample
 
 ### From Other Systems to the App
 
-External systems can write metric definitions and values through Nautobot's REST API when authenticated and authorized.
+External systems should write observations through the atomic bulk-ingestion
+endpoint when authenticated and authorized. Direct model endpoints remain
+available for administrative CRUD.
 
 ## Nautobot REST API endpoints
 
 - `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
 - `/api/plugins/lipford-nautobot-metrics/metric-values/`
+- `/api/plugins/lipford-nautobot-metrics/ingest/`
 - `/api/plugins/lipford-nautobot-metrics/summary/`
 
 Example:

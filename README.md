@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.14-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
-Lipford Nautobot Metrics is a custom Nautobot App for tracking automation ROI and platform adoption metrics inside Nautobot. It starts with the v1 first batch of four production-ready ROI metrics, exposed through Nautobot models, UI views, REST API endpoints, and a sample-data Nautobot Job.
+Lipford Nautobot Metrics is a Nautobot 3.1 App for tracking automation ROI, user activity, app, lifecycle, and Job metrics inside Nautobot. It provides a canonical 60-metric catalog, persistent observations, UI and API access, sample data, authenticated bulk ingestion, and native Nautobot reference collectors.
 
 ## Repository Metadata
 

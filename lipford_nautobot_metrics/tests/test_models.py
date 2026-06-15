@@ -46,6 +46,7 @@ class MetricValueTestCase(TestCase):
             metric_definition=self.percent_definition,
             value=Decimal("125.0"),
             recorded_at=timezone.now(),
+            source="unit-test",
         )
 
         with self.assertRaises(ValidationError):
@@ -57,6 +58,7 @@ class MetricValueTestCase(TestCase):
             metric_definition=self.percent_definition,
             value=Decimal("-1.0"),
             recorded_at=timezone.now(),
+            source="unit-test",
         )
 
         with self.assertRaises(ValidationError):
@@ -68,6 +70,7 @@ class MetricValueTestCase(TestCase):
             metric_definition=self.percent_definition,
             value=Decimal("75.0"),
             recorded_at=timezone.now(),
+            source="unit-test",
         )
 
         metric_value.full_clean()
@@ -85,6 +88,7 @@ class MetricValueTestCase(TestCase):
             metric_definition=throughput_definition,
             value=Decimal("400.0"),
             recorded_at=timezone.now(),
+            source="unit-test",
         )
 
         metric_value.full_clean()
@@ -102,6 +106,7 @@ class MetricValueTestCase(TestCase):
             metric_definition=rate_definition,
             value=Decimal("101.0"),
             recorded_at=timezone.now(),
+            source="unit-test",
         )
 
         with self.assertRaises(ValidationError):
@@ -124,3 +129,15 @@ class MetricValueTestCase(TestCase):
                 recorded_at=recorded_at,
                 source="unit-test",
             )
+
+    def test_source_is_required(self):
+        """Every observation identifies its provenance."""
+        metric_value = MetricValue(
+            metric_definition=self.percent_definition,
+            value=Decimal("75.0"),
+            recorded_at=timezone.now(),
+            source="",
+        )
+
+        with self.assertRaises(ValidationError):
+            metric_value.full_clean()

@@ -20,6 +20,9 @@ class LipfordNautobotMetricsConfig(NautobotAppConfig):
     base_url = "lipford-nautobot-metrics"
     required_settings = []
     default_settings = {
+        "collector_lookback_minutes": 60,
+        "max_ingest_batch_size": 500,
+        "retention_days": 0,
         "sample_metric_days": 3,
         "sample_metric_source": "lipford_nautobot_metrics.full_catalog_sample_job",
     }

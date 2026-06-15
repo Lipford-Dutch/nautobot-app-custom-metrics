@@ -49,3 +49,27 @@ class MetricSummaryResponseSerializer(serializers.Serializer):
 
     count = serializers.IntegerField()
     results = MetricSummarySerializer(many=True)
+
+
+class MetricIngestObservationSerializer(serializers.Serializer):
+    """Validate one externally supplied metric observation."""
+
+    metric_key = serializers.SlugField()
+    value = serializers.DecimalField(max_digits=18, decimal_places=4)
+    recorded_at = serializers.DateTimeField()
+    source = serializers.CharField(max_length=255, allow_blank=False)
+    context = serializers.JSONField(required=False, default=dict)
+    notes = serializers.CharField(required=False, default="", allow_blank=True)
+
+
+class MetricIngestRequestSerializer(serializers.Serializer):
+    """Validate an atomic bulk-ingestion request."""
+
+    values = MetricIngestObservationSerializer(many=True, allow_empty=False)
+
+
+class MetricIngestResponseSerializer(serializers.Serializer):
+    """Serialize bulk-ingestion result counts."""
+
+    created = serializers.IntegerField()
+    updated = serializers.IntegerField()

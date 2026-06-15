@@ -10,7 +10,7 @@ Follow the [Installation Guide](../admin/install.md) to install and enable the a
 2. Open Metrics > Custom Metrics > Dashboard.
 3. Open Jobs and enable `Seed sample metric data` if it has not been enabled yet.
 4. Run the job with the default `sample_days` value.
-5. Open Metric Definitions and confirm the four v1 first-batch ROI metrics exist.
+5. Open Metric Definitions and confirm all 60 canonical metric definitions exist.
 6. Open Metric Values and confirm daily sample observations exist.
 7. Open `/api/plugins/lipford-nautobot-metrics/summary/` with an authenticated API token to verify the summary endpoint.
 

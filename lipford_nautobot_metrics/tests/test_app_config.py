@@ -4,7 +4,7 @@ from django.test import SimpleTestCase
 
 from lipford_nautobot_metrics import LipfordNautobotMetricsConfig, config
 from lipford_nautobot_metrics.graphql.types import MetricDefinitionType, MetricValueType, graphql_types
-from lipford_nautobot_metrics.jobs import SeedSampleMetricData, jobs
+from lipford_nautobot_metrics.jobs import CollectNautobotMetrics, PurgeMetricValues, SeedSampleMetricData, jobs
 
 
 class AppConfigTestCase(SimpleTestCase):
@@ -49,4 +49,4 @@ class AppConfigTestCase(SimpleTestCase):
 
     def test_jobs_are_registered(self):
         """The job module exposes the registered app jobs."""
-        self.assertEqual(jobs, [SeedSampleMetricData])
+        self.assertEqual(jobs, [SeedSampleMetricData, CollectNautobotMetrics, PurgeMetricValues])

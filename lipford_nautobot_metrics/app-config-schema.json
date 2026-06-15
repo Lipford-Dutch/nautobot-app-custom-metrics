@@ -4,6 +4,27 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "collector_lookback_minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10080,
+      "default": 60,
+      "description": "Default lookback window used by native Nautobot collectors."
+    },
+    "max_ingest_batch_size": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 5000,
+      "default": 500,
+      "description": "Maximum observations accepted by one atomic bulk-ingestion request."
+    },
+    "retention_days": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3650,
+      "default": 0,
+      "description": "Delete observations older than this many days; zero disables retention."
+    },
     "sample_metric_days": {
       "type": "integer",
       "minimum": 1,

@@ -14,13 +14,16 @@ permissions:
   contents: "read"
   issues: "read"
   pull-requests: "read"
-  security-events: "write"
-  id-token: "write"
 
 jobs:
   scorecard:
     name: "Scorecard"
     runs-on: "ubuntu-latest"
+    permissions:
+      actions: "read"
+      contents: "read"
+      id-token: "write"
+      security-events: "write"
     steps:
       - name: "Checkout"
         uses: "actions/checkout@v4"
