@@ -43,6 +43,11 @@ For rollback, restore the prior wheel and database backup when a migration
 cannot be safely reversed. Never run retention during an upgrade or rollback
 window.
 
+Record each upgrade and rollback rehearsal with the previous version, target
+version, database backup identifier, migration result, smoke-test result, and
+operator approval. Production promotion requires this evidence from a staging
+or production-like environment.
+
 ## Failure Signals
 
 - Failed collector or retention Jobs in Nautobot Job Results
@@ -50,3 +55,14 @@ window.
 - Bulk-ingestion HTTP 400 or 403 responses
 - Increasing summary API latency
 - Unexpected observation growth
+
+## Incident Response
+
+For ingestion or collector failures:
+
+1. Stop scheduled collector and retention Jobs if they could make the incident
+   worse.
+2. Capture failed Job logs and API responses without secrets.
+3. Compare recent observation counts by source.
+4. Re-run collectors in dry-run mode after the root cause is understood.
+5. Resume normal schedules only after summary and list views are stable.
