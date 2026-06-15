@@ -170,7 +170,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        python-version: ["3.14"]
+        # pylint-nautobot 1.0 declares Python <3.14; runtime tests below remain authoritative on 3.14.
+        python-version: ["3.13"]
         nautobot-version: ["3.1.0"]
     env:
       INVOKE_LIPFORD_NAUTOBOT_METRICS_PYTHON_VER: "${{ matrix.python-version }}"
