@@ -1,0 +1,1 @@
+Fixed release verification so built wheels install their declared Nautobot runtime dependency before import validation.
