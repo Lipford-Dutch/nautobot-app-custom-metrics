@@ -33,6 +33,8 @@ Recommended GitHub repository metadata:
 - Nautobot UI list, detail, filter, dashboard, and navigation integration.
 - REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`.
 - Summary endpoint for aggregate metric snapshots.
+- Source-controlled project wiki for v3 roadmap, operations, and release
+  governance.
 - Idempotent sample-data Nautobot Job for local verification and demos.
 - App configuration schema for collection defaults.
 - Tests for models, jobs, views, permissions, API behavior, and invalid payloads.

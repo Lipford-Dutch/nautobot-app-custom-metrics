@@ -132,6 +132,7 @@ nav:
       - Local Nautobot Lab: "local-nautobot-lab.md"
       - Full Metric Catalog Phase 0: "dev/full_metric_catalog_phase_0.md"
       - Bug Triage and Fix Tracking: "dev/bug_triage.md"
+      - Project Wiki: "dev/wiki.md"
       - Release v3.0 Forecast: "dev/release_v3_forecast.md"
       - Release Checklist: "dev/release_checklist.md"
       - Architecture Decision Records: "dev/arch_decision.md"
