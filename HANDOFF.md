@@ -4,8 +4,8 @@
 
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
 - GitHub repository: `Lipford-Dutch/nautobot-app-custom-metrics`
-- Active development branch: `develop`
-- Current working branch: `codex/final-alpha-rc-evidence`
+- Active development branch: `main`
+- Current working branch: `main`
 - Current package candidate: `0.2.0rc1`
 - Previous published prerelease: `v0.2.0a1`
 

@@ -47,6 +47,8 @@ include = [
 python = ">=3.10,<3.15"
 # Used for local development
 nautobot = ">=3.1.0,<4.0.0"
+# Keep Nautobot/Celery wheel smoke installs on the importable tzlocal line.
+tzlocal = ">=5.3.1,<5.4.0"
 
 [tool.poetry.group.dev.dependencies]
 coverage = "*"

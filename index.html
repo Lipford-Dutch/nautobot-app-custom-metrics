@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Lipford Nautobot Metrics turns 60 automation, activity, plugin, and business-impact signals into Nautobot-backed operational proof.">
-  <title>Lipford Nautobot Metrics | Put the Full Metric Catalog on the Board</title>
+  <meta name="description" content="Lipford Nautobot Metrics Alpha turns 60 automation, activity, plugin, and business-impact signals into Nautobot-backed operational proof.">
+  <title>Lipford Nautobot Metrics Alpha | The Automation Scoreboard Is Live</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/lucide@latest"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,6 +42,7 @@
       <div class="hidden items-center gap-7 text-xs font-extrabold uppercase tracking-[.18em] text-slate-400 md:flex">
         <a class="transition hover:text-hyper" href="#features">Advantage</a>
         <a class="transition hover:text-hyper" href="#play">Playbook</a>
+        <a class="transition hover:text-hyper" href="#sneak-peek">Field Tape</a>
         <a class="transition hover:text-hyper" href="#stats">Stat Board</a>
       </div>
       <a href="#deploy" class="border border-voltage bg-voltage/10 px-4 py-2 text-xs font-black uppercase tracking-widest text-voltage transition hover:bg-voltage hover:text-ink">Run the play</a>
@@ -55,13 +56,13 @@
       <div class="mx-auto grid min-h-[calc(100vh-7rem)] max-w-7xl items-center gap-12 px-5 py-16 lg:grid-cols-[1.2fr_.8fr]">
         <div>
           <div class="mb-7 inline-flex items-center gap-3 border-l-4 border-blaze bg-blaze/10 px-4 py-2 text-xs font-black uppercase tracking-[.22em] text-orange-300">
-            <span class="h-2 w-2 animate-pulse rounded-full bg-blaze"></span> Nautobot 3.1+ · Python 3.10+
+            <span class="h-2 w-2 animate-pulse rounded-full bg-blaze"></span> Alpha RC · Nautobot 3.1+ · Python 3.14 validated
           </div>
           <h1 class="max-w-5xl font-display text-6xl font-bold uppercase leading-[.88] tracking-[-.035em] text-white sm:text-7xl lg:text-[7.5rem]">
-            Put the full metric <span class="text-voltage">catalog</span> on the board.
+            The automation scoreboard <span class="text-voltage">just went Alpha.</span>
           </h1>
           <p class="mt-7 max-w-2xl text-lg font-medium leading-relaxed text-slate-300">
-            Native Nautobot telemetry spanning ROI, business impact, user activity, Golden Config, SSoT, lifecycle management, and job execution. Sixty canonical metrics. One operational scoreboard.
+            Native Nautobot telemetry spanning ROI, business impact, user activity, Golden Config, SSoT, lifecycle management, and job execution. Sixty canonical metrics, atomic ingestion, reference collectors, retention control, and proof-grade release evidence.
           </p>
           <div class="mt-9 flex flex-col gap-4 sm:flex-row">
             <a href="#deploy" class="glow-lime group flex items-center justify-center gap-3 bg-voltage px-7 py-4 text-sm font-black uppercase tracking-[.16em] text-ink transition hover:-translate-y-1">
@@ -76,17 +77,17 @@
           <div class="glow-blue relative overflow-hidden border border-hyper/30 bg-slate-950/90 p-1">
             <div class="scanline absolute top-0 h-px w-full"></div>
             <div class="flex items-center justify-between border-b border-white/10 px-5 py-4">
-              <span class="text-xs font-black uppercase tracking-[.2em] text-slate-400">Full Catalog Command Center</span>
+              <span class="text-xs font-black uppercase tracking-[.2em] text-slate-400">Alpha Command Center</span>
               <span class="flex items-center gap-2 text-xs font-bold text-voltage"><span class="h-2 w-2 rounded-full bg-voltage"></span> LIVE</span>
             </div>
             <div class="grid gap-px bg-white/10 sm:grid-cols-2">
               <div class="bg-ink p-6"><p class="text-xs font-black uppercase tracking-widest text-slate-500">Canonical Metrics</p><p class="mt-2 font-display text-5xl font-bold text-white">60</p><p class="mt-3 text-xs text-voltage">FULL CATALOG LOADED</p></div>
               <div class="bg-ink p-6"><p class="text-xs font-black uppercase tracking-widest text-slate-500">Metric Categories</p><p class="mt-2 font-display text-5xl font-bold text-white">7</p><p class="mt-3 text-xs text-voltage">EVERY OPERATING ANGLE</p></div>
               <div class="bg-ink p-6"><p class="text-xs font-black uppercase tracking-widest text-slate-500">User Activity</p><p class="mt-2 font-display text-5xl font-bold text-white">16</p><p class="mt-3 text-xs text-voltage">ADOPTION EXPOSED</p></div>
-              <div class="bg-ink p-6"><p class="text-xs font-black uppercase tracking-widest text-slate-500">Plugin Metrics</p><p class="mt-2 font-display text-5xl font-bold text-white">22</p><p class="mt-3 text-xs text-voltage">GC + SSOT + DLM</p></div>
+              <div class="bg-ink p-6"><p class="text-xs font-black uppercase tracking-widest text-slate-500">Nautobot Jobs</p><p class="mt-2 font-display text-5xl font-bold text-white">3</p><p class="mt-3 text-xs text-voltage">SEED + COLLECT + PURGE</p></div>
             </div>
           </div>
-          <p class="mt-4 text-center text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">Verified runtime catalog | deterministic sample data proves the pipeline</p>
+          <p class="mt-4 text-center text-[10px] font-bold uppercase tracking-[.2em] text-slate-600">v0.2.0rc1 evidence | deterministic samples | native collectors | atomic ingest</p>
         </div>
       </div>
     </section>
@@ -107,14 +108,14 @@
             <p class="mt-3 text-sm leading-6 text-slate-400">The transactional full-catalog seed Job creates or repairs all 60 definitions, supports dry runs, and writes deterministic observations without duplicate noise.</p>
           </article>
           <article class="group border border-white/10 bg-white/[.025] p-6 transition hover:-translate-y-2 hover:border-blaze/60">
-            <div class="flex items-start justify-between"><i data-lucide="radio-tower" class="h-8 w-8 text-blaze"></i><span class="bg-blaze/10 px-2 py-1 text-[10px] font-black tracking-wider text-orange-300">EVERY SURFACE</span></div>
-            <h3 class="mt-8 font-display text-3xl font-bold uppercase">Metrics everywhere</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">Drive the dashboard, CRUD endpoints, metric summary API, GraphQL, webhooks, filters, and exports from the same canonical catalog.</p>
+            <div class="flex items-start justify-between"><i data-lucide="radio-tower" class="h-8 w-8 text-blaze"></i><span class="bg-blaze/10 px-2 py-1 text-[10px] font-black tracking-wider text-orange-300">API FIREHOSE</span></div>
+            <h3 class="mt-8 font-display text-3xl font-bold uppercase">Ingest under pressure</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-400">Atomic bulk ingestion, summary rollups, CRUD endpoints, and GraphQL registration move external observations into Nautobot without splitting the scoreboard.</p>
           </article>
           <article class="group border border-white/10 bg-white/[.025] p-6 transition hover:-translate-y-2 hover:border-fuchsia-400/60">
-            <div class="flex items-start justify-between"><i data-lucide="shield-check" class="h-8 w-8 text-fuchsia-400"></i><span class="bg-fuchsia-400/10 px-2 py-1 text-[10px] font-black tracking-wider text-fuchsia-300">BATTLE TESTED</span></div>
-            <h3 class="mt-8 font-display text-3xl font-bold uppercase">Built to clear checks</h3>
-            <p class="mt-3 text-sm leading-6 text-slate-400">Docker-backed Nautobot tests, migration checks, permissions, invalid payloads, Ruff, Poetry, builds, and strict docs all get called up.</p>
+            <div class="flex items-start justify-between"><i data-lucide="shield-check" class="h-8 w-8 text-fuchsia-400"></i><span class="bg-fuchsia-400/10 px-2 py-1 text-[10px] font-black tracking-wider text-fuchsia-300">OPS READY</span></div>
+            <h3 class="mt-8 font-display text-3xl font-bold uppercase">Collect, retain, prove</h3>
+            <p class="mt-3 text-sm leading-6 text-slate-400">Native JobResult/ObjectChange collectors and dry-run retention controls turn Alpha validation into an operations runway, not a demo dead end.</p>
           </article>
         </div>
       </div>
@@ -149,14 +150,65 @@
       </div>
     </section>
 
+    <section id="sneak-peek" class="border-y border-white/10 bg-slate-950 py-24">
+      <div class="mx-auto max-w-7xl px-5">
+        <div class="flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+          <div>
+            <p class="text-sm font-black uppercase tracking-[.28em] text-blaze">Sneak peek field tape</p>
+            <h2 class="mt-4 max-w-4xl font-display text-5xl font-bold uppercase leading-none sm:text-7xl">Screenshots from the <span class="text-hyper">test arena.</span></h2>
+          </div>
+          <p class="max-w-lg text-sm leading-6 text-slate-400">These are repo-owned Alpha audit captures, not fantasy mockups: dashboard, definitions, values, navigation, and detail screens proving the Nautobot surfaces are already on the field.</p>
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          <figure class="group overflow-hidden border border-white/10 bg-white/[.025] lg:col-span-2">
+            <img src="audits/screenshots/01-dashboard.png" alt="Lipford Nautobot Metrics dashboard screenshot" class="aspect-video w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100">
+            <figcaption class="border-t border-white/10 p-5">
+              <p class="text-xs font-black uppercase tracking-[.22em] text-voltage">Main scoreboard</p>
+              <p class="mt-2 text-sm text-slate-400">Dashboard saturation view showing the 60/60 catalog coverage and live metric rollups.</p>
+            </figcaption>
+          </figure>
+          <div class="grid gap-5">
+            <figure class="group overflow-hidden border border-white/10 bg-white/[.025]">
+              <img src="audits/screenshots/02-metric-definitions.png" alt="Metric definitions list screenshot" class="aspect-video w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100">
+              <figcaption class="border-t border-white/10 p-4">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-hyper">Definitions loaded</p>
+                <p class="mt-2 text-xs text-slate-400">Canonical catalog records surfaced through Nautobot tables.</p>
+              </figcaption>
+            </figure>
+            <figure class="group overflow-hidden border border-white/10 bg-white/[.025]">
+              <img src="audits/screenshots/05-metric-definition-detail.png" alt="Metric definition detail screenshot" class="aspect-video w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100">
+              <figcaption class="border-t border-white/10 p-4">
+                <p class="text-xs font-black uppercase tracking-[.18em] text-blaze">Detail breakdown</p>
+                <p class="mt-2 text-xs text-slate-400">Per-metric metadata, target, formula, and operational context.</p>
+              </figcaption>
+            </figure>
+          </div>
+          <figure class="group overflow-hidden border border-white/10 bg-white/[.025]">
+            <img src="audits/screenshots/03-metric-values.png" alt="Metric values screenshot" class="aspect-video w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.03] group-hover:opacity-100">
+            <figcaption class="border-t border-white/10 p-4">
+              <p class="text-xs font-black uppercase tracking-[.18em] text-voltage">Values on tape</p>
+              <p class="mt-2 text-xs text-slate-400">Timestamped observations with source provenance for auditability.</p>
+            </figcaption>
+          </figure>
+          <figure class="group overflow-hidden border border-white/10 bg-white/[.025] lg:col-span-2">
+            <img src="audits/screenshots/04-navigation-home.png" alt="Nautobot navigation screenshot" class="aspect-video w-full object-cover object-top opacity-90 transition duration-500 group-hover:scale-[1.02] group-hover:opacity-100">
+            <figcaption class="border-t border-white/10 p-4">
+              <p class="text-xs font-black uppercase tracking-[.18em] text-hyper">Nautobot-native navigation</p>
+              <p class="mt-2 text-xs text-slate-400">Metrics enter the operator workflow from the Nautobot UI, not a bolt-on side quest.</p>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
+
     <section id="stats" class="border-y border-white/10 bg-voltage py-20 text-ink">
       <div class="mx-auto max-w-7xl px-5">
         <p class="text-sm font-black uppercase tracking-[.28em]">The stat board</p>
         <div class="mt-10 grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
           <div><p class="counter font-display text-7xl font-bold leading-none" data-target="60">0</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">Canonical metrics activated</p></div>
           <div><p class="counter font-display text-7xl font-bold leading-none" data-target="7">0</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">Metric categories fielded</p></div>
-          <div><p class="counter font-display text-7xl font-bold leading-none" data-target="30">0</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">Max sample days per run</p></div>
-          <div><p class="font-display text-7xl font-bold leading-none">2</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">Core data models</p></div>
+          <div><p class="counter font-display text-7xl font-bold leading-none" data-target="4">0</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">REST endpoints armed</p></div>
+          <div><p class="counter font-display text-7xl font-bold leading-none" data-target="3">0</p><p class="mt-3 text-xs font-black uppercase tracking-[.18em]">Nautobot Jobs deployed</p></div>
         </div>
       </div>
     </section>
@@ -166,7 +218,7 @@
       <div class="relative mx-auto max-w-5xl px-5 text-center">
         <p class="text-sm font-black uppercase tracking-[.28em] text-hyper">Join the squad</p>
         <h2 class="mt-5 font-display text-6xl font-bold uppercase leading-[.95] sm:text-8xl">Stop defending automation. <span class="text-voltage">Start proving it.</span></h2>
-        <p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-400">Clone the app. Enable the plugin. Seed the complete 60-metric catalog. Put measurable Nautobot-backed automation, activity, plugin, and business-impact outcomes in front of the people making the next decision.</p>
+        <p class="mx-auto mt-7 max-w-2xl text-base leading-7 text-slate-400">Clone the app. Enable the plugin. Seed the complete 60-metric catalog. Ingest real observations. Collect native Nautobot evidence. Put measurable automation, activity, plugin, and business-impact outcomes in front of the people making the next decision.</p>
         <div class="mx-auto mt-10 flex max-w-3xl items-center gap-3 border border-white/15 bg-ink p-3 text-left">
           <span class="pl-2 font-mono text-sm font-bold text-voltage">$</span>
           <code id="clone-command" class="min-w-0 flex-1 overflow-x-auto whitespace-nowrap font-mono text-xs text-slate-300 sm:text-sm">git clone https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git</code>

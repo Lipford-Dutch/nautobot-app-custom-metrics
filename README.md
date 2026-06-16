@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.14-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
-Lipford Nautobot Metrics is a Nautobot 3.1 App for tracking automation ROI, user activity, app, lifecycle, and Job metrics inside Nautobot. It provides a canonical 60-metric catalog, persistent observations, UI and API access, sample data, authenticated bulk ingestion, and native Nautobot reference collectors.
+Lipford Nautobot Metrics is an Alpha Nautobot 3.1 App for tracking automation ROI, user activity, app, lifecycle, and Job metrics inside Nautobot. It provides a canonical 60-metric catalog, persistent observations, UI and API access, sample data, authenticated bulk ingestion, native Nautobot reference collectors, and retention controls.
 
 ## Repository Metadata
 
@@ -29,12 +29,18 @@ Recommended GitHub repository metadata:
   Config, SSoT, Device Lifecycle Management, and Job execution.
 - Nautobot UI list, detail, filter, dashboard, and navigation integration.
 - REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`.
+- Atomic authenticated bulk ingestion endpoint for external observations.
 - Summary endpoint for aggregate metric snapshots.
+- GraphQL type registration for metric definitions and values.
 - Source-controlled project wiki for v3 roadmap, operations, and release
   governance.
 - Idempotent sample-data Nautobot Job for local verification and demos.
+- Native Nautobot reference collector Job for JobResult and ObjectChange
+  observations.
+- Retention Job with dry-run support for metric value lifecycle control.
 - App configuration schema for collection defaults.
-- Tests for models, jobs, views, permissions, API behavior, and invalid payloads.
+- Tests for models, jobs, views, permissions, API behavior, ingestion, invalid
+  payloads, and catalog saturation.
 
 ## Compatibility
 
@@ -63,6 +69,9 @@ PLUGINS_CONFIG = {
     "lipford_nautobot_metrics": {
         "sample_metric_days": 3,
         "sample_metric_source": "lipford_nautobot_metrics.full_catalog_sample_job",
+        "collector_lookback_minutes": 60,
+        "max_ingest_batch_size": 500,
+        "retention_days": 0,
     }
 }
 ```
@@ -82,6 +91,9 @@ For Docker-based deployments, rebuild or restart the Nautobot containers after i
 | --- | --- | --- | --- |
 | `sample_metric_days` | integer | `3` | Default number of daily sample observations created per metric by the sample data job. Valid range: `1` to `30`. |
 | `sample_metric_source` | string | `lipford_nautobot_metrics.full_catalog_sample_job` | Source label written to sample `MetricValue` records. |
+| `collector_lookback_minutes` | integer | `60` | Default JobResult and ObjectChange collection window. Valid range: `1` to `10080`. |
+| `max_ingest_batch_size` | integer | `500` | Maximum observations accepted by one atomic ingestion request. Valid range: `1` to `5000`. |
+| `retention_days` | integer | `0` | Observation retention in days. Zero disables automatic retention. |
 
 ## First Workflow
 
@@ -89,7 +101,9 @@ For Docker-based deployments, rebuild or restart the Nautobot containers after i
 2. Confirm the app appears in **Installed Apps**.
 3. Navigate to **Metrics > Custom Metrics > Dashboard**.
 4. Enable and run the **Seed sample metric data** job with `sample_days=3`.
-5. Review metric definitions, metric values, the dashboard, and the summary API.
+5. Run **Collect Nautobot reference metrics** in dry-run mode, then normal mode when ready.
+6. Review metric definitions, metric values, the dashboard, and the summary API.
+7. Use the ingestion endpoint for external automation or observability feeds.
 
 ## API
 
@@ -183,9 +197,11 @@ The implemented test suite currently covers model validation, uniqueness constra
 ```text
 lipford_nautobot_metrics/
   api/                  REST API serializers, views, and routes
+  graphql/              GraphQL type registration
   migrations/           Django migrations
   templates/            Nautobot UI templates
   tests/                App test suite
+  catalog.py            Canonical 60-metric catalog
   choices.py            Metric type/status choices
   filters.py            FilterSets
   forms.py              Nautobot forms
