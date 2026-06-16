@@ -40,6 +40,15 @@ class MetricsDashboardViewTestCase(TestCase):
         self.assertContains(response, "SSoT Data Synchronization Job Frequency")
         self.assertContains(response, "DLM Time to Provision New Device")
         self.assertContains(response, "Job Results")
+        self.assertContains(response, "Catalog Saturation")
+        self.assertContains(response, "Observation Coverage")
+        self.assertContains(response, "60/60")
+        self.assertContains(response, "Business Impact")
+        self.assertContains(response, "User Activity")
+        self.assertContains(response, "Golden Config")
+        self.assertContains(response, "SSoT")
+        self.assertContains(response, "DLM")
+        self.assertContains(response, "Job Execution")
 
     def test_dashboard_blocks_user_without_metric_permissions(self):
         """Authenticated users without metric permissions cannot view the dashboard."""

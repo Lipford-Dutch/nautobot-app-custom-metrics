@@ -17,7 +17,9 @@ from lipford_nautobot_metrics.services import (
     SAMPLE_SOURCE,
     collect_nautobot_metrics,
     get_app_settings,
+    get_metric_saturation_summary,
     get_metric_summaries,
+    get_metric_summary_groups,
     purge_metric_values,
     seed_sample_metrics,
 )
@@ -137,6 +139,21 @@ class SeedSampleMetricsTestCase(TestCase):
             summaries = get_metric_summaries()
 
         self.assertEqual(len(summaries), len(METRIC_CATALOG))
+
+    def test_metric_summary_groups_cover_full_catalog(self):
+        """Dashboard grouping preserves all metrics and category counts."""
+        seed_sample_metrics(sample_days=1)
+
+        summaries = get_metric_summaries()
+        groups = get_metric_summary_groups(summaries)
+        saturation = get_metric_saturation_summary(summaries)
+
+        self.assertEqual(sum(group["definition_count"] for group in groups), len(METRIC_CATALOG))
+        self.assertEqual(sum(group["value_count"] for group in groups), len(METRIC_CATALOG))
+        self.assertTrue(saturation["is_fully_enabled"])
+        self.assertTrue(saturation["is_fully_observed"])
+        self.assertEqual(saturation["enabled_count"], len(METRIC_CATALOG))
+        self.assertEqual(saturation["observed_count"], len(METRIC_CATALOG))
 
     def test_retention_dryrun_and_delete(self):
         """Retention reports and then deletes observations older than the cutoff."""

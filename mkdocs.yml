@@ -108,6 +108,7 @@ nav:
       - Getting Started: "user/app_getting_started.md"
       - V1 First-Batch Metrics: "user/v1_first_batch_metrics.md"
       - Full Metric Catalog: "user/full_metric_catalog.md"
+      - Dashboard Saturation: "user/dashboard_saturation.md"
       - Using the App: "user/app_use_cases.md"
       - Frequently Asked Questions: "user/faq.md"
       - External Interactions: "user/external_interactions.md"

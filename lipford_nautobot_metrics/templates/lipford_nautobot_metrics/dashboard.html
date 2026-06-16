@@ -1,10 +1,8 @@
 {% extends "base.html" %}
 {% load helpers %}
-
 {% block breadcrumbs %}
     <li class="breadcrumb-item active" aria-current="page">Metrics Dashboard</li>
 {% endblock breadcrumbs %}
-
 {% block content %}
     <div class="row">
         <div class="col-md-3">
@@ -27,71 +25,97 @@
                 </div>
             </div>
         </div>
-    </div>
-
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Metric Summary</strong>
+        <div class="col-md-3">
+            <div class="panel {% if metric_saturation.is_fully_enabled %}panel-success{% else %}panel-warning{% endif %}">
+                <div class="panel-heading">
+                    <strong>Catalog Saturation</strong>
+                </div>
+                <div class="panel-body">
+                    <span class="h2">{{ metric_saturation.enabled_count }}/{{ metric_saturation.expected_count }}</span>
+                    <div>enabled definitions</div>
+                </div>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Latest Value</th>
-                        <th>Average</th>
-                        <th>Target</th>
-                        <th>Samples</th>
-                        <th>Latest Timestamp</th>
-                        <th>Source</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for metric in metric_summaries %}
-                        <tr>
-                            <td>
-                                <a href="{% url 'plugins:lipford_nautobot_metrics:metricdefinition' pk=metric.id %}">
-                                    {{ metric.name }}
-                                </a>
-                            </td>
-                            <td>
-                                {% if metric.latest_value is not None %}
-                                    {{ metric.latest_value }} {{ metric.unit }}
-                                {% else %}
-                                    &mdash;
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if metric.average_value is not None %}
-                                    {{ metric.average_value|floatformat:4 }} {{ metric.unit }}
-                                {% else %}
-                                    &mdash;
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if metric.target_value is not None %}
-                                    {{ metric.target_value }} {{ metric.unit }}
-                                {% else %}
-                                    &mdash;
-                                {% endif %}
-                            </td>
-                            <td>{{ metric.value_count }}</td>
-                            <td>
-                                {% if metric.latest_recorded_at %}
-                                    {{ metric.latest_recorded_at|date:"Y-m-d H:i:s T" }}
-                                {% else %}
-                                    &mdash;
-                                {% endif %}
-                            </td>
-                            <td>{{ metric.latest_source|default:"-" }}</td>
-                        </tr>
-                    {% empty %}
-                        <tr>
-                            <td colspan="7">No enabled metric definitions are available.</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        <div class="col-md-3">
+            <div class="panel {% if metric_saturation.is_fully_observed %}panel-success{% else %}panel-warning{% endif %}">
+                <div class="panel-heading">
+                    <strong>Observation Coverage</strong>
+                </div>
+                <div class="panel-body">
+                    <span class="h2">{{ metric_saturation.observed_count }}/{{ metric_saturation.expected_count }}</span>
+                    <div>metrics with values</div>
+                </div>
+            </div>
         </div>
     </div>
+    {% for group in metric_summary_groups %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>{{ group.label }}</strong>
+                <span class="pull-right">{{ group.definition_count }}/{{ group.expected_count }} definitions, {{ group.value_count }} samples</span>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Latest Value</th>
+                            <th>Average</th>
+                            <th>Target</th>
+                            <th>Samples</th>
+                            <th>Latest Timestamp</th>
+                            <th>Source</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for metric in group.metrics %}
+                            <tr>
+                                <td>
+                                    <a href="{% url 'plugins:lipford_nautobot_metrics:metricdefinition' pk=metric.id %}">{{ metric.name }}</a>
+                                </td>
+                                <td>
+                                    {% if metric.latest_value is not None %}
+                                        {{ metric.latest_value }} {{ metric.unit }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if metric.average_value is not None %}
+                                        {{ metric.average_value|floatformat:4 }} {{ metric.unit }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if metric.target_value is not None %}
+                                        {{ metric.target_value }} {{ metric.unit }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                                <td>{{ metric.value_count }}</td>
+                                <td>
+                                    {% if metric.latest_recorded_at %}
+                                        {{ metric.latest_recorded_at|date:"Y-m-d H:i:s T" }}
+                                    {% else %}
+                                        &mdash;
+                                    {% endif %}
+                                </td>
+                                <td>{{ metric.latest_source|default:"-" }}</td>
+                            </tr>
+                        {% empty %}
+                            <tr>
+                                <td colspan="7">No enabled metric definitions are available for this category.</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    {% empty %}
+        <div class="panel panel-default">
+            <div class="panel-body">No enabled metric definitions are available.</div>
+        </div>
+    {% endfor %}
 {% endblock content %}
