@@ -5,6 +5,6 @@ This project currently follows the standard Nautobot App architecture generated 
 ## ADR-0001: Store Metrics as Nautobot Models
 
 - **Status:** Accepted
-- **Context:** The first release needs auditable, permissioned, API-accessible metric records that work inside a normal Nautobot deployment.
+- **Context:** Alpha releases need auditable, permissioned, API-accessible metric records that work inside a normal Nautobot deployment.
 - **Decision:** Store metric catalog entries in `MetricDefinition` and timestamped observations in `MetricValue`.
-- **Consequences:** Metrics inherit Nautobot model behavior, permissions, custom fields, tags, webhooks, export templates, and API patterns. High-volume time-series storage may require a future external backend, but that is intentionally out of scope for `v0.1.0`.
+- **Consequences:** Metrics inherit Nautobot model behavior, permissions, custom fields, tags, webhooks, export templates, and API patterns. High-volume time-series storage may require rollups, retention, or a future external backend before production-scale deployment, but the Alpha app keeps Nautobot as the authoritative SoT for metric definitions and current observations.
