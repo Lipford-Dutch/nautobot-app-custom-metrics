@@ -36,9 +36,14 @@ jobs:
           REPOSITORY: "${{ github.repository }}"
         run: |
           set -euo pipefail
+          WIKI_REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.wiki.git"
+          if ! git ls-remote "${WIKI_REMOTE}" >/dev/null 2>&1; then
+            echo "::notice title=GitHub Wiki not initialized::The repository has wiki support enabled, but ${REPOSITORY}.wiki.git is not available yet. Open the GitHub Wiki once or initialize the backing wiki repository, then rerun this workflow."
+            exit 0
+          fi
           git config --global user.name "github-actions[bot]"
           git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git clone "https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.wiki.git" wiki-publish
+          git clone "${WIKI_REMOTE}" wiki-publish
           rsync -a --delete --exclude ".git" wiki/ wiki-publish/
           cd wiki-publish
           if git diff --quiet --exit-code; then
