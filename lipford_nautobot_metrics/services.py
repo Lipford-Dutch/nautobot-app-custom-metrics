@@ -6,8 +6,10 @@ from typing import Any
 
 from django.conf import settings
 from django.db import transaction
-from django.db.models import Avg, Count, Max
+from django.db.models import Avg, Count, DecimalField, OuterRef, Subquery
 from django.utils import timezone
+from nautobot.extras.choices import JobResultStatusChoices, ObjectChangeActionChoices
+from nautobot.extras.models import JobResult, ObjectChange
 
 from lipford_nautobot_metrics.catalog import METRIC_CATALOG
 from lipford_nautobot_metrics.choices import MetricKindChoices, MetricUnitChoices
@@ -16,6 +18,13 @@ from lipford_nautobot_metrics.models import MetricDefinition, MetricValue
 SAMPLE_SOURCE = "lipford_nautobot_metrics.full_catalog_sample_job"
 DEFAULT_SAMPLE_DAYS = 3
 MAX_SAMPLE_DAYS = 30
+DEFAULT_COLLECTOR_LOOKBACK_MINUTES = 60
+DEFAULT_MAX_INGEST_BATCH_SIZE = 500
+DEFAULT_RETENTION_DAYS = 0
+MAX_RETENTION_DAYS = 3650
+JOB_RESULT_SOURCE = "lipford_nautobot_metrics.job_result_collector"
+OBJECT_CHANGE_SOURCE = "lipford_nautobot_metrics.object_change_collector"
+CATALOG_MANAGED_FIELDS = ("name", "category", "kind", "unit", "description", "formula")
 
 DEFAULT_TARGETS = {
     MetricKindChoices.TIME_SAVED_PER_AUTOMATED_TASK: Decimal("1.7500"),
@@ -38,6 +47,11 @@ def get_app_settings() -> dict[str, Any]:
     """Return app settings with defensive defaults for direct test usage."""
     plugin_settings = getattr(settings, "PLUGINS_CONFIG", {}).get("lipford_nautobot_metrics", {})
     return {
+        "collector_lookback_minutes": plugin_settings.get(
+            "collector_lookback_minutes", DEFAULT_COLLECTOR_LOOKBACK_MINUTES
+        ),
+        "max_ingest_batch_size": plugin_settings.get("max_ingest_batch_size", DEFAULT_MAX_INGEST_BATCH_SIZE),
+        "retention_days": plugin_settings.get("retention_days", DEFAULT_RETENTION_DAYS),
         "sample_metric_days": plugin_settings.get("sample_metric_days", DEFAULT_SAMPLE_DAYS),
         "sample_metric_source": plugin_settings.get("sample_metric_source", SAMPLE_SOURCE),
     }
@@ -81,19 +95,21 @@ def seed_sample_metrics(sample_days: int | None = None, dryrun: bool = False) ->
 
 def get_metric_summaries() -> list[dict[str, Any]]:
     """Return dashboard-ready summary data for all metric definitions."""
+    latest_values = MetricValue.objects.filter(metric_definition=OuterRef("pk")).order_by("-recorded_at")
     definitions = (
         MetricDefinition.objects.filter(enabled=True)
         .annotate(
             value_count=Count("values"),
             average_value=Avg("values__value"),
-            latest_recorded_at=Max("values__recorded_at"),
+            latest_recorded_at=Subquery(latest_values.values("recorded_at")[:1]),
+            latest_value=Subquery(latest_values.values("value")[:1], output_field=DecimalField()),
+            latest_source=Subquery(latest_values.values("source")[:1]),
         )
         .order_by("name")
     )
 
     summaries = []
     for definition in definitions:
-        latest_value = definition.values.order_by("-recorded_at").first()
         summaries.append(
             {
                 "id": definition.pk,
@@ -106,8 +122,8 @@ def get_metric_summaries() -> list[dict[str, Any]]:
                 "value_count": definition.value_count,
                 "average_value": definition.average_value,
                 "latest_recorded_at": definition.latest_recorded_at,
-                "latest_value": latest_value.value if latest_value else None,
-                "latest_source": latest_value.source if latest_value else "",
+                "latest_value": definition.latest_value,
+                "latest_source": definition.latest_source or "",
             }
         )
 
@@ -127,7 +143,10 @@ def _upsert_metric_definitions(result: dict[str, int]) -> dict[str, MetricDefini
         if created:
             result["definitions_created"] += 1
         else:
-            changed = _apply_changed_fields(definition, definition_data)
+            changed = _apply_changed_fields(
+                definition,
+                {field: definition_data[field] for field in CATALOG_MANAGED_FIELDS},
+            )
             if changed:
                 definition.full_clean()
                 definition.save()
@@ -241,3 +260,131 @@ def _apply_changed_fields(instance, field_values: dict[str, Any]) -> bool:
             setattr(instance, field_name, value)
             changed = True
     return changed
+
+
+def ingest_metric_values(observations: list[dict[str, Any]]) -> dict[str, int]:
+    """Atomically validate and upsert externally supplied metric observations."""
+    max_batch_size = get_app_settings()["max_ingest_batch_size"]
+    if not observations:
+        raise ValueError("At least one metric observation is required.")
+    if len(observations) > max_batch_size:
+        raise ValueError(f"A maximum of {max_batch_size} metric observations is allowed per request.")
+
+    keys = {observation["metric_key"] for observation in observations}
+    definitions = MetricDefinition.objects.in_bulk(keys, field_name="key")
+    missing = sorted(keys - definitions.keys())
+    if missing:
+        raise ValueError(f"Unknown metric keys: {', '.join(missing)}.")
+
+    result = {"created": 0, "updated": 0}
+    with transaction.atomic():
+        for observation in observations:
+            counters = {"values_created": 0, "values_updated": 0}
+            _upsert_metric_value(
+                metric_definition=definitions[observation["metric_key"]],
+                recorded_at=observation["recorded_at"],
+                value=observation["value"],
+                context=observation.get("context", {}),
+                notes=observation.get("notes", ""),
+                source=observation["source"],
+                result=counters,
+            )
+            result["created"] += counters["values_created"]
+            result["updated"] += counters["values_updated"]
+    return result
+
+
+def purge_metric_values(retention_days: int | None = None, dryrun: bool = False) -> dict[str, Any]:
+    """Delete observations older than the configured retention window."""
+    retention_days = get_app_settings()["retention_days"] if retention_days is None else retention_days
+    if retention_days < 1 or retention_days > MAX_RETENTION_DAYS:
+        raise ValueError(f"retention_days must be between 1 and {MAX_RETENTION_DAYS}.")
+    cutoff = timezone.now() - timedelta(days=retention_days)
+    queryset = MetricValue.objects.filter(recorded_at__lt=cutoff)
+    result = {"deleted": queryset.count(), "cutoff": cutoff}
+    if not dryrun:
+        queryset.delete()
+    return result
+
+
+def collect_nautobot_metrics(
+    lookback_minutes: int | None = None,
+    dryrun: bool = False,
+    recorded_at=None,
+) -> dict[str, int]:
+    """Collect reference metrics from Nautobot JobResult and ObjectChange records."""
+    lookback_minutes = lookback_minutes or get_app_settings()["collector_lookback_minutes"]
+    if lookback_minutes < 1 or lookback_minutes > 10080:
+        raise ValueError("lookback_minutes must be between 1 and 10080.")
+    recorded_at = (recorded_at or timezone.now()).replace(second=0, microsecond=0)
+    window_start = recorded_at - timedelta(minutes=lookback_minutes)
+    definitions = MetricDefinition.objects.in_bulk(
+        {
+            "job_execution_total_count",
+            "job_execution_status_rate",
+            "job_execution_duration",
+            "object_creation_count",
+            "object_update_count",
+            "object_deletion_count",
+        },
+        field_name="key",
+    )
+    required = {
+        "job_execution_total_count",
+        "job_execution_status_rate",
+        "job_execution_duration",
+        "object_creation_count",
+        "object_update_count",
+        "object_deletion_count",
+    }
+    missing = sorted(required - definitions.keys())
+    if missing:
+        raise ValueError(f"Seed metric definitions before collection. Missing: {', '.join(missing)}.")
+
+    completed_jobs = JobResult.objects.filter(date_done__gte=window_start, date_done__lte=recorded_at)
+    job_count = completed_jobs.count()
+    success_count = completed_jobs.filter(status=JobResultStatusChoices.STATUS_SUCCESS).count()
+    durations = [
+        (job.date_done - (job.date_started or job.date_created)).total_seconds()
+        for job in completed_jobs.only("date_created", "date_started", "date_done")
+        if job.date_done
+    ]
+    observations = [
+        ("job_execution_total_count", Decimal(job_count), JOB_RESULT_SOURCE),
+        (
+            "job_execution_status_rate",
+            Decimal(success_count) * Decimal(100) / Decimal(job_count) if job_count else Decimal(0),
+            JOB_RESULT_SOURCE,
+        ),
+        (
+            "job_execution_duration",
+            Decimal(str(sum(durations) / len(durations))) if durations else Decimal(0),
+            JOB_RESULT_SOURCE,
+        ),
+    ]
+    changes = ObjectChange.objects.filter(time__gte=window_start, time__lte=recorded_at)
+    for action, key in (
+        (ObjectChangeActionChoices.ACTION_CREATE, "object_creation_count"),
+        (ObjectChangeActionChoices.ACTION_UPDATE, "object_update_count"),
+        (ObjectChangeActionChoices.ACTION_DELETE, "object_deletion_count"),
+    ):
+        observations.append((key, Decimal(changes.filter(action=action).count()), OBJECT_CHANGE_SOURCE))
+
+    result = {"created": 0, "updated": 0}
+    with transaction.atomic():
+        for key, value, source in observations:
+            counters = {"values_created": 0, "values_updated": 0}
+            _upsert_metric_value(
+                metric_definition=definitions[key],
+                recorded_at=recorded_at,
+                value=value,
+                context={"lookback_minutes": lookback_minutes, "window_start": window_start.isoformat()},
+                notes="Collected from Nautobot-owned operational records.",
+                source=source,
+                result=counters,
+            )
+            result["created"] += counters["values_created"]
+            result["updated"] += counters["values_updated"]
+        if dryrun:
+            transaction.set_rollback(True)
+    return result

@@ -11,6 +11,7 @@ router.register("metric-values", views.MetricValueViewSet)
 
 app_name = "lipford_nautobot_metrics-api"
 urlpatterns = [
+    path("ingest/", views.MetricIngestView.as_view(), name="metric-ingest"),
     path("summary/", views.MetricSummaryView.as_view(), name="metric-summary"),
 ]
 

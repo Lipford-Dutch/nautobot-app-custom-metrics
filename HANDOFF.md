@@ -3,262 +3,105 @@
 ## Repository
 
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
-- Current branch: `main-development-metrics-stage`
-- Intended GitHub organization: `Lipford-Dutch`
-- GitHub repository: `nautobot-app-custom-metrics`
-- Remote URL: `https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git`
+- GitHub repository: `Lipford-Dutch/nautobot-app-custom-metrics`
+- Active development branch: `develop`
+- Current working branch: `codex/final-alpha-rc-evidence`
+- Current package candidate: `0.2.0rc1`
+- Previous published prerelease: `v0.2.0a1`
 
 ## Current State
 
-The base app has been implemented through Phases 0-5, and this branch extends
-the metrics catalog through the v1 first batch. Release polish for package
-version `0.1.0` has been completed locally:
+Lipford Nautobot Metrics is a Nautobot 3.1 app with a full 60-metric catalog,
+persistent metric storage, UI, REST API, GraphQL registration, sample data,
+bulk ingestion, native Nautobot reference collectors, retention controls,
+CI/CD, release provenance, and repository governance.
 
-1. Bootstrap and local Docker environment
-2. Core models
-3. Data population job
-4. Dashboard, UI, and API
-5. Test expansion, configuration, packaging, and documentation polish
-
-Current branch release point:
-
-1. Phase 0: reviewed `C:\Users\spamw\Downloads\custom_metrics_def.md` and selected the Section 2.1 ROI efficiency metrics as the first batch.
-2. Phase 1: expanded supported metric kinds for the full first batch.
-3. Phase 2: updated deterministic sample population for all first-batch metrics.
-4. Phase 3: verified existing dashboard and API paths expose the expanded batch.
-5. Phase 4: updated model, job, API, dashboard, and permission tests.
-6. Phase 5: refreshed release docs, security audit notes, repository metadata,
-   and package version for `0.1.0`.
-
-The repository currently contains a custom Nautobot App named `lipford_nautobot_metrics`.
+The owner granted blanket approval on 2026-06-16 for Alpha and
+release-candidate evidence while dedicated QA, SRE, and CAB teams are not yet
+defined. This approval is documented for Alpha/RC release evidence and security
+disposition. It is not a substitute for future production separation of duties.
 
 ## Implemented Functionality
 
-- `MetricDefinition` model for metric catalog entries
-- `MetricValue` model for timestamped observations
-- V1 first-batch ROI metrics:
-    - Time Saved per Automated Task
-    - Reduction in Manual Error Rates
-    - Increased Task Throughput
-    - Automation Adoption Rate
-- Nautobot UI viewsets for definitions and values
-- Dashboard page at `/plugins/lipford-nautobot-metrics/`
-- REST model APIs:
+- Canonical 60-metric catalog in `lipford_nautobot_metrics/catalog.py`
+- `MetricDefinition` and `MetricValue` Nautobot models
+- Required observation provenance with `MetricValue.source`
+- Dashboard and Nautobot CRUD views
+- REST API:
     - `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
     - `/api/plugins/lipford-nautobot-metrics/metric-values/`
-- Summary API:
     - `/api/plugins/lipford-nautobot-metrics/summary/`
-- Navigation under Metrics > Custom Metrics
-- Nautobot Job:
+    - `/api/plugins/lipford-nautobot-metrics/ingest/`
+- GraphQL type registration
+- Nautobot Jobs:
     - `Seed sample metric data`
-    - Supports dry-run
-    - Supports configurable sample window
-    - Idempotent by metric, timestamp, and source
-- App configuration schema:
+    - `Collect Nautobot reference metrics`
+    - `Purge retained metric values`
+- App configuration:
     - `sample_metric_days`
     - `sample_metric_source`
+    - `collector_lookback_minutes`
+    - `max_ingest_batch_size`
+    - `retention_days`
+- GitHub environments, branch protections, release workflow, CodeQL,
+  dependency review, Scorecard, and coverage checks
+- Bug-fix tracking process and labels for release-candidate defects
 
-## Key Files
+## Important Artifacts
 
-- `lipford_nautobot_metrics/models.py`
-- `lipford_nautobot_metrics/services.py`
-- `lipford_nautobot_metrics/jobs.py`
-- `lipford_nautobot_metrics/views.py`
-- `lipford_nautobot_metrics/navigation.py`
-- `lipford_nautobot_metrics/api/views.py`
-- `lipford_nautobot_metrics/api/urls.py`
-- `lipford_nautobot_metrics/templates/lipford_nautobot_metrics/dashboard.html`
-- `lipford_nautobot_metrics/app-config-schema.json`
-- `lipford_nautobot_metrics/tests/test_models.py`
-- `lipford_nautobot_metrics/tests/test_jobs.py`
-- `lipford_nautobot_metrics/tests/test_views.py`
-- `README.md`
-- `SECURITY.md`
-- `.github/dependabot.yml`
-- `.github/ISSUE_TEMPLATE/bug_report.md`
-- `.github/ISSUE_TEMPLATE/feature_request.md`
-- `docs/admin/install.md`
-- `docs/admin/compatibility_matrix.md`
-- `docs/user/app_overview.md`
-- `docs/user/app_getting_started.md`
-- `docs/user/v1_first_batch_metrics.md`
-- `docs/user/app_use_cases.md`
+- Release evidence: `reports/release-candidate-evidence-v0.2.0rc1.md`
+- Session export: `reports/session-details-export-2026-06-16-v0.2.0rc1.md`
+- Production readiness: `docs/admin/production_readiness.md`
+- Security advisory disposition: `docs/admin/security_advisories.md`
+- Bug triage: `docs/dev/bug_triage.md`
+- v3.0 forecast: `docs/dev/release_v3_forecast.md`
+- Release notes: `docs/admin/release_notes/version_0.2.md`
 
-## Local Development Notes
+## Validation Commands
 
-Docker is installed but the Docker CLI is not on the default PATH in this shell. Use:
+Local validation:
 
 ```powershell
-$env:PATH = 'C:\Program Files\Docker\Docker\resources\bin;' + $env:PATH
-$env:NAUTOBOT_VER='3.1.3'
-$env:PYTHON_VER='3.12'
+.\.venv\Scripts\ruff.exe check .
+.\.venv\Scripts\ruff.exe format --check .
+.\.venv\Scripts\yamllint.exe .
+.\.venv\Scripts\pymarkdownlnt.exe scan README.md docs reports
+.\.venv\Scripts\mkdocs.exe build --strict
+.\.venv\Scripts\python.exe -m compileall lipford_nautobot_metrics
 ```
 
-Use direct `docker compose ... exec -T ...` commands for Nautobot checks/tests. The cookiecutter `invoke exec` path had a Windows PTY issue.
+Nautobot validation inside a Linux/Docker Nautobot environment:
 
-The local development Nautobot URL is:
-
-```text
-http://localhost:8080/
+```shell
+python -c "import lipford_nautobot_metrics"
+nautobot-server check
+nautobot-server makemigrations lipford_nautobot_metrics --check --dry-run
+nautobot-server migrate --noinput
+nautobot-server post_upgrade
+nautobot-server collectstatic --noinput
+nautobot-server test lipford_nautobot_metrics
 ```
 
-Development credentials generated from the cookiecutter defaults:
+GitHub Actions remains the authoritative Docker/Linux validation path for this
+Windows workstation.
 
-- Username: `admin`
-- Password: `admin`
-- Token: `0123456789abcdef0123456789abcdef01234567`
+## Remaining Production Conditions
 
-## Verification Commands
+- Replace named-maintainer fallback approvals with QA, SRE, and CAB GitHub
+  teams.
+- Resolve or formally accept upstream-constrained PyJWT advisories for the
+  production target date.
+- Complete staging upgrade, rollback, backup/restore, retention, and load-test
+  exercises.
+- Define production collector schedules, retention policy, and operational
+  ownership.
+- Decide whether and when to enable PyPI publishing.
 
-Local checks:
+## Next Suggested Work
 
-```powershell
-.\.venv\Scripts\poetry.exe run ruff check lipford_nautobot_metrics
-.\.venv\Scripts\poetry.exe run ruff format --check lipford_nautobot_metrics
-python -m json.tool lipford_nautobot_metrics\app-config-schema.json
-.\.venv\Scripts\poetry.exe check
-.\.venv\Scripts\poetry.exe build
-.\.venv\Scripts\poetry.exe run mkdocs build --strict
-```
-
-Docker/Nautobot checks:
-
-```powershell
-$env:PATH = 'C:\Program Files\Docker\Docker\resources\bin;' + $env:PATH
-$env:NAUTOBOT_VER='3.1.3'
-$env:PYTHON_VER='3.12'
-docker compose --project-name lipford-nautobot-metrics --project-directory "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.base.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.redis.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.postgres.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.dev.yml" exec -T nautobot nautobot-server check
-docker compose --project-name lipford-nautobot-metrics --project-directory "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.base.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.redis.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.postgres.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.dev.yml" exec -T nautobot nautobot-server migrate --check
-docker compose --project-name lipford-nautobot-metrics --project-directory "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.base.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.redis.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.postgres.yml" -f "C:\Users\spamw\Documents\Lipford Nautobot Metrics\development\docker-compose.dev.yml" exec -T nautobot nautobot-server test lipford_nautobot_metrics.tests --verbosity 2
-```
-
-## Last Verified Results
-
-- Ruff check: passed
-- Ruff format check: passed
-- JSON schema parse: passed
-- `poetry check`: valid with Poetry 2 deprecation warnings for cookiecutter metadata format
-- `poetry build`: passed
-- Built artifacts:
-    - `dist/lipford_nautobot_metrics-0.1.0.tar.gz`
-    - `dist/lipford_nautobot_metrics-0.1.0-py3-none-any.whl`
-- Wheel includes dashboard template and app config schema
-- `mkdocs build --strict`: passed
-- `yamllint . --format standard`: passed
-- `pymarkdown scan --recurse docs *.md`: passed
-- `pip-audit --local`: reviewed; blocked only by upstream-constrained PyJWT
-  advisories through Nautobot/social-auth dependencies
-- `nautobot-server check`: no issues
-- `nautobot-server migrate --check`: no pending migrations
-- Full Docker app tests: `23 passed`
-
-## Current Branch Verification Results
-
-- Branch: `main-development-metrics-stage`
-- Ruff check: passed
-- Ruff format check: passed after formatting changed files
-- JSON schema parse: passed
-- `poetry check`: valid with Poetry 2 deprecation warnings for cookiecutter metadata format
-- `poetry build`: passed
-- `mkdocs build --strict`: passed
-- `yamllint . --format standard`: passed
-- `pymarkdown scan --recurse docs *.md`: passed
-- `nautobot-server check`: no issues
-- `nautobot-server migrate --check`: no pending migrations
-- Docker-backed Nautobot app tests: `23 passed`
-- Known security-audit note: `pip-audit --local` reports PyJWT advisories
-  fixed in `2.13.0`; Nautobot's current auth dependency chain resolves
-  `PyJWT==2.12.1`. Tracked as upstream-constrained in
-  `reports/security/RELEASE-AUDIT-2026-06-05.md`.
-
-## Repository Metadata Added
-
-- README now includes badges, repository metadata, recommended GitHub
-  description/topics, compatibility, install/configuration, API, local
-  development, verification, project structure, release notes, and contribution
-  guidance.
-- `pyproject.toml` now points at
-  `Lipford-Dutch/nautobot-app-custom-metrics`, has richer package classifiers
-  and keywords, and uses a Python 3.10 Ruff target.
-- Issue templates now use ASCII-safe names and capture Nautobot version,
-  deployment type, impact, metric semantics, and UI/API expectations.
-- Added `SECURITY.md`.
-- Added `.github/dependabot.yml` for Python and GitHub Actions dependency
-  monitoring.
-- The GitHub connector does not currently expose a repository metadata update
-  tool. Manually set the remote repository description, website, and topics in
-  GitHub after the branch is pushed.
-
-## GitHub Publishing Status
-
-The repository exists and is visible through the GitHub connector:
-
-```text
-Lipford-Dutch/nautobot-app-custom-metrics
-```
-
-Local `origin` is configured as:
-
-```text
-https://github.com/Lipford-Dutch/nautobot-app-custom-metrics.git
-```
-
-Original release branch:
-
-```text
-codex/start-nautobot-app-phase-5
-```
-
-V1 first-batch release branch:
-
-```text
-main-development-metrics-stage
-```
-
-Publishing status:
-
-```text
-PR #12 was opened and merged into main:
-https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/12
-
-Merge commit:
-7bbdb69aab8437d3b4faaac02d9b51de0fd09a61
-
-Annotated release tag pushed:
-v0.1.0
-```
-
-Important history note:
-
-```text
-GitHub initialized main independently from this local cookiecutter history.
-The release branch was merged with origin/main using --allow-unrelated-histories
-so GitHub can create a pull request from the branch into main.
-```
-
-Draft PR for the original release branch:
-
-```text
-https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/pull/1
-```
-
-Package publication status:
-
-- Local package artifacts were built successfully under `dist/`.
-- GitHub Release publication is not complete from this workstation because the
-  GitHub CLI is not installed and the available GitHub connector does not expose
-  a release-creation endpoint.
-- PyPI publication requires either valid local PyPI credentials or a published
-  GitHub Release with the repository's Trusted Publishing environment
-  configured.
-- The release workflow is configured to build, upload release assets, and publish
-  to PyPI only for a `release.published` event on a `v*` tag.
-
-## Residual Notes
-
-- `poetry check` emits deprecation warnings because the generated cookiecutter uses `[tool.poetry]` metadata. It builds successfully. A later maintenance task can migrate metadata into PEP 621 `[project]` format.
-- Generated/ignored artifacts from verification may exist locally:
-    - `.ruff_cache/`
-    - `dist/`
-    - `lipford_nautobot_metrics/static/lipford_nautobot_metrics/docs/`
-- These are ignored by `.gitignore`.
+1. Merge `codex/final-alpha-rc-evidence` after CI passes.
+2. Tag and publish `v0.2.0rc1`.
+3. Review the session export in `reports/`.
+4. Convert v3.0 forecast features into GitHub issues or milestones.
+5. Create QA, SRE, and CAB teams in the GitHub organization before production
+   promotion.

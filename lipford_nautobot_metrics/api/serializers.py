@@ -2,6 +2,7 @@
 
 from nautobot.core.api import NautobotModelSerializer
 from nautobot.extras.api.mixins import TaggedModelSerializerMixin
+from rest_framework import serializers
 
 from lipford_nautobot_metrics import models
 
@@ -24,3 +25,51 @@ class MetricValueSerializer(TaggedModelSerializerMixin, NautobotModelSerializer)
 
         model = models.MetricValue
         fields = "__all__"
+
+
+class MetricSummarySerializer(serializers.Serializer):
+    """Serializer for dashboard metric summary rows."""
+
+    id = serializers.UUIDField()
+    name = serializers.CharField()
+    key = serializers.CharField()
+    category = serializers.CharField()
+    kind = serializers.CharField()
+    unit = serializers.CharField()
+    target_value = serializers.DecimalField(max_digits=18, decimal_places=4, allow_null=True)
+    value_count = serializers.IntegerField()
+    average_value = serializers.DecimalField(max_digits=18, decimal_places=4, allow_null=True)
+    latest_recorded_at = serializers.DateTimeField(allow_null=True)
+    latest_value = serializers.DecimalField(max_digits=18, decimal_places=4, allow_null=True)
+    latest_source = serializers.CharField(allow_blank=True)
+
+
+class MetricSummaryResponseSerializer(serializers.Serializer):
+    """Serializer for the metric summary API response."""
+
+    count = serializers.IntegerField()
+    results = MetricSummarySerializer(many=True)
+
+
+class MetricIngestObservationSerializer(serializers.Serializer):
+    """Validate one externally supplied metric observation."""
+
+    metric_key = serializers.SlugField()
+    value = serializers.DecimalField(max_digits=18, decimal_places=4)
+    recorded_at = serializers.DateTimeField()
+    source = serializers.CharField(max_length=255, allow_blank=False)
+    context = serializers.JSONField(required=False, default=dict)
+    notes = serializers.CharField(required=False, default="", allow_blank=True)
+
+
+class MetricIngestRequestSerializer(serializers.Serializer):
+    """Validate an atomic bulk-ingestion request."""
+
+    values = MetricIngestObservationSerializer(many=True, allow_empty=False)
+
+
+class MetricIngestResponseSerializer(serializers.Serializer):
+    """Serialize bulk-ingestion result counts."""
+
+    created = serializers.IntegerField()
+    updated = serializers.IntegerField()

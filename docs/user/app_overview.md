@@ -1,15 +1,15 @@
 # App Overview
 
-Lipford Nautobot Metrics adds custom metric tracking to Nautobot. It stores metric definitions and timestamped metric values, exposes them through the Nautobot UI and REST API, and provides a simple dashboard for reviewing current values.
+Lipford Nautobot Metrics adds custom metric tracking to Nautobot. It stores metric definitions and timestamped metric values, exposes them through the Nautobot UI, REST API, GraphQL, and a dashboard for reviewing current values.
 
-The v1 first-batch metrics are ROI-focused:
+The current catalog contains 60 canonical metrics across:
 
-- Time Saved per Automated Task
-- Reduction in Manual Error Rates
-- Increased Task Throughput
-- Automation Adoption Rate
-
-These are intentionally small starting points so the app can be verified end to end before expanding into additional metric categories.
+- ROI and business impact
+- User activity
+- Golden Config
+- SSoT
+- Device Lifecycle Management
+- Job execution
 
 ## Audience
 
@@ -23,7 +23,8 @@ The app uses standard Nautobot app patterns:
 - Nautobot UI viewsets, tables, forms, filters, and navigation
 - REST API endpoints under `/api/plugins/lipford-nautobot-metrics/`
 - A summary API endpoint for dashboard consumers
-- A Nautobot Job for sample metric data population
+- Nautobot Jobs for sample metric data, reference collection, and retention
+- Authenticated bulk-ingestion endpoint
 - Permissions, tags, custom fields, webhooks, custom links, export templates, and GraphQL support
 
 ## Current Views

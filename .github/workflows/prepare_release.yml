@@ -14,9 +14,9 @@ on: # yamllint disable-line rule:truthy rule:comments
           - "minor"
           - "major"
       target_branch:
-        description: "Create the release from this branch (default: main)."
+        description: "Create the release from this branch."
         required: true
-        default: "main"
+        default: "develop"
       date:
         description: "Date of the release YYYY-MM-DD (defaults to today's date in the US Eastern TZ)."
         required: false
@@ -33,8 +33,7 @@ jobs:
       - name: "Checkout code"
         uses: "actions/checkout@v4"
         with:
-          # If target_branch is 'main', use 'develop' as the source branch. Otherwise, the source and target branch are the same.
-          ref: "${{ github.event.inputs['target_branch'] == 'main' && 'develop' || github.event.inputs['target_branch'] }}"
+          ref: "${{ github.event.inputs.target_branch }}"
           fetch-depth: 0  # Fetch all history for git tags
 
       - name: "Setup environment"
@@ -112,7 +111,7 @@ jobs:
           # 2. Call GitHub API to generate raw notes
           RAW_GH_NOTES=$(gh api /repos/${{ github.repository }}/releases/generate-notes \
             -f tag_name="v${{ env.NEW_VERSION }}" \
-            -f target_commitish="${{ github.event.inputs['target_branch'] == 'main' && 'develop' || github.event.inputs['target_branch'] }}" \
+            -f target_commitish="${{ github.event.inputs.target_branch }}" \
             -f previous_tag_name="${{ env.PREVIOUS_TAG }}" --jq '.body')
 
           # 3. Parse usernames (Regex match)

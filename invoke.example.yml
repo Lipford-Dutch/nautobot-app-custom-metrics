@@ -1,7 +1,7 @@
 ---
 lipford_nautobot_metrics:
   nautobot_ver: "3.1.0"
-  python_ver: "3.12"
+  python_ver: "3.14"
   # local: false
   # compose_dir: "/full/path/to/nautobot-app-custom-metrics/development"
 
