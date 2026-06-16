@@ -45,3 +45,7 @@ branch policies, and wait timers. True multi-party staging and production
 review still requires organization teams for QA, SRE, and CAB ownership. Until
 those teams exist, a named maintainer can validate the workflow mechanics, but
 that is not equivalent to production-grade separation of duties.
+
+The repository owner granted blanket approval on 2026-06-16 to use the
+named-maintainer fallback for Alpha release-candidate evidence. Replace this
+fallback with actual QA, SRE, and CAB teams before production deployment.
