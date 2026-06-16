@@ -1,4 +1,14 @@
 
+## [v0.2.0rc1 (2026-06-16)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/releases/tag/v0.2.0rc1)
+
+### Documentation
+
+- Added final Alpha release-candidate evidence, owner approval scope,
+  security-advisory disposition, bug-fix tracking process, session export, and
+  v3.0 release forecast.
+- Updated stale user documentation to describe the current 60-metric catalog,
+  ingestion endpoint, reference collectors, and release-candidate scope.
+
 ## [v0.2.0a1 (2026-06-15)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/releases/tag/v0.2.0a1)
 
 ### Added

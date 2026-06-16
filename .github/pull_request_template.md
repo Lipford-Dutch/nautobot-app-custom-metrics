@@ -10,6 +10,15 @@
 
 # Closes: #<ISSUE NUMBER GOES HERE>
 
+## Change Realm
+
+<!-- Select the primary lane. Bug fixes should reference a tracked issue. -->
+- [ ] Feature
+- [ ] Bug fix
+- [ ] Documentation
+- [ ] Security
+- [ ] Release / operations
+
 ## What's Changed
 
 <!--
@@ -32,3 +41,4 @@
 - [ ] Unit, Integration Tests
 - [ ] Documentation Updates (when adding/changing features)
 - [ ] Outline Remaining Work, Constraints from Design
+- [ ] For bug fixes: linked issue has `type: bug` and `realm: bugfix`

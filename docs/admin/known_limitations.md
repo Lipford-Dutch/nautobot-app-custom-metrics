@@ -16,6 +16,6 @@
 - `pylint-nautobot 1.0.0` declares Python `<3.14`, so the Pylint/App Config/
   migration lint stage runs on Python 3.13. The application runtime and unit
   test matrix remains on Python 3.14.
-- `v0.2.0a1` is an Alpha prerelease. Production deployment requires the
+- `v0.2.0rc1` is an Alpha release candidate. Production deployment requires the
   production readiness checklist, upgrade rehearsal, rollback rehearsal, and
   security advisory disposition to be completed.
