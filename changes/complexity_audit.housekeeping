@@ -1,0 +1,1 @@
+Added a code-complexity audit (`audits/code-complexity-audit.md`) covering cyclomatic/cognitive complexity, size, coupling, and cohesion metrics, plus a headless screenshot helper (`development/screenshots.py`) and captured UI evidence under `audits/screenshots/`.
