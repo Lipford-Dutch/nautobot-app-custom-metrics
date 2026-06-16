@@ -33,6 +33,13 @@ The workflow intentionally uses plain git commands with the GitHub token. This
 keeps the deployment auditable and avoids unnecessary third-party deployment
 actions.
 
+The first run requires GitHub to expose the repository wiki backing remote
+(`OWNER/REPOSITORY.wiki.git`). If GitHub reports the wiki as enabled but the
+remote is not available yet, the workflow exits with a notice instead of
+failing `develop`. Initialize the wiki from GitHub's Wiki tab or by creating
+the backing wiki repository through an account that can access it, then rerun
+the workflow.
+
 ## Style Guidance
 
 - Keep pages concise and operational.
@@ -40,4 +47,3 @@ actions.
 - Use the same terminology as the MkDocs site.
 - Prefer tables and short runbooks over long prose.
 - Do not publish secrets, tokens, customer names, or production-only topology.
-
