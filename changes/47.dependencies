@@ -1,0 +1,1 @@
+Constrain tzlocal to the known-good importable release line used by Nautobot wheel smoke tests.
