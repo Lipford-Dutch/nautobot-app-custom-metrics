@@ -212,6 +212,7 @@ the audited snapshot — mirror the metrics app's working `Device` setup, or Nau
 **Importance: 5/10** · multiple
 
 Concretely absent, by category:
+
 - **Error:** SIM slot conflict `ValueError` (`services.py:27`); duplicate serial/imei (`vendor.py:36,38`); stale snapshot path (`services.py:50`).
 - **Permission edges:** `CellularSummaryView`/`CellularPrometheusView` authed-without-perm → 403 (`api/views.py:28-34, 45-46`). The dashboard has this test (`test_views.py:32`); the APIs do not.
 - **Security — Prometheus label injection:** `api/views.py:57` escapes `\` and `"` in device names; no test feeds a device name containing quotes/backslashes to prove the escaping holds.
@@ -240,15 +241,19 @@ def test_summary_query_count_is_bounded(self):
 
 - **Naming & AAA:** every test name states the behavior (`test_stale_snapshot_is_ignored`
   style); bodies follow Arrange-Act-Assert cleanly. Keep this.
+
 - **Independence:** per-`setUp` users, no shared mutable state, schemas use
   `SimpleTestCase` (no DB) — fast and correct tier choice.
+
 - **Mock usage:** no inappropriate mocking of the ORM (good). The only mock that
   *should* exist — a fake `CellularCollector` — is the missing seam (TEST-002).
+
 - **Mild anti-pattern:** `test_dashboard_renders_empty_state` asserts on template copy
   (`"No cellular routers are configured."`, `test_views.py:30`) — behavior-via-copy
   coupling; prefer asserting a stable element/`data-testid` if the empty-state text changes often.
 
 ## Improvement plan (priority order)
+
 1. **TEST-004 factories** (unblocks everything) → then **TEST-001 services** → **TEST-002 adapters**.
 2. **TEST-003** model `clean()` branch completion (cheap, no factories for SIMCard).
 3. **TEST-005** error/permission/security/perf edges.

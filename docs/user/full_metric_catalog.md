@@ -7,7 +7,8 @@ definition through the dashboard, REST API, and sample-data job.
 
 | Area | Metric count |
 | --- | ---: |
-| ROI and business impact | 16 |
+| ROI | 12 |
+| Business impact | 4 |
 | User activity | 16 |
 | Golden Config | 8 |
 | SSoT | 8 |
@@ -19,6 +20,10 @@ The canonical definitions live in
 `lipford_nautobot_metrics/catalog.py`. Each definition declares a stable key,
 display name, category, unit, description, optional formula, and whether the
 metric is bounded to a maximum value of 100.
+
+The catalog also defines an explicit saturation contract in Python. Tests fail
+if the release no longer contains 60 unique metrics with the expected category
+counts.
 
 ## Populate Definitions
 

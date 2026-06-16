@@ -11,7 +11,7 @@ from django.utils import timezone
 from nautobot.extras.choices import JobResultStatusChoices, ObjectChangeActionChoices
 from nautobot.extras.models import JobResult, ObjectChange
 
-from lipford_nautobot_metrics.catalog import METRIC_CATALOG
+from lipford_nautobot_metrics.catalog import EXPECTED_CATEGORY_COUNTS, EXPECTED_METRIC_COUNT, METRIC_CATALOG
 from lipford_nautobot_metrics.choices import MetricKindChoices, MetricUnitChoices
 from lipford_nautobot_metrics.models import MetricDefinition, MetricValue
 
@@ -128,6 +128,73 @@ def get_metric_summaries() -> list[dict[str, Any]]:
         )
 
     return summaries
+
+
+def get_metric_summary_groups(summaries: list[dict[str, Any]] | None = None) -> list[dict[str, Any]]:
+    """Return dashboard-ready metric summaries grouped by canonical category."""
+    summaries = summaries if summaries is not None else get_metric_summaries()
+    grouped = {
+        category: {
+            "category": category,
+            "label": _category_label(category),
+            "expected_count": expected_count,
+            "definition_count": 0,
+            "value_count": 0,
+            "metrics": [],
+        }
+        for category, expected_count in EXPECTED_CATEGORY_COUNTS.items()
+    }
+
+    for summary in summaries:
+        group = grouped.setdefault(
+            summary["category"],
+            {
+                "category": summary["category"],
+                "label": _category_label(summary["category"]),
+                "expected_count": 0,
+                "definition_count": 0,
+                "value_count": 0,
+                "metrics": [],
+            },
+        )
+        group["metrics"].append(summary)
+        group["definition_count"] += 1
+        group["value_count"] += summary["value_count"]
+
+    return list(grouped.values())
+
+
+def get_metric_saturation_summary(summaries: list[dict[str, Any]] | None = None) -> dict[str, Any]:
+    """Return dashboard saturation status for the canonical catalog."""
+    summaries = summaries if summaries is not None else get_metric_summaries()
+    enabled_keys = {summary["key"] for summary in summaries}
+    catalog_keys = {definition["key"] for definition in METRIC_CATALOG}
+    missing_enabled_keys = sorted(catalog_keys - enabled_keys)
+    observed_keys = {summary["key"] for summary in summaries if summary["value_count"] > 0}
+    missing_observation_keys = sorted(catalog_keys - observed_keys)
+    return {
+        "expected_count": EXPECTED_METRIC_COUNT,
+        "enabled_count": len(enabled_keys),
+        "observed_count": len(observed_keys),
+        "missing_enabled_keys": missing_enabled_keys,
+        "missing_observation_keys": missing_observation_keys,
+        "is_fully_enabled": not missing_enabled_keys,
+        "is_fully_observed": not missing_observation_keys,
+    }
+
+
+def _category_label(category: str) -> str:
+    """Return a compact display label for a metric category."""
+    labels = {
+        "roi": "ROI",
+        "business_impact": "Business Impact",
+        "user_activity": "User Activity",
+        "plugin_golden_config": "Golden Config",
+        "plugin_ssot": "SSoT",
+        "plugin_dlm": "DLM",
+        "job_execution": "Job Execution",
+    }
+    return labels.get(category, category.replace("_", " ").title())
 
 
 def _upsert_metric_definitions(result: dict[str, int]) -> dict[str, MetricDefinition]:

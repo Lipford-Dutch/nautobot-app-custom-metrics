@@ -1,0 +1,55 @@
+---
+name: "Deploy GitHub Wiki"
+
+on:  # yamllint disable-line rule:truthy
+  workflow_dispatch: ~
+  push:
+    branches:
+      - "develop"
+    paths:
+      - "wiki/**"
+      - ".github/workflows/deploy-wiki.yml"
+
+permissions:
+  contents: "write"
+
+concurrency:
+  group: "deploy-wiki-${{ github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: "Deploy wiki"
+    runs-on: "ubuntu-latest"
+    steps:
+      - name: "Check out repository code"
+        uses: "actions/checkout@v4"
+
+      - name: "Validate wiki source"
+        run: |
+          test -f wiki/Home.md
+          find wiki -maxdepth 1 -name '*.md' -type f | sort
+
+      - name: "Publish wiki pages"
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          REPOSITORY: "${{ github.repository }}"
+        run: |
+          set -euo pipefail
+          WIKI_REMOTE="https://x-access-token:${GH_TOKEN}@github.com/${REPOSITORY}.wiki.git"
+          if ! git ls-remote "${WIKI_REMOTE}" >/dev/null 2>&1; then
+            echo "::notice title=GitHub Wiki not initialized::The repository has wiki support enabled, but ${REPOSITORY}.wiki.git is not available yet. Open the GitHub Wiki once or initialize the backing wiki repository, then rerun this workflow."
+            exit 0
+          fi
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git clone "${WIKI_REMOTE}" wiki-publish
+          rsync -a --delete --exclude ".git" wiki/ wiki-publish/
+          cd wiki-publish
+          if git diff --quiet --exit-code; then
+            echo "Wiki is already up to date."
+            exit 0
+          fi
+          git add .
+          git commit -m "docs: sync project wiki"
+          git push

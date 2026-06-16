@@ -1,8 +1,8 @@
 # Using the App
 
-## ROI Metric Review
+## Saturated Metric Review
 
-Use the dashboard to review current ROI metrics:
+Use the dashboard to review every enabled metric across the full catalog:
 
 - Latest observed value
 - Average value
@@ -11,7 +11,10 @@ Use the dashboard to review current ROI metrics:
 - Latest timestamp
 - Source label
 
-The v1 first batch covers Time Saved per Automated Task, Reduction in Manual Error Rates, Increased Task Throughput, and Automation Adoption Rate.
+The dashboard groups the 60 canonical metrics by ROI, business impact, user
+activity, Golden Config, SSoT, Device Lifecycle Management, and Job execution.
+After sample data is seeded, the saturation and observation coverage cards
+should both show `60/60`.
 
 ## Sample Data Population
 
@@ -32,6 +35,7 @@ Use the model endpoints when integrations need full CRUD behavior:
 
 - `/api/plugins/lipford-nautobot-metrics/metric-definitions/`
 - `/api/plugins/lipford-nautobot-metrics/metric-values/`
+- `/api/plugins/lipford-nautobot-metrics/ingest/`
 
 ## Permissions
 
