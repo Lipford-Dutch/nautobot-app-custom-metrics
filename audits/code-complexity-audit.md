@@ -55,6 +55,7 @@ statements exist in the codebase; max nested-conditional depth is 2.*
 | 3 | `services.py:292` | `_apply_changed_fields` |
 
 ### Size metrics (AST)
+
 - **Functions > 50 lines:** `services.py:175 _upsert_sample_values` — **71 lines** (only one).
 - Next: `services.py:248 _upsert_metric_value` (42), `services.py:80 seed_sample_metrics` (34), `services.py:116 get_metric_summaries` (33).
 - **Files > 300 lines:** none. Largest: `services.py` **299** (242 SLOC).
@@ -206,11 +207,14 @@ would halve the function.
 - **Afferent/efferent:** computed above. The hub is `services` (Ca=3) feeding
   `jobs`, `views`, `api.views`; `choices` is the stable shared leaf. This is
   textbook layered structure for a Nautobot app.
+
 - **Instability:** values are appropriate to each module's role (stable core,
   unstable edges). No module is simultaneously central and volatile.
+
 - **Tight coupling:** none found — no import cycles, no god-module.
 - **Single responsibility:** strong overall; the one mild exception is Finding 3
   (`services.py` read+write).
+
 - **Cross-package efferent coupling** (to `nautobot.*` / `django.*`) is high but
   expected and unavoidable for a framework app — not a defect.
 
@@ -222,6 +226,7 @@ would halve the function.
   `:19-68`). If the live tree has materially refactored `services.py`, re-run this
   audit against that branch to confirm the size/cohesion findings still hold. The
   command to prove it: `radon cc services.py -s && radon raw services.py -s` on that branch.
+
 - No GraphQL/job/management-command code beyond `jobs.py` was found, so those
   dimensions are N/A here (the models declare `graphql` via `@extras_features`,
   which Nautobot auto-generates — no app code to measure).
@@ -235,8 +240,10 @@ headless Chromium attached to the lab's Docker network (`nautobot:8080`),
 authenticated as `admin`. Script: [`development/screenshots.py`](../development/screenshots.py).
 
 **Instance / app status**
+
 - App enabled: `PLUGINS = ['lipford_nautobot_metrics']`; `PLUGINS_CONFIG` resolved
   (`sample_metric_days=3`, `sample_metric_source=…phase2_sample_job`).
+
 - `nautobot-server check` → 0 issues; migration `0001_initial_metrics` applied; 24/24 unit tests pass.
 
 **End-to-end data chain (seed → DB → service rollup → REST API), all consistent:**
@@ -248,6 +255,7 @@ authenticated as `admin`. Script: [`development/screenshots.py`](../development/
 Total: **2 definitions, 6 values.** ORM, dashboard service, and `/api/plugins/lipford-nautobot-metrics/summary/` agree.
 
 **Screenshots** (in [`audits/screenshots/`](screenshots/)):
+
 - `01-dashboard.png` — Metrics Dashboard: Definitions=2, Values=6, summary table (latest/avg/target/samples/source).
 - `02-metric-definitions.png` — Metric Definitions list view.
 - `03-metric-values.png` — Metric Values list: all 6 rows across 2026-06-03/04/05, ascending seed pattern.

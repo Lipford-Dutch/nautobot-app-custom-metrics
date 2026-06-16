@@ -1,0 +1,2 @@
+Handle uninitialized GitHub Wiki remotes gracefully in the wiki deployment
+workflow.

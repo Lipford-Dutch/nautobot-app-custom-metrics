@@ -10,6 +10,7 @@ The current app provides:
 
 - 60 canonical metric definitions across ROI, business impact, user activity,
   Golden Config, SSoT, Device Lifecycle Management, and Job execution
+- Catalog saturation tests that enforce all 60 definitions and category counts
 - Persistent Nautobot storage for metric definitions and observations
 - UI, REST API, GraphQL registration, and summary endpoint
 - Atomic authenticated bulk ingestion
@@ -27,9 +28,11 @@ The current app provides:
 | DLM metrics | Definitions exist; no adapter. | Add optional Device Lifecycle Management collector. |
 | User activity metrics | Some ObjectChange coverage exists. | Add auth/session/page/filter/export activity collectors where Nautobot exposes reliable data. |
 | Business ROI metrics | Definitions and ingestion exist. | Add baseline/target governance, import helpers, and calculation explainability. |
+| Dashboard saturation | Category grouping and coverage cards exist. | Add richer dashboard panels, filters, and drilldowns for dashboard consumers. |
 | Forecasting | Not implemented. | Add trend, forecast, and threshold surfaces. |
 | Retention | Manual Job exists. | Add scheduled retention guidance, rollups, and archive/export path. |
 | Production evidence | Alpha/RC evidence exists. | Automate upgrade, rollback, load, and backup/restore validation. |
+| Project wiki | Not implemented. | Add source-controlled GitHub Wiki content and automated deployment. |
 
 ## Proposed v3.0 Features
 
@@ -157,6 +160,30 @@ Acceptance criteria:
 - Report output includes source provenance and collection time.
 - Exports respect Nautobot permissions.
 
+### 11. Project Wiki
+
+Create and deploy a proper GitHub Wiki for operator and maintainer knowledge.
+The wiki mirrors the GitHub Pages design language through shared terminology,
+navigation structure, and source-controlled content.
+
+Acceptance criteria:
+
+- Wiki source lives in `wiki/`.
+- Wiki deployment is automated through GitHub Actions.
+- Wiki content covers project overview, v3 roadmap, collector architecture,
+  operations, release governance, and bug-fix workflow.
+- Wiki pages link back to the formal MkDocs documentation where deeper detail
+  is required.
+- Manual wiki edits are treated as emergency-only and reconciled back into
+  source control.
+
+## Final Major Revision Policy
+
+v3.0 is the final planned major feature expansion for the project. After v3.0,
+the release model should shift to bug fixes, security updates, Nautobot
+compatibility, optional adapter maintenance, and documentation refinement.
+Additional major features require explicit roadmap approval.
+
 ## v3.0 Release Risks
 
 - Optional app APIs may change independently of this app.
@@ -165,6 +192,8 @@ Acceptance criteria:
 - Forecasting can be misleading without enough history or stable collection
   intervals.
 - Large metric-value volumes require retention, rollups, and query budgets.
+- Wiki drift can occur if maintainers edit GitHub Wiki pages directly instead
+  of updating `wiki/` source files.
 
 ## Recommended v3.0 Sequence
 
@@ -178,4 +207,4 @@ Acceptance criteria:
 8. Forecasting and thresholds
 9. Retention rollups and archive
 10. Reporting and export
-
+11. Project wiki deployment and governance

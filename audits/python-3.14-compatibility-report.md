@@ -16,6 +16,7 @@ dependency changes.** Just build/run on 3.14.
 - **Modern Python 3.14 target?** ✅ Yes — works as-is.
 - **Standalone Django app?** No — it is a **Nautobot 3.x app** (uses
   `nautobot.apps.NautobotAppConfig`, not the legacy 1.x `nautobot.extras.plugins.PluginConfig`).
+
 - **Nautobot app?** ✅ Yes (Nautobot 3.1.x, Django 5.2.x).
 - **Unavoidable incompatibility?** ❌ None found.
 
@@ -72,21 +73,26 @@ Baseline parity (Python 3.12, earlier this session): `check`, `post_upgrade`,
 same 24 tests — all green. 3.14 matches 3.12 exactly.
 
 ## 7. Remaining risks
+
 - **Very low — a published 3.14 image exists.** `ghcr.io/nautobot/nautobot-dev:3.1.0-py3.14`
   is published (py3.10–3.14 all exist), so the dev `Dockerfile`
   (`FROM ghcr.io/nautobot/nautobot-dev:${NAUTOBOT_VER}-py${PYTHON_VER}`) builds on
   3.14 with no change. The clean-room proof additionally confirmed a from-scratch
   `python:3.14` + pip install also works.
+
 - **Low — treat as works-but-newest.** 3.14 is the newest CPython; keep the 24-test
   suite as the on-every-push guard (see §8) so any future dependency regression on
   3.14 is caught early.
+
 - **Out of scope:** the extracted `nautobot_cellular_sot` app was not tested on 3.14
   (separate repo; source not in this workspace).
 
 ## 8. Manual follow-up (optional, to operationalize)
 None required to *use* 3.14. To make it first-class:
+
 1. Add `3.14` to the CI matrix in `.github/workflows/ci.yml` (the `check-in-docker`
    / `unittest` `python-version` lists) so the suite runs on 3.14 every push.
+
 2. Optionally build the dev image on 3.14: `PYTHON_VER=3.14 invoke build` (the
    `Dockerfile` `PYTHON_VER` arg already supports it).
 
