@@ -1,5 +1,6 @@
 """Canonical full metric catalog definitions."""
 
+from collections import Counter
 from typing import Any
 
 
@@ -399,3 +400,33 @@ METRIC_CATALOG: tuple[dict[str, Any], ...] = (
 
 CATALOG_BY_KEY = {definition["key"]: definition for definition in METRIC_CATALOG}
 BOUNDED_METRIC_KINDS = {definition["kind"] for definition in METRIC_CATALOG if definition["bounded"]}
+EXPECTED_CATEGORY_COUNTS = {
+    "roi": 12,
+    "business_impact": 4,
+    "user_activity": 16,
+    "plugin_golden_config": 8,
+    "plugin_ssot": 8,
+    "plugin_dlm": 6,
+    "job_execution": 6,
+}
+EXPECTED_METRIC_COUNT = sum(EXPECTED_CATEGORY_COUNTS.values())
+
+
+def get_catalog_category_counts() -> dict[str, int]:
+    """Return metric counts by canonical category."""
+    return dict(sorted(Counter(definition["category"] for definition in METRIC_CATALOG).items()))
+
+
+def validate_catalog_saturation() -> None:
+    """Raise an error if the canonical catalog is not fully saturated."""
+    keys = [definition["key"] for definition in METRIC_CATALOG]
+    duplicate_keys = sorted({key for key in keys if keys.count(key) > 1})
+    if duplicate_keys:
+        raise ValueError(f"Duplicate metric keys: {', '.join(duplicate_keys)}.")
+
+    if len(METRIC_CATALOG) != EXPECTED_METRIC_COUNT:
+        raise ValueError(f"Expected {EXPECTED_METRIC_COUNT} metrics, found {len(METRIC_CATALOG)}.")
+
+    category_counts = get_catalog_category_counts()
+    if category_counts != EXPECTED_CATEGORY_COUNTS:
+        raise ValueError(f"Expected category counts {EXPECTED_CATEGORY_COUNTS}, found {category_counts}.")

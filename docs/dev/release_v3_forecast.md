@@ -10,6 +10,7 @@ The current app provides:
 
 - 60 canonical metric definitions across ROI, business impact, user activity,
   Golden Config, SSoT, Device Lifecycle Management, and Job execution
+- Catalog saturation tests that enforce all 60 definitions and category counts
 - Persistent Nautobot storage for metric definitions and observations
 - UI, REST API, GraphQL registration, and summary endpoint
 - Atomic authenticated bulk ingestion
@@ -27,6 +28,7 @@ The current app provides:
 | DLM metrics | Definitions exist; no adapter. | Add optional Device Lifecycle Management collector. |
 | User activity metrics | Some ObjectChange coverage exists. | Add auth/session/page/filter/export activity collectors where Nautobot exposes reliable data. |
 | Business ROI metrics | Definitions and ingestion exist. | Add baseline/target governance, import helpers, and calculation explainability. |
+| Dashboard saturation | Category grouping and coverage cards exist. | Add richer dashboard panels, filters, and drilldowns for dashboard consumers. |
 | Forecasting | Not implemented. | Add trend, forecast, and threshold surfaces. |
 | Retention | Manual Job exists. | Add scheduled retention guidance, rollups, and archive/export path. |
 | Production evidence | Alpha/RC evidence exists. | Automate upgrade, rollback, load, and backup/restore validation. |
@@ -206,4 +208,3 @@ Additional major features require explicit roadmap approval.
 9. Retention rollups and archive
 10. Reporting and export
 11. Project wiki deployment and governance
-

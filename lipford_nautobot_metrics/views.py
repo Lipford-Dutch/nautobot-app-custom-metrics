@@ -8,7 +8,11 @@ from nautobot.core.ui.choices import SectionChoices
 
 from lipford_nautobot_metrics import filters, forms, models, tables
 from lipford_nautobot_metrics.api import serializers
-from lipford_nautobot_metrics.services import get_metric_summaries
+from lipford_nautobot_metrics.services import (
+    get_metric_saturation_summary,
+    get_metric_summaries,
+    get_metric_summary_groups,
+)
 
 
 class MetricsDashboardView(LoginRequiredMixin, PermissionRequiredMixin, TemplateView):
@@ -25,10 +29,13 @@ class MetricsDashboardView(LoginRequiredMixin, PermissionRequiredMixin, Template
         """Build dashboard context."""
         context = super().get_context_data(**kwargs)
         summaries = get_metric_summaries()
+        saturation = get_metric_saturation_summary(summaries)
         context.update(
             {
                 "title": "Metrics Dashboard",
                 "metric_summaries": summaries,
+                "metric_summary_groups": get_metric_summary_groups(summaries),
+                "metric_saturation": saturation,
                 "definition_count": len(summaries),
                 "value_count": sum(summary["value_count"] for summary in summaries),
             }

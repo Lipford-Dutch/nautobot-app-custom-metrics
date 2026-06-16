@@ -1,6 +1,10 @@
 # V1 First-Batch Metrics
 
-The v1 first batch implements the ROI efficiency metrics from Section 2.1 of the metrics definition guide. These metrics focus on measurable outcomes from Nautobot-backed automation and are intentionally narrow enough to validate end to end before expanding into cost, business-impact, user-activity, plugin, and system-performance categories.
+The v1 first batch implemented the first ROI efficiency metrics from Section
+2.1 of the metrics definition guide. This page remains as release history and
+backward-compatibility context. Current releases include the complete
+60-metric catalog described in the [Full Metric Catalog](full_metric_catalog.md)
+and [Dashboard Saturation](dashboard_saturation.md) pages.
 
 | Metric | Key | Unit | Formula | Sample context |
 | --- | --- | --- | --- | --- |
@@ -15,4 +19,5 @@ The v1 first batch implements the ROI efficiency metrics from Section 2.1 of the
 - The job is idempotent by metric definition, timestamp, and source.
 - Adoption and manual error-rate reduction are bounded percentages from `0` to `100`.
 - Throughput improvement is a percent-change metric and can exceed `100`.
-- All four metrics are available in the dashboard and summary API after the sample-data job runs.
+- These four metrics remain available in the dashboard and summary API after
+  the sample-data job runs.
