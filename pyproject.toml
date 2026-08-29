@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "lipford-nautobot-metrics"
-version = "0.2.0rc1"
+version = "1.0.0"
 description = "Custom Nautobot app for ROI, activity, and platform metrics."
 authors = ["Lipford Dutch"]
 license = "Apache-2.0"
@@ -21,7 +21,7 @@ classifiers = [
     "Framework :: Django",
     "Intended Audience :: Developers",
     "Intended Audience :: Information Technology",
-    "Development Status :: 3 - Alpha",
+    "Development Status :: 5 - Production/Stable",
     "License :: OSI Approved :: Apache Software License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",

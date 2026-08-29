@@ -8,18 +8,15 @@ production release.
 
 | Finding | Source | Status | Production Requirement |
 | --- | --- | --- | --- |
-| `PyJWT==2.12.1` advisories | Inherited through Nautobot dependency constraints. | Upstream constrained; owner-approved for Alpha/RC on 2026-06-16. | Track Nautobot security releases and document risk acceptance until Nautobot permits a fixed dependency. |
+| `PyJWT==2.12.1` advisories | Inherited through Nautobot dependency constraints. | Upstream constrained; owner-approved for Production v1 on 2026-08-29. | Track Nautobot security releases and review the exception by 2026-10-01. |
 | `pylint-nautobot 1.0.0` Python `<3.14` constraint | Development tooling only. | Accepted for CI tooling. | Keep runtime tests on Python 3.14 and run the Pylint/App Config stage on Python 3.13 until tooling supports Python 3.14. |
 
-## Alpha Release Approval
+## Production Release Approval
 
-The repository owner granted blanket approval on 2026-06-16 to reference the
-current upstream-constrained advisory state in Alpha, release-candidate, and
-network-security evidence. The accepted risk is limited to Alpha/RC publication
-and internal validation.
-
-The approval must be revisited before any production deployment or stable
-release that is represented as production ready.
+The repository owner approved the documented upstream-constrained advisory
+state for Production v1.0.0 on August 29, 2026 after acceptance testing passed.
+The exception must be reviewed by October 1, 2026 as part of v2 specification
+and planning.
 
 ## Required Repository Controls
 

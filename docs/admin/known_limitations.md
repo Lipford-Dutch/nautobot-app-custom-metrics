@@ -16,6 +16,6 @@
 - `pylint-nautobot 1.0.0` declares Python `<3.14`, so the Pylint/App Config/
   migration lint stage runs on Python 3.13. The application runtime and unit
   test matrix remains on Python 3.14.
-- `v0.2.0rc1` is an Alpha release candidate. Production deployment requires the
-  production readiness checklist, upgrade rehearsal, rollback rehearsal, and
-  security advisory disposition to be completed.
+- Production v1 supports the validated Nautobot database scale and collector
+  set documented above. Expanded scale targets and additional collectors are
+  deferred to the v2 specification due October 1, 2026.
