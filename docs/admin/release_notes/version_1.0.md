@@ -19,6 +19,8 @@ candidate to stable operation on Nautobot 3.
 
 - Corrected Nautobot 3 integration paths for navigation, Jobs, and GraphQL
   types so each feature is registered and visible in Installed Apps.
+- Refreshed the production dependency lock to Nautobot 3.2.3 and current
+  security-fixed runtime packages.
 - Promoted the package version and documentation from `v0.2.0rc1` to stable
   `v1.0.0`.
 

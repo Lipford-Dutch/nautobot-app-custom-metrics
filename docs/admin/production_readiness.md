@@ -7,16 +7,16 @@ or signed operational note.
 
 ## Current Production Status
 
-`v1.0.0` is the approved production release. It was promoted after successful
-owner acceptance testing and a verified Nautobot 3.2.2 deployment on August 29,
-2026.
+`v1.0.0` is the production release candidate. It passed owner acceptance
+testing and a verified Nautobot 3.2.3 deployment on August 29, 2026. Final
+release publication follows the protected pull-request and tag workflow.
 
 ## Production Approval
 
-The repository owner approved Production v1.0.0 promotion on August 29, 2026
-after application testing passed. This approval includes the documented
-upstream-constrained dependency risk and requires it to be reviewed during the
-v2 specification checkpoint on October 1, 2026.
+The repository owner approved preparation of Production v1.0.0 on August 29,
+2026 after application testing passed. The dependency lock was refreshed to
+fixed releases, including Nautobot 3.2.3, Django 5.2.17, sqlparse 0.6.0,
+cryptography 50.0.1, GitPython 3.1.61, Pillow 12.3.0, and PyJWT 2.13.0.
 
 ## Required Gates
 
@@ -30,7 +30,7 @@ v2 specification checkpoint on October 1, 2026.
 | Bulk ingestion | Authenticated ingestion handles validation errors atomically. | Complete. |
 | Collectors | JobResult and ObjectChange collectors are idempotent and registered as Jobs. | Complete. |
 | Performance | Production alpha dataset and bounded aggregate paths pass smoke checks. | Accepted for v1 scope; expanded targets due in v2 planning. |
-| Security | HTTPS, secure cookies, firewall, telemetry policy, and advisory disposition are documented. | Complete with owner-accepted upstream constraint. |
+| Security | HTTPS, secure cookies, firewall, telemetry policy, and advisory disposition are documented. | Complete; the production dependency lock uses fixed releases. |
 | Operations | Backup, restore, rollback, service, worker, and scheduler procedures are exercised. | Complete. |
 
 ## Validation Commands

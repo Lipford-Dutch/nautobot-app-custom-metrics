@@ -8,15 +8,14 @@ production release.
 
 | Finding | Source | Status | Production Requirement |
 | --- | --- | --- | --- |
-| `PyJWT==2.12.1` advisories | Inherited through Nautobot dependency constraints. | Upstream constrained; owner-approved for Production v1 on 2026-08-29. | Track Nautobot security releases and review the exception by 2026-10-01. |
 | `pylint-nautobot 1.0.0` Python `<3.14` constraint | Development tooling only. | Accepted for CI tooling. | Keep runtime tests on Python 3.14 and run the Pylint/App Config stage on Python 3.13 until tooling supports Python 3.14. |
 
 ## Production Release Approval
 
-The repository owner approved the documented upstream-constrained advisory
-state for Production v1.0.0 on August 29, 2026 after acceptance testing passed.
-The exception must be reviewed by October 1, 2026 as part of v2 specification
-and planning.
+The Production v1.0.0 lock refresh resolves the previously documented PyJWT
+exception through Nautobot 3.2.3, PyJWT 2.13.0, and cryptography 50.0.1. The
+remaining listed exception is development tooling only and does not ship in the
+application package.
 
 ## Required Repository Controls
 

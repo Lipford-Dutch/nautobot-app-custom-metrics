@@ -10,9 +10,6 @@
   interpretation.
 - Retention is operator-triggered through a Nautobot Job and is disabled by
   default.
-- `PyJWT==2.12.1` advisories inherited through Nautobot's dependency chain
-  remain upstream-constrained. Deployments must track Nautobot security
-  releases and record formal risk acceptance until the constraint is resolved.
 - `pylint-nautobot 1.0.0` declares Python `<3.14`, so the Pylint/App Config/
   migration lint stage runs on Python 3.13. The application runtime and unit
   test matrix remains on Python 3.14.
