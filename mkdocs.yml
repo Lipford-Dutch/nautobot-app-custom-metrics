@@ -116,6 +116,7 @@ nav:
       - Install and Configure: "admin/install.md"
       - GitHub Environments: "admin/github_environments.md"
       - Production Readiness: "admin/production_readiness.md"
+      - V2 Planning: "admin/v2_planning.md"
       - Security Advisories: "admin/security_advisories.md"
       - Upgrade: "admin/upgrade.md"
       - Uninstall: "admin/uninstall.md"
@@ -124,6 +125,7 @@ nav:
       - Known Limitations: "admin/known_limitations.md"
       - Release Notes:
           - "admin/release_notes/index.md"
+          - v1.0: "admin/release_notes/version_1.0.md"
           - v0.2: "admin/release_notes/version_0.2.md"
           - v0.1: "admin/release_notes/version_0.1.md"
   - Developer Guide:

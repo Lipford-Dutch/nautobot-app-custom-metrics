@@ -1,4 +1,8 @@
-# Release v3.0 Forecast
+# Post-v2 Release Forecast
+
+This earlier v3 forecast is retained as long-range input. The immediate v2
+specification and planning package is due October 1, 2026, with delivery
+targeted for end of 2026; see the administrator guide's V2 Planning page.
 
 This forecast compares the original metric-catalog requirements with the live
 `v0.2.0rc1` implementation. It defines the likely v3.0 feature set and the

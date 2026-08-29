@@ -4,10 +4,10 @@
 
 - Local path: `C:\Users\spamw\Documents\Lipford Nautobot Metrics`
 - GitHub repository: `Lipford-Dutch/nautobot-app-custom-metrics`
-- Active development branch: `main`
-- Current working branch: `main`
-- Current package candidate: `0.2.0rc1`
-- Previous published prerelease: `v0.2.0a1`
+- Stable branch: `main`
+- Release branch: `release/1.0.0-production`
+- Current package: `1.0.0`
+- Previous published prerelease: `v0.2.0rc1`
 
 ## Current State
 
@@ -16,10 +16,10 @@ persistent metric storage, UI, REST API, GraphQL registration, sample data,
 bulk ingestion, native Nautobot reference collectors, retention controls,
 CI/CD, release provenance, and repository governance.
 
-The owner granted blanket approval on 2026-06-16 for Alpha and
-release-candidate evidence while dedicated QA, SRE, and CAB teams are not yet
-defined. This approval is documented for Alpha/RC release evidence and security
-disposition. It is not a substitute for future production separation of duties.
+The owner approved Production v1.0.0 promotion on August 29, 2026 after
+acceptance testing passed. The production deployment, rollback behavior,
+services, TLS, Jobs, metrics, APIs, UI, and backup were verified on Nautobot
+3.2.2.
 
 ## Implemented Functionality
 
@@ -54,8 +54,8 @@ disposition. It is not a substitute for future production separation of duties.
 - Production readiness: `docs/admin/production_readiness.md`
 - Security advisory disposition: `docs/admin/security_advisories.md`
 - Bug triage: `docs/dev/bug_triage.md`
-- v3.0 forecast: `docs/dev/release_v3_forecast.md`
-- Release notes: `docs/admin/release_notes/version_0.2.md`
+- V2 planning: `docs/admin/v2_planning.md`
+- Release notes: `docs/admin/release_notes/version_1.0.md`
 
 ## Validation Commands
 
@@ -85,23 +85,15 @@ nautobot-server test lipford_nautobot_metrics
 GitHub Actions remains the authoritative Docker/Linux validation path for this
 Windows workstation.
 
-## Remaining Production Conditions
+## V2 Follow-Up
 
-- Replace named-maintainer fallback approvals with QA, SRE, and CAB GitHub
-  teams.
-- Resolve or formally accept upstream-constrained PyJWT advisories for the
-  production target date.
-- Complete staging upgrade, rollback, backup/restore, retention, and load-test
-  exercises.
-- Define production collector schedules, retention policy, and operational
-  ownership.
-- Decide whether and when to enable PyPI publishing.
+- Complete the v2 specification and planning package by October 1, 2026.
+- Target v2 delivery for end of 2026.
+- Revisit the upstream-constrained dependency exception and expanded scale
+  targets during that review.
 
 ## Next Suggested Work
 
-1. Merge `codex/final-alpha-rc-evidence` after CI passes.
-2. Tag and publish `v0.2.0rc1`.
-3. Review the session export in `reports/`.
-4. Convert v3.0 forecast features into GitHub issues or milestones.
-5. Create QA, SRE, and CAB teams in the GitHub organization before production
-   promotion.
+1. Merge the Production v1.0.0 release PR after required checks and approval.
+2. Publish the `v1.0.0` GitHub release named **Production** with wheel and sdist.
+3. Begin v2 specification work before the October 1, 2026 checkpoint.
