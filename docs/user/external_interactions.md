@@ -1,14 +1,14 @@
 # External Interactions
 
 Lipford Nautobot Metrics stores metric definitions and values inside Nautobot.
-The app does not require an external metrics database for the `v0.2.0rc1`
+The app does not require an external metrics database for the `v1.0.0`
 release candidate.
 
 ## External System Integrations
 
 ### From the App to Other Systems
 
-The app does not initiate outbound calls to external systems in `v0.2.0rc1`.
+The app does not initiate outbound calls to external systems in `v1.0.0`.
 Sample data is generated locally by the `Seed sample metric data` Nautobot Job.
 Native Nautobot JobResult and ObjectChange data can be collected through the
 `Collect Nautobot reference metrics` Job.

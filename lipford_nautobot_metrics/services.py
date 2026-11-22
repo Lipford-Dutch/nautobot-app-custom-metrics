@@ -4,10 +4,10 @@ from datetime import timedelta
 from decimal import Decimal
 from typing import Any
 
-from django.conf import settings
 from django.db import transaction
 from django.db.models import Avg, Count, DecimalField, OuterRef, Subquery
 from django.utils import timezone
+from nautobot.apps.config import get_app_settings_or_config
 from nautobot.extras.choices import JobResultStatusChoices, ObjectChangeActionChoices
 from nautobot.extras.models import JobResult, ObjectChange
 
@@ -45,15 +45,22 @@ DEFAULT_METRIC_DEFINITIONS: tuple[dict[str, Any], ...] = tuple(
 
 def get_app_settings() -> dict[str, Any]:
     """Return app settings with defensive defaults for direct test usage."""
-    plugin_settings = getattr(settings, "PLUGINS_CONFIG", {}).get("lipford_nautobot_metrics", {})
     return {
-        "collector_lookback_minutes": plugin_settings.get(
-            "collector_lookback_minutes", DEFAULT_COLLECTOR_LOOKBACK_MINUTES
+        "collector_lookback_minutes": get_app_settings_or_config(
+            "lipford_nautobot_metrics", "collector_lookback_minutes", DEFAULT_COLLECTOR_LOOKBACK_MINUTES
         ),
-        "max_ingest_batch_size": plugin_settings.get("max_ingest_batch_size", DEFAULT_MAX_INGEST_BATCH_SIZE),
-        "retention_days": plugin_settings.get("retention_days", DEFAULT_RETENTION_DAYS),
-        "sample_metric_days": plugin_settings.get("sample_metric_days", DEFAULT_SAMPLE_DAYS),
-        "sample_metric_source": plugin_settings.get("sample_metric_source", SAMPLE_SOURCE),
+        "max_ingest_batch_size": get_app_settings_or_config(
+            "lipford_nautobot_metrics", "max_ingest_batch_size", DEFAULT_MAX_INGEST_BATCH_SIZE
+        ),
+        "retention_days": get_app_settings_or_config(
+            "lipford_nautobot_metrics", "retention_days", DEFAULT_RETENTION_DAYS
+        ),
+        "sample_metric_days": get_app_settings_or_config(
+            "lipford_nautobot_metrics", "sample_metric_days", DEFAULT_SAMPLE_DAYS
+        ),
+        "sample_metric_source": get_app_settings_or_config(
+            "lipford_nautobot_metrics", "sample_metric_source", SAMPLE_SOURCE
+        ),
     }
 
 

@@ -2,12 +2,9 @@
 
 ## Current Approval Model
 
-The repository owner granted blanket approval on 2026-06-16 for Alpha and
-release-candidate evidence while formal QA, SRE, and CAB teams are still being
-created.
-
-This approval supports Alpha and release-candidate publication. It does not
-replace production separation of duties.
+The repository owner approved Production v1.0.0 promotion on August 29, 2026
+after acceptance testing passed. Future production releases remain subject to
+reviewed release PRs and required repository checks.
 
 ## Required Production Governance
 
@@ -21,7 +18,6 @@ replace production separation of duties.
 
 ## Release Promotion
 
-- Alpha and RC releases are published from `develop`.
+- Prereleases are published from the active integration branch.
 - Stable production releases are promoted through a reviewed release PR.
 - Release artifacts must include wheel, sdist, checksums, and provenance.
-

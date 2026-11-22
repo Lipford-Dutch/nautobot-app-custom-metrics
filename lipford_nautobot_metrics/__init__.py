@@ -3,7 +3,7 @@
 # Metadata is inherited from Nautobot. If not including Nautobot in the environment, this should be added
 from importlib import metadata
 
-from nautobot.apps import NautobotAppConfig
+from nautobot.apps import ConstanceConfigItem, NautobotAppConfig
 
 __version__ = metadata.version(__name__)
 
@@ -30,18 +30,30 @@ class LipfordNautobotMetricsConfig(NautobotAppConfig):
     max_version = "4.0.0"
     middleware = []
     installed_apps = []
-    menu_items = "lipford_nautobot_metrics.navigation.menu_items"
-    jobs = "lipford_nautobot_metrics.jobs.jobs"
-    template_extensions = []
-    graphql_types = "lipford_nautobot_metrics.graphql.types.graphql_types"
-    custom_validators = []
-    datasource_contents = []
+    menu_items = "navigation.menu_items"
+    jobs = "jobs.jobs"
+    graphql_types = "graphql.types.graphql_types"
+    constance_config = {
+        "collector_lookback_minutes": ConstanceConfigItem(60, "Default collection lookback in minutes.", int),
+        "max_ingest_batch_size": ConstanceConfigItem(
+            500, "Maximum observations accepted by one ingestion request.", int
+        ),
+        "retention_days": ConstanceConfigItem(0, "Metric retention in days; zero disables automatic retention.", int),
+    }
     caching_config = {}
     docs_view_name = "plugins:lipford_nautobot_metrics:docs"
     searchable_models = [
         "MetricDefinition",
         "MetricValue",
     ]
+
+    def ready(self):
+        """Register the app and expose stable metric names in long-lived web processes."""
+        super().ready()
+        from lipford_nautobot_metrics.metrics import METRIC_NAMES
+
+        if "metrics" in self.features and not self.features["metrics"]:
+            self.features["metrics"] = METRIC_NAMES.copy()
 
 
 config = LipfordNautobotMetricsConfig  # pylint:disable=invalid-name

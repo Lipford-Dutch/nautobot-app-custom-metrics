@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/Python-3.14-blue)](https://www.python.org/)
 [![License](https://img.shields.io/badge/License-Apache--2.0-green)](https://github.com/Lipford-Dutch/nautobot-app-custom-metrics/blob/main/LICENSE)
 
-Lipford Nautobot Metrics is an Alpha Nautobot 3.1 App for tracking automation ROI, user activity, app, lifecycle, and Job metrics inside Nautobot. It provides a canonical 60-metric catalog, persistent observations, UI and API access, sample data, authenticated bulk ingestion, native Nautobot reference collectors, and retention controls.
+Lipford Nautobot Metrics is a production Nautobot 3 App for tracking automation ROI, user activity, app, lifecycle, and Job metrics inside Nautobot. It provides a canonical 60-metric catalog, persistent observations, UI and API access, authenticated bulk ingestion, native Nautobot reference collectors, configurable retention, operational Jobs, and Prometheus health metrics.
 
 ## Repository Metadata
 
@@ -13,7 +13,7 @@ Lipford Nautobot Metrics is an Alpha Nautobot 3.1 App for tracking automation RO
 - Nautobot app label: `lipford_nautobot_metrics`
 - GitHub repository: `Lipford-Dutch/nautobot-app-custom-metrics`
 - License: Apache-2.0
-- Development status: Alpha
+- Development status: Production (`v1.0.0`)
 - Primary audience: Nautobot administrators, network automation engineers, and platform teams
 
 Recommended GitHub repository metadata:
@@ -39,6 +39,8 @@ Recommended GitHub repository metadata:
   observations.
 - Retention Job with dry-run support for metric value lifecycle control.
 - App configuration schema for collection defaults.
+- Database-backed runtime configuration, validation, home-page content,
+  contextual banners, Jinja filters, Jobs, and native app metrics.
 - Tests for models, jobs, views, permissions, API behavior, ingestion, invalid
   payloads, and catalog saturation.
 
@@ -216,6 +218,9 @@ lipford_nautobot_metrics/
 ## Release Notes
 
 Release notes are maintained under `docs/admin/release_notes/`. Use Towncrier fragments in `changes/` for future feature, fix, dependency, security, documentation, and housekeeping changes.
+
+Production v1 planning is complete. The v2 specification and planning review is
+due **October 1, 2026**, with v2 delivery targeted for **end of 2026**.
 
 ## Contributing
 

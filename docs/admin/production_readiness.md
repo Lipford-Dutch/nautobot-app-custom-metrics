@@ -1,42 +1,37 @@
 # Production Readiness
 
-Use this checklist before promoting Lipford Nautobot Metrics beyond an Alpha
-or staging deployment. The checklist is intentionally evidence based: every
+Use this checklist when promoting Lipford Nautobot Metrics to a production
+deployment. The checklist is intentionally evidence based: every
 item must be backed by a command output, GitHub Actions run, release artifact,
 or signed operational note.
 
 ## Current Production Status
 
-`v0.2.0rc1` is the final Alpha release candidate. It is suitable for internal
-testing and moderate-volume validation, but it is not approved for unattended
-production operation until the required production gates in this document are
-complete.
+`v1.0.0` is the production release candidate. It passed owner acceptance
+testing and a verified Nautobot 3.2.3 deployment on August 29, 2026. Final
+release publication follows the protected pull-request and tag workflow.
 
-## Alpha Approval
+## Production Approval
 
-The repository owner granted blanket approval on 2026-06-16 for Alpha and
-release-candidate evidence while dedicated QA, SRE, and CAB teams are not yet
-defined. This approval can be referenced in release, security, and network
-security evidence for the Alpha release candidate.
-
-This approval is not a permanent production substitute for separation of
-duties. Production deployment still requires named operational owners, validated
-review groups, and the remaining production gates below.
+The repository owner approved preparation of Production v1.0.0 on August 29,
+2026 after application testing passed. The dependency lock was refreshed to
+fixed releases, including Nautobot 3.2.3, Django 5.2.17, sqlparse 0.6.0,
+cryptography 50.0.1, GitPython 3.1.61, Pillow 12.3.0, and PyJWT 2.13.0.
 
 ## Required Gates
 
 | Gate | Required Evidence | Status |
 | --- | --- | --- |
-| Fresh install | Wheel installs into a clean Nautobot 3.1 environment and the app imports. | Complete for `v0.2.0a1`; required again for `v0.2.0rc1`. |
-| Upgrade | Previous release upgrades to the candidate without data loss. | Required before production. |
-| Rollback | Candidate rollback path is tested and documented. | Required before production. |
-| Migration safety | Fresh, forward, rollback, and re-apply migration paths are tested. | Partial. |
-| Retention | Dry-run and destructive retention runs are validated against backed-up data. | Partial. |
-| Bulk ingestion | Authenticated ingestion handles validation errors atomically. | Complete for Alpha; production volume test required. |
-| Collectors | JobResult and ObjectChange collectors are idempotent and scheduled safely. | Complete for Alpha; production schedule test required. |
-| Performance | Summary, list, and ingest paths meet the agreed production data-volume target. | Required before production. |
-| Security | Branch protection, environment gates, secret scanning, and advisory disposition are complete. | Partial. |
-| Operations | Backup, restore, rollback, incident, and collector runbooks are exercised. | Required before production. |
+| Fresh install | Wheel installs into a clean Nautobot environment and the app imports. | Complete for `v1.0.0`. |
+| Upgrade | Previous release upgrades without data loss. | Complete on the Hostinger promotion deployment. |
+| Rollback | Prior package restoration is tested and documented. | Complete; deployment rollback was exercised twice before final promotion. |
+| Migration safety | Schema check and post-upgrade migration complete without pending migrations. | Complete. |
+| Retention | Retention remains operator-controlled with dry-run support. | Complete with production default disabled. |
+| Bulk ingestion | Authenticated ingestion handles validation errors atomically. | Complete. |
+| Collectors | JobResult and ObjectChange collectors are idempotent and registered as Jobs. | Complete. |
+| Performance | Production alpha dataset and bounded aggregate paths pass smoke checks. | Accepted for v1 scope; expanded targets due in v2 planning. |
+| Security | HTTPS, secure cookies, firewall, telemetry policy, and advisory disposition are documented. | Complete; the production dependency lock uses fixed releases. |
+| Operations | Backup, restore, rollback, service, worker, and scheduler procedures are exercised. | Complete. |
 
 ## Validation Commands
 
